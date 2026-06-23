@@ -122,18 +122,21 @@ class OrderModel extends BaseModel
 
     public function getSalesSummary(string $period = 'day'): array
     {
+        // MariaDB não suporta "INTERVAL n DAY * 2" — usamos pares explícitos
         $intervals = [
-            'day'   => 'INTERVAL 1 DAY',
-            'week'  => 'INTERVAL 7 DAY',
-            'month' => 'INTERVAL 30 DAY',
+            'day'   => ['cur' => 'INTERVAL 1 DAY',   'prev' => 'INTERVAL 2 DAY'],
+            'week'  => ['cur' => 'INTERVAL 7 DAY',   'prev' => 'INTERVAL 14 DAY'],
+            'month' => ['cur' => 'INTERVAL 30 DAY',  'prev' => 'INTERVAL 60 DAY'],
         ];
-        $interval = $intervals[$period] ?? 'INTERVAL 1 DAY';
+        $int      = $intervals[$period] ?? $intervals['day'];
+        $cur      = $int['cur'];
+        $prev     = $int['prev'];
 
         $current = $this->fetch(
             "SELECT COUNT(*) AS orders, COALESCE(SUM(total), 0) AS revenue,
                     COALESCE(AVG(total), 0) AS avg_ticket
                FROM orders
-              WHERE status != ? AND created_at >= DATE_SUB(NOW(), {$interval})",
+              WHERE status != ? AND created_at >= DATE_SUB(NOW(), {$cur})",
             [self::STATUS_CANCELLED]
         );
 
@@ -141,8 +144,8 @@ class OrderModel extends BaseModel
             "SELECT COUNT(*) AS orders, COALESCE(SUM(total), 0) AS revenue
                FROM orders
               WHERE status != ?
-                AND created_at >= DATE_SUB(NOW(), {$interval} * 2)
-                AND created_at <  DATE_SUB(NOW(), {$interval})",
+                AND created_at >= DATE_SUB(NOW(), {$prev})
+                AND created_at <  DATE_SUB(NOW(), {$cur})",
             [self::STATUS_CANCELLED]
         );
 
