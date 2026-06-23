@@ -5,13 +5,13 @@
 
 /* ── Global body ────────────────────────────────────────────── */
 body {
-    background: var(--color-bg-base);
-    color: var(--color-text-primary);
-    font-family: var(--font-body);
+    background: #0A0A0A;
+    color: #FFFFFF;
+    font-family: var(--font-body), 'Inter', sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
 }
-
+section { background: transparent; }
 main { display: block; }
 
 /* ============================================================
@@ -102,14 +102,14 @@ main { display: block; }
 
 .mobile-menu-toggle { display: none; }
 
-/* Mobile nav overlay */
+/* Mobile nav overlay — hidden by default, shown only when .open added via JS */
 .mobile-nav {
-    display: none;
-    background: var(--color-bg-surface);
-    border-top: 1px solid var(--color-border);
+    display: none !important;
+    background: #111111;
+    border-top: 1px solid rgba(255,255,255,0.06);
     padding: 1rem 0;
 }
-.mobile-nav.open { display: block; }
+.mobile-nav.open { display: block !important; }
 .mobile-nav nav { display: flex; flex-direction: column; }
 .mobile-nav a {
     padding: 0.875rem 1.5rem;

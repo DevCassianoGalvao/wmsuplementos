@@ -56,7 +56,18 @@
     --transition: 0.2s ease;
 }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    background: #0A0A0A;
+}
+body {
+    background: #0A0A0A;
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
 img, svg { max-width: 100%; display: block; }
 ul, ol { list-style: none; }
 button { cursor: pointer; font: inherit; border: none; background: none; color: inherit; }
