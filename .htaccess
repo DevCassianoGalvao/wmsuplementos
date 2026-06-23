@@ -2,23 +2,12 @@
     RewriteEngine On
     RewriteBase /maiasuplementos/
 
-    # Já está em public/ — para evitar loop
+    # Se já chegou em public/ — para (evita loop)
     RewriteRule ^public/ - [L]
 
-    # Arquivos/pastas reais em public/ → serve direto
-    RewriteCond %{DOCUMENT_ROOT}/maiasuplementos/public/%{REQUEST_URI} -f [OR]
-    RewriteCond %{DOCUMENT_ROOT}/maiasuplementos/public/%{REQUEST_URI} -d
+    # Tudo mais → public/
+    # O public/.htaccess cuida de servir arquivos reais ou rotear para index.php
     RewriteRule ^(.*)$ public/$1 [L,QSA]
-
-    # Todo o resto → public/index.php
-    RewriteRule ^(.*)$ public/index.php [L,QSA]
-</IfModule>
-
-# Bloqueia acesso direto a pastas sensíveis
-<IfModule mod_authz_core.c>
-    <DirectoryMatch "^.*/(app|config|cron|database|logs|cache|scripts)/">
-        Require all denied
-    </DirectoryMatch>
 </IfModule>
 
 Options -Indexes

@@ -16,7 +16,7 @@ namespace Maia\Helpers;
 class CSRF
 {
     private const TOKEN_KEY = '_csrf_token';
-    private const FIELD     = '_csrf';
+    private const FIELD     = 'csrf_token'; // todas as views usam name="csrf_token"
 
     /** Gera (ou retorna) token da sessão atual. */
     public static function token(): string
