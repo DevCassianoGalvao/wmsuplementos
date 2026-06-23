@@ -20,7 +20,7 @@ return [
 
     'upload' => [
         'max_size' => (int)(getenv('UPLOAD_MAX_SIZE') ?: 5242880),
-        'path'     => getenv('UPLOAD_PATH') ?: 'public/assets/uploads/images',
+        'path'     => getenv('UPLOAD_PATH') ?: 'public/uploads',
         'sizes'    => [
             'thumbnail' => 300,
             'medium'    => 800,
