@@ -1,0 +1,51 @@
+/* ============================================================
+   Maia Suplementos — animations.css
+   ============================================================ */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(230,51,41,0.4); }
+    50%      { box-shadow: 0 0 0 6px rgba(230,51,41,0); }
+}
+@keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.animate-in {
+    opacity: 0;
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+.stock-pulse {
+    width: 8px;
+    height: 8px;
+    background: var(--color-red);
+    border-radius: 50%;
+    animation: pulse-red 1.5s infinite;
+    display: inline-block;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, var(--color-bg-surface) 25%, var(--color-bg-elevated) 50%, var(--color-bg-surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+}
+
+/* Staggered entrance delays */
+.animate-in:nth-child(2) { animation-delay: 0.1s; }
+.animate-in:nth-child(3) { animation-delay: 0.2s; }
+.animate-in:nth-child(4) { animation-delay: 0.3s; }
+.animate-in:nth-child(5) { animation-delay: 0.4s; }
+.animate-in:nth-child(6) { animation-delay: 0.5s; }
+.animate-in:nth-child(7) { animation-delay: 0.6s; }
+.animate-in:nth-child(8) { animation-delay: 0.7s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-in { opacity: 1; animation: none; }
+    .stock-pulse, .skeleton { animation: none; }
+}

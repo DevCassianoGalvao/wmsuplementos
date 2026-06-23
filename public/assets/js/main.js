@@ -1,6 +1,40 @@
 /* Maia Suplementos — main.js */
 'use strict';
 
+/* ── Mobile menu toggle ─────────────────────────────────────── */
+var menuToggle = document.querySelector('.mobile-menu-toggle');
+var mobileNav  = document.getElementById('mobile-nav');
+if (menuToggle && mobileNav) {
+    menuToggle.addEventListener('click', function () {
+        var open = mobileNav.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', open);
+    });
+}
+
+/* ── Sticky header shadow on scroll ─────────────────────────── */
+var siteHeader = document.getElementById('site-header');
+if (siteHeader) {
+    window.addEventListener('scroll', function () {
+        siteHeader.classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+}
+
+/* ── IntersectionObserver for .animate-in elements ──────────── */
+if ('IntersectionObserver' in window) {
+    var animObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+                animObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate-in').forEach(function (el) {
+        el.style.animationPlayState = 'paused';
+        animObserver.observe(el);
+    });
+}
+
 /* ── Cart count update ──────────────────────────────────────── */
 document.querySelectorAll('.add-to-cart-form').forEach(function(form) {
     form.addEventListener('submit', function(e) {
