@@ -49,7 +49,7 @@ class DashboardController extends BaseController
         $stmt->execute(['pending']);
         $pendingReviews = (int)$stmt->fetchColumn();
 
-        $stmt = db()->query('SELECT COUNT(*) FROM products WHERE stock <= stock_alert AND active = 1');
+        $stmt = db()->query('SELECT COUNT(*) FROM products WHERE stock <= stock_alert_threshold AND active = 1');
         $lowStock = (int)$stmt->fetchColumn();
 
         return [

@@ -23,10 +23,10 @@ try {
 
     // ── Alerta de estoque baixo para admin ─────────────────────────────────────
     $lowStock = db()->query(
-        'SELECT p.id, p.name, p.slug, p.stock, p.stock_alert
+        'SELECT p.id, p.name, p.slug, p.stock, p.stock_alert_threshold AS stock_alert
            FROM products p
           WHERE p.active = 1
-            AND p.stock <= p.stock_alert
+            AND p.stock <= p.stock_alert_threshold
           ORDER BY p.stock ASC'
     )->fetchAll(\PDO::FETCH_ASSOC);
 

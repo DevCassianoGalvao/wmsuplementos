@@ -52,12 +52,12 @@
     <tr><td colspan="7" class="empty-state">Nenhum produto encontrado.</td></tr>
     <?php else: ?>
     <?php foreach ($items as $prod): ?>
-    <tr class="<?= (int)$prod['stock'] <= (int)($prod['stock_alert'] ?? 5) ? 'row-warning' : '' ?>">
+    <tr class="<?= (int)$prod['stock'] <= (int)($prod['stock_alert_threshold'] ?? 5) ? 'row-warning' : '' ?>">
         <td><?= (int)$prod['id'] ?></td>
         <td><a href="/admin/produtos/<?= (int)$prod['id'] ?>"><?= htmlspecialchars($prod['name'], ENT_QUOTES, 'UTF-8') ?></a></td>
         <td><?= htmlspecialchars($prod['category_name'] ?? '—', ENT_QUOTES, 'UTF-8') ?></td>
         <td>R$ <?= Sanitizer::money((float)($prod['price_sale'] ?? $prod['price'])) ?></td>
-        <td class="<?= (int)$prod['stock'] <= 0 ? 'stock-zero' : ((int)$prod['stock'] <= (int)($prod['stock_alert'] ?? 5) ? 'stock-low' : '') ?>">
+        <td class="<?= (int)$prod['stock'] <= 0 ? 'stock-zero' : ((int)$prod['stock'] <= (int)($prod['stock_alert_threshold'] ?? 5) ? 'stock-low' : '') ?>">
             <?= (int)$prod['stock'] ?>
         </td>
         <td>

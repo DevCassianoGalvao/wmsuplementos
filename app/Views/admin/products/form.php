@@ -89,7 +89,7 @@
                 <div class="form-group">
                     <label for="stock_alert">Alerta de Estoque</label>
                     <input type="number" id="stock_alert" name="stock_alert" min="0"
-                           value="<?= (int)($product['stock_alert'] ?? 5) ?>">
+                           value="<?= (int)($product['stock_alert_threshold'] ?? 5) ?>">
                 </div>
                 <div class="form-group">
                     <label for="weight_g">Peso (g)</label>

@@ -180,7 +180,7 @@ class ProductController extends BaseController
                                 ? (float)str_replace(',', '.', $_POST['price_sale'])
                                 : null,
             'stock'       => (int)($_POST['stock']       ?? 0),
-            'stock_alert' => (int)($_POST['stock_alert'] ?? 5),
+            'stock_alert_threshold' => (int)($_POST['stock_alert'] ?? 5),
             'category_id' => (int)($_POST['category_id'] ?? 0) ?: null,
             'brand_id'    => (int)($_POST['brand_id']    ?? 0) ?: null,
             'weight_g'    => (int)($_POST['weight_g']    ?? 0) ?: null,

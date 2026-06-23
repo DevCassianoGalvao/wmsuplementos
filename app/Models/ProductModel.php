@@ -413,7 +413,7 @@ class ProductModel extends BaseModel
             $params[] = (int)$filters['active'];
         }
         if (!empty($filters['low_stock'])) {
-            $where[] = 'p.stock <= p.stock_alert';
+            $where[] = 'p.stock <= p.stock_alert_threshold';
         }
 
         return (int)$this->fetchColumn(

@@ -19,7 +19,7 @@ class StockController extends BaseController
         $page  = max(1, (int)($_GET['pagina'] ?? 1));
         $filter = $_GET['filtro'] ?? '';
 
-        $sql    = 'SELECT p.id, p.name, p.slug, p.stock, p.stock_alert, p.active,
+        $sql    = 'SELECT p.id, p.name, p.slug, p.stock, p.stock_alert_threshold AS stock_alert, p.active,
                           c.name AS category_name
                      FROM products p
                      LEFT JOIN categories c ON c.id = p.category_id
@@ -27,7 +27,7 @@ class StockController extends BaseController
         $params = [];
 
         if ($filter === 'baixo') {
-            $sql .= ' AND p.stock <= p.stock_alert';
+            $sql .= ' AND p.stock <= p.stock_alert_threshold';
         } elseif ($filter === 'zerado') {
             $sql .= ' AND p.stock = 0';
         }
@@ -40,7 +40,7 @@ class StockController extends BaseController
         $stmt->execute(array_merge($params, [$perPage, $offset]));
         $products = $stmt->fetchAll();
 
-        $stmt = db()->prepare(str_replace('SELECT p.id, p.name, p.slug, p.stock, p.stock_alert, p.active,
+        $stmt = db()->prepare(str_replace('SELECT p.id, p.name, p.slug, p.stock, p.stock_alert_threshold AS stock_alert, p.active,
                           c.name AS category_name', 'SELECT COUNT(*)', $sql));
         $stmt->execute($params);
         $total = (int)$stmt->fetchColumn();
