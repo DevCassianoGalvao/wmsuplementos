@@ -11,74 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout do código
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. Configura PHP para rodar scripts de build
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: gd, pdo, pdo_mysql, mbstring, fileinfo
-
-      # 3. Cria .env no servidor via secret (não commitado)
-      - name: Criar .env
-        run: |
-          cat > .env << EOF
-          APP_NAME="${{ secrets.APP_NAME }}"
-          APP_URL=${{ secrets.APP_URL }}
-          APP_DEBUG=false
-
-          DB_HOST=${{ secrets.DB_HOST }}
-          DB_PORT=${{ secrets.DB_PORT }}
-          DB_NAME=${{ secrets.DB_NAME }}
-          DB_USER=${{ secrets.DB_USER }}
-          DB_PASS=${{ secrets.DB_PASS }}
-          DB_CHARSET=utf8mb4
-
-          MP_ACCESS_TOKEN=${{ secrets.MP_ACCESS_TOKEN }}
-          MP_PUBLIC_KEY=${{ secrets.MP_PUBLIC_KEY }}
-          MP_WEBHOOK_SECRET=${{ secrets.MP_WEBHOOK_SECRET }}
-
-          BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}
-          SMTP_HOST=${{ secrets.SMTP_HOST }}
-          SMTP_PORT=${{ secrets.SMTP_PORT }}
-          SMTP_USER=${{ secrets.SMTP_USER }}
-          SMTP_PASS=${{ secrets.SMTP_PASS }}
-          MAIL_FROM=${{ secrets.MAIL_FROM }}
-          MAIL_FROM_NAME="${{ secrets.MAIL_FROM_NAME }}"
-
-          UPLOAD_MAX_SIZE=5242880
-          SESSION_NAME=maia_sess
-          EOF
-
-      # 4. Minifica CSS/JS
-      - name: Minificar assets
-        run: php scripts/minify.php
-
-      # 5. Cria diretórios necessários no servidor via FTP (arquivo marcador)
-      - name: Preparar diretórios runtime
-        run: |
-          mkdir -p logs cache public/uploads
-          touch logs/.gitkeep cache/.gitkeep public/uploads/.gitkeep
-
-      # 6. Deploy via FTP usando SamKirkland/FTP-Deploy-Action
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
-          port: ${{ secrets.FTP_PORT }}
-          # Caminho remoto na hospedagem (pasta pública ou subdiretório)
-          server-dir: ${{ secrets.FTP_REMOTE_DIR }}
-          # Exclui arquivos sensíveis e desnecessários do upload
+          server-dir: ./
           exclude: |
             **/.git*
             **/.git*/**
-            **/node_modules/**
             **/.DS_Store
             **/Thumbs.db
             AGENTS.md
-            scripts/
+            .env.example
