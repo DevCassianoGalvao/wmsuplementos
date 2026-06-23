@@ -146,11 +146,12 @@ INSERT IGNORE INTO coupons (code, type, value, min_order, max_uses, active, expi
 
 -- -----------------------------------------------------------------------------
 -- Usuário cliente de teste
--- Senha: Teste@123 (bcrypt cost 12)
+-- Execute database/create_test_users.php no servidor para criar com senha correta.
+-- Placeholder com hash inválido — substituído pelo script PHP:
 -- -----------------------------------------------------------------------------
 INSERT IGNORE INTO users (name, email, password_hash, phone, active) VALUES
-('João da Silva',   'joao@teste.com',  '$2y$12$LkS6Q0kCVWqR0BQjE4Kz5.eqGHoxSvGMp4k1h4J5Yx0pZcJHDC2q', '(11) 98765-4321', 1),
-('Maria Oliveira',  'maria@teste.com', '$2y$12$LkS6Q0kCVWqR0BQjE4Kz5.eqGHoxSvGMp4k1h4J5Yx0pZcJHDC2q', '(21) 99876-5432', 1);
+('João da Silva',   'joao@teste.com',  'HASH_PENDENTE', '(11) 98765-4321', 1),
+('Maria Oliveira',  'maria@teste.com', 'HASH_PENDENTE', '(21) 99876-5432', 1);
 
 -- -----------------------------------------------------------------------------
 -- Pedidos fictícios

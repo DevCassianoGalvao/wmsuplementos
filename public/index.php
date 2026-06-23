@@ -101,6 +101,32 @@ $_basePath = dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '/public/index.php'));
 if ($_basePath === '.' || $_basePath === '/') {
     $_basePath = '';
 }
+// Constante global usada em BaseController::redirect() e em helpers
+define('APP_BASE', $_basePath);
+
+// Output buffer que reescreve href/src/action="/..." → "/maiasuplementos/..."
+// Resolve o problema de subdiretório sem alterar nenhuma view.
+if ($_basePath !== '') {
+    ob_start(static function (string $html): string {
+        // Só reescreve respostas HTML (não afeta JSON da API ou webhook)
+        $ct = '';
+        foreach (headers_list() as $h) {
+            if (stripos($h, 'content-type:') === 0) {
+                $ct = $h;
+                break;
+            }
+        }
+        if ($ct !== '' && stripos($ct, 'text/html') === false) {
+            return $html;
+        }
+        // Reescreve href="/", src="/", action="/" — mas não href="//cdn" (protocol-relative)
+        return preg_replace(
+            '/\b(href|src|action)=(["\'])\/(?!\/)/',
+            '$1=$2' . APP_BASE . '/',
+            $html
+        ) ?? $html;
+    });
+}
 
 // ─── Rotas ───────────────────────────────────────────────────────────────────
 $router = new Maia\Router($_basePath);

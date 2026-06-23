@@ -66,8 +66,14 @@ class Sanitizer
         return basename(preg_replace('/[^a-zA-Z0-9._-]/', '', $filename) ?? '');
     }
 
-    /** Converte valor monetário string ("1.299,90") para float. */
-    public static function money(string $value): float
+    /** Formata float como moeda BR para exibição: 1299.9 → "1.299,90" */
+    public static function money(float $value): string
+    {
+        return number_format($value, 2, ',', '.');
+    }
+
+    /** Converte string monetária BR para float: "1.299,90" → 1299.9 */
+    public static function parseMoney(string $value): float
     {
         $value = str_replace(['.', ','], ['', '.'], trim($value));
         return (float)filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);

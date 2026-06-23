@@ -59,9 +59,17 @@ abstract class BaseController
         exit;
     }
 
-    /** Redireciona e encerra. */
+    /** Redireciona e encerra. Prefixa APP_BASE automaticamente para subdiretórios. */
     protected function redirect(string $url, int $status = 302): never
     {
+        // Se a URL começa com "/" mas não com "//" (não é protocol-relative) e APP_BASE
+        // está definido, prefixa para garantir redirecionamento correto em subdiretórios.
+        if (str_starts_with($url, '/') && !str_starts_with($url, '//')) {
+            $base = defined('APP_BASE') ? APP_BASE : '';
+            if ($base !== '' && !str_starts_with($url, $base . '/')) {
+                $url = $base . $url;
+            }
+        }
         header('Location: ' . $url, true, $status);
         exit;
     }
