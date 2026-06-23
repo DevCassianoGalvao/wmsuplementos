@@ -17,7 +17,7 @@
     <aside class="admin-sidebar">
         <div class="sidebar-logo">
             <a href="/admin/dashboard">
-                <img src="/assets/img/logo.svg" alt="Maia Suplementos" height="32" style="height:32px;width:auto;">
+                <img src="/assets/img/logo.png" alt="Maia Suplementos" height="38" style="height:38px;width:auto;">
             </a>
         </div>
 
