@@ -45,18 +45,30 @@ class Router
 
     /**
      * Converte /produto/{slug} em regex capturando parâmetros nomeados.
+     * basePath é stripped no dispatch(), não incluído aqui.
      */
     private function buildRegex(string $pattern): string
     {
         $regex = preg_replace('/\{([a-zA-Z_]+)\}/', '(?P<$1>[^/]+)', $pattern);
-        return '#^' . $this->basePath . $regex . '$#u';
+        return '#^' . $regex . '$#u';
     }
 
     public function dispatch(): void
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $uri    = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-        $uri    = '/' . trim((string)$uri, '/');
+        $uri    = (string)(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/');
+
+        // Strip subdirectory base path (ex: /maiasuplementos) para funcionar
+        // tanto em root quanto em subdiretório sem alterar as rotas registradas.
+        if ($this->basePath !== '' && str_starts_with($uri, $this->basePath)) {
+            $uri = substr($uri, strlen($this->basePath));
+        }
+
+        $uri = '/' . ltrim($uri ?: '/', '/');
+        // Remove trailing slash (exceto root)
+        if ($uri !== '/' && str_ends_with($uri, '/')) {
+            $uri = rtrim($uri, '/');
+        }
 
         foreach ($this->routes as $route) {
             if ($route['method'] !== $method) {

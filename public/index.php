@@ -95,8 +95,15 @@ Maia\Middleware\AuditLogger::autoLog();
     }
 })();
 
+// ─── Base path automático (funciona em root e em subdiretório) ───────────────
+// SCRIPT_NAME ex: /maiasuplementos/public/index.php → basePath = /maiasuplementos
+$_basePath = dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '/public/index.php'));
+if ($_basePath === '.' || $_basePath === '/') {
+    $_basePath = '';
+}
+
 // ─── Rotas ───────────────────────────────────────────────────────────────────
-$router = new Maia\Router();
+$router = new Maia\Router($_basePath);
 
 // Área pública
 $router->get('/',                        'HomeController@index');
