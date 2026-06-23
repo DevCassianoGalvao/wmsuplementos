@@ -5,9 +5,9 @@
 
 /* ── Layout ─────────────────────────────────────────────────── */
 .admin-body {
-    background: var(--color-bg-base);
-    color: var(--color-text-primary);
-    font-family: var(--font-body);
+    background: #0A0A0A;
+    color: #FFFFFF;
+    font-family: var(--font-body), 'Inter', sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
 }
@@ -104,8 +104,8 @@
 .admin-main { display: flex; flex-direction: column; min-width: 0; }
 .admin-topbar {
     height: 60px;
-    background: var(--color-bg-base);
-    border-bottom: 1px solid var(--color-border);
+    background: #0A0A0A;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
     display: flex;
     align-items: center;
     gap: 1rem;

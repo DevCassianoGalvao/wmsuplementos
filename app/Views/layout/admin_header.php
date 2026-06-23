@@ -7,8 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/design-system.css">
-    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/design-system.css?v=20260623">
+    <link rel="stylesheet" href="/assets/css/admin.css?v=20260623">
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="admin-body">
@@ -17,7 +17,7 @@
     <aside class="admin-sidebar">
         <div class="sidebar-logo">
             <a href="/admin/dashboard">
-                <img src="/assets/img/logo.svg" alt="Maia Suplementos" width="130" height="33">
+                <img src="/assets/img/logo.png" alt="Maia Suplementos" height="32" style="height:32px;width:auto;">
             </a>
         </div>
 

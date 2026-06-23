@@ -24,7 +24,7 @@
         </button>
 
         <a href="/" class="logo" aria-label="Maia Suplementos">
-            <img src="/assets/img/logo.svg" alt="Maia Suplementos" width="120" height="32" loading="eager">
+            <img src="/assets/img/logo.png" alt="Maia Suplementos" height="40" loading="eager" style="height:40px;width:auto;">
         </a>
 
         <form class="search-form" action="/busca" method="get" role="search">
