@@ -1,0 +1,33 @@
+# Credenciais e ambiente
+.env
+.env.*
+!.env.example
+
+# Dependências
+/vendor/
+
+# Cache e sessões runtime
+/cache/
+/logs/
+/public/uploads/
+
+# Minificados gerados (rebuildar no deploy)
+/public/assets/**/*.min.css
+/public/assets/**/*.min.js
+
+# Sitemap (gerado pelo cron)
+/public/sitemap.xml
+
+# SO e editores
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# PHP
+*.log

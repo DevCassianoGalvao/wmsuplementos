@@ -1,0 +1,198 @@
+<?php
+
+declare(strict_types=1);
+
+// ─── Raiz do projeto (um nível acima de public/) ─────────────────────────────
+define('ROOT_PATH', dirname(__DIR__));
+
+// ─── Carrega variáveis de ambiente do .env ────────────────────────────────────
+(function (): void {
+    $envFile = ROOT_PATH . '/.env';
+    if (!is_file($envFile)) {
+        return;
+    }
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#')) {
+            continue;
+        }
+        if (!str_contains($line, '=')) {
+            continue;
+        }
+        [$key, $value] = explode('=', $line, 2);
+        $key   = trim($key);
+        $value = trim($value, " \t\n\r\0\x0B\"'");
+        if ($key !== '' && getenv($key) === false) {
+            putenv("{$key}={$value}");
+            $_ENV[$key] = $value;
+        }
+    }
+})();
+
+// ─── Configuração de erros ────────────────────────────────────────────────────
+$debug = filter_var(getenv('APP_DEBUG') ?: 'false', FILTER_VALIDATE_BOOLEAN);
+
+if ($debug) {
+    ini_set('display_errors', '1');
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', '0');
+    error_reporting(0);
+}
+
+ini_set('log_errors', '1');
+ini_set('error_log', ROOT_PATH . '/' . (getenv('LOG_PATH') ?: 'logs/') . 'php_errors.log');
+
+// ─── Autoloader PSR-4 ─────────────────────────────────────────────────────────
+require ROOT_PATH . '/app/autoload.php';
+
+// ─── Config e banco ───────────────────────────────────────────────────────────
+require ROOT_PATH . '/config/database.php';
+
+$config = require ROOT_PATH . '/config/app.php';
+
+// ─── Sessão segura ────────────────────────────────────────────────────────────
+session_name($config['session']['name']);
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path'     => '/',
+    'secure'   => isset($_SERVER['HTTPS']),
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// ─── Middleware: security headers + audit log ─────────────────────────────────
+Maia\Middleware\SecurityHeaders::send();
+Maia\Middleware\AuditLogger::autoLog();
+
+// ─── Rate limiting em endpoints sensíveis ─────────────────────────────────────
+(function (): void {
+    $uri    = $_SERVER['REQUEST_URI'] ?? '';
+    $method = $_SERVER['REQUEST_METHOD'] ?? '';
+
+    // Checkout: 5 por minuto por IP
+    if ($method === 'POST' && $uri === '/finalizar-compra') {
+        Maia\Middleware\RateLimiter::enforce('checkout', 5, 60);
+    }
+
+    // Adicionar ao carrinho: 30 por minuto por IP
+    if ($method === 'POST' && $uri === '/carrinho/adicionar') {
+        Maia\Middleware\RateLimiter::enforce('cart_add', 30, 60);
+    }
+
+    // Webhook MP: 60 por minuto (protege contra flood; MP reenvia com backoff)
+    if ($method === 'POST' && $uri === '/webhook/mercadopago') {
+        Maia\Middleware\RateLimiter::enforce('webhook_mp', 60, 60);
+    }
+
+    // Cadastro: 3 por 5 minutos por IP
+    if ($method === 'POST' && $uri === '/cadastro') {
+        Maia\Middleware\RateLimiter::enforce('register', 3, 300);
+    }
+})();
+
+// ─── Rotas ───────────────────────────────────────────────────────────────────
+$router = new Maia\Router();
+
+// Área pública
+$router->get('/',                        'HomeController@index');
+$router->get('/categoria/{slug}',        'CategoryController@show');
+$router->get('/produto/{slug}',          'ProductController@show');
+$router->get('/combo/{slug}',            'ComboController@show');
+$router->get('/busca',                   'SearchController@index');
+
+// Carrinho
+$router->get('/carrinho',                'CartController@index');
+$router->post('/carrinho/adicionar',     'CartController@add');
+$router->post('/carrinho/atualizar',     'CartController@update');
+$router->post('/carrinho/remover',       'CartController@remove');
+$router->post('/carrinho/cupom',         'CartController@applyCoupon');
+
+// Checkout
+$router->get('/finalizar-compra',        'CheckoutController@index');
+$router->post('/finalizar-compra',       'CheckoutController@store');
+$router->get('/pedido/confirmacao/{id}', 'CheckoutController@confirmation');
+$router->post('/webhook/mercadopago',    'WebhookController@mercadoPago');
+
+// Área do cliente
+$router->get('/cadastro',                'AuthController@registerForm');
+$router->post('/cadastro',               'AuthController@register');
+$router->get('/entrar',                  'AuthController@loginForm');
+$router->post('/entrar',                 'AuthController@login');
+$router->get('/sair',                    'AuthController@logout');
+$router->get('/minha-conta',             'AccountController@index');
+$router->get('/minha-conta/pedidos',     'AccountController@orders');
+$router->get('/minha-conta/pedido/{id}', 'AccountController@orderDetail');
+$router->post('/minha-conta/dados',      'AccountController@updateProfile');
+$router->get('/avaliar/{token}',         'ReviewController@form');
+$router->post('/avaliar/{token}',        'ReviewController@store');
+
+// Páginas institucionais
+$router->get('/politica-de-privacidade', 'PageController@privacy');
+$router->get('/termos-de-uso',           'PageController@terms');
+$router->get('/pagina/{slug}',           'PageController@show');
+
+// ─── Admin ───────────────────────────────────────────────────────────────────
+$router->get('/admin/login',             'Admin\AuthController@loginForm');
+$router->post('/admin/login',            'Admin\AuthController@login');
+$router->get('/admin/logout',            'Admin\AuthController@logout');
+
+$router->get('/admin',                   'Admin\DashboardController@index');
+$router->get('/admin/dashboard',         'Admin\DashboardController@index');
+
+// Produtos
+$router->get('/admin/produtos',          'Admin\ProductController@index');
+$router->get('/admin/produtos/novo',     'Admin\ProductController@create');
+$router->post('/admin/produtos',         'Admin\ProductController@store');
+$router->get('/admin/produtos/{id}',     'Admin\ProductController@edit');
+$router->post('/admin/produtos/{id}',    'Admin\ProductController@update');
+$router->post('/admin/produtos/{id}/toggle', 'Admin\ProductController@toggle');
+$router->post('/admin/produtos/{id}/duplicar', 'Admin\ProductController@duplicate');
+
+// Estoque
+$router->get('/admin/estoque',           'Admin\StockController@index');
+$router->post('/admin/estoque/ajuste',   'Admin\StockController@adjust');
+
+// Pedidos
+$router->get('/admin/pedidos',           'Admin\OrderController@index');
+$router->get('/admin/pedidos/{id}',      'Admin\OrderController@show');
+$router->post('/admin/pedidos/{id}/status', 'Admin\OrderController@updateStatus');
+$router->get('/admin/pedidos/exportar',  'Admin\OrderController@export');
+
+// Clientes
+$router->get('/admin/clientes',          'Admin\CustomerController@index');
+$router->get('/admin/clientes/{id}',     'Admin\CustomerController@show');
+
+// Cupons
+$router->get('/admin/cupons',            'Admin\CouponController@index');
+$router->get('/admin/cupons/novo',       'Admin\CouponController@create');
+$router->post('/admin/cupons',           'Admin\CouponController@store');
+$router->get('/admin/cupons/{id}',       'Admin\CouponController@edit');
+$router->post('/admin/cupons/{id}',      'Admin\CouponController@update');
+$router->post('/admin/cupons/{id}/toggle', 'Admin\CouponController@toggle');
+
+// Avaliações
+$router->get('/admin/avaliacoes',        'Admin\ReviewController@index');
+$router->post('/admin/avaliacoes/{id}/aprovar', 'Admin\ReviewController@approve');
+$router->post('/admin/avaliacoes/{id}/rejeitar', 'Admin\ReviewController@reject');
+
+// Central de Scripts
+$router->get('/admin/scripts',           'Admin\ScriptController@index');
+$router->post('/admin/scripts',          'Admin\ScriptController@update');
+
+// UTM Builder
+$router->get('/admin/utm',               'Admin\UtmController@index');
+$router->post('/admin/utm',              'Admin\UtmController@store');
+$router->post('/admin/utm/{id}/excluir', 'Admin\UtmController@delete');
+
+// Notificações
+$router->get('/admin/notificacoes',                    'Admin\NotificationController@index');
+$router->post('/admin/notificacoes/{id}/ler',          'Admin\NotificationController@markRead');
+$router->post('/admin/notificacoes/marcar-todas',      'Admin\NotificationController@markAllRead');
+
+// ─── Despacha ────────────────────────────────────────────────────────────────
+$router->dispatch();

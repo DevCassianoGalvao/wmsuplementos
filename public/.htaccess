@@ -1,0 +1,50 @@
+# ─── Segurança ────────────────────────────────────────────────────────────────
+ServerSignature Off
+Options -Indexes -MultiViews
+
+# Headers de segurança (seção 5.3 PRD)
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://sdk.mercadopago.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-src https://www.mercadopago.com.br https://www.mercadopago.com; connect-src 'self' https://api.mercadopago.com;"
+</IfModule>
+
+# ─── Compressão GZIP ──────────────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# ─── Cache de navegador ───────────────────────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/webp   "access plus 1 year"
+    ExpiresByType image/jpeg   "access plus 1 year"
+    ExpiresByType image/png    "access plus 1 year"
+    ExpiresByType text/css     "access plus 30 days"
+    ExpiresByType application/javascript "access plus 30 days"
+</IfModule>
+
+# ─── URL rewrite → public/index.php ──────────────────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Não redireciona arquivos e diretórios reais
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Bloqueia acesso direto a cron/, logs/, app/, config/
+    RewriteRule ^(cron|logs|app|config|database|docs)/ - [F,L]
+
+    # Tudo o mais vai para index.php
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# ─── Protege arquivos sensíveis ───────────────────────────────────────────────
+<FilesMatch "\.(env|sql|log|md|json|lock|gitignore)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
