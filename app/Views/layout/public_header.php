@@ -9,7 +9,7 @@
     <?php endif; ?>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/design-system.css?v=20260623">
     <link rel="stylesheet" href="/assets/css/animations.css?v=20260623">
     <link rel="stylesheet" href="/assets/css/main.css?v=20260623">
@@ -24,7 +24,7 @@
         </button>
 
         <a href="/" class="logo" aria-label="Maia Suplementos">
-            <img src="/assets/img/logo.png" alt="Maia Suplementos" height="40" loading="eager" style="height:40px;width:auto;">
+            <img src="/assets/img/logo.svg" alt="Maia Suplementos" height="40" loading="eager" style="height:40px;width:auto;">
         </a>
 
         <form class="search-form" action="/busca" method="get" role="search">
