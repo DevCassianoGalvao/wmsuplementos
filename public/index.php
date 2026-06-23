@@ -31,15 +31,10 @@ define('ROOT_PATH', dirname(__DIR__));
 })();
 
 // ─── Configuração de erros ────────────────────────────────────────────────────
-$debug = filter_var(getenv('APP_DEBUG') ?: 'false', FILTER_VALIDATE_BOOLEAN);
-
-if ($debug) {
-    ini_set('display_errors', '1');
-    error_reporting(E_ALL);
-} else {
-    ini_set('display_errors', '0');
-    error_reporting(0);
-}
+// DEBUG TEMPORÁRIO — remover após resolver 500s
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+$debug = true;
 
 ini_set('log_errors', '1');
 ini_set('error_log', ROOT_PATH . '/' . (getenv('LOG_PATH') ?: 'logs/') . 'php_errors.log');
