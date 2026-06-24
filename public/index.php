@@ -240,6 +240,17 @@ $router->post('/admin/avaliacoes/{id}/rejeitar', 'Admin\ReviewController@reject'
 $router->get('/admin/scripts',           'Admin\ScriptController@index');
 $router->post('/admin/scripts',          'Admin\ScriptController@update');
 
+// Configuracoes
+$router->get('/admin/configuracoes',     'Admin\SettingsController@index');
+$router->post('/admin/configuracoes',    'Admin\SettingsController@update');
+
+// Usuarios admin
+$router->get('/admin/usuarios',          'Admin\AdminUserController@index');
+$router->get('/admin/usuarios/novo',     'Admin\AdminUserController@create');
+$router->post('/admin/usuarios',         'Admin\AdminUserController@store');
+$router->get('/admin/usuarios/{id}',     'Admin\AdminUserController@edit');
+$router->post('/admin/usuarios/{id}',    'Admin\AdminUserController@update');
+
 // UTM Builder
 $router->get('/admin/utm',               'Admin\UtmController@index');
 $router->post('/admin/utm',              'Admin\UtmController@store');

@@ -56,6 +56,12 @@
             <a href="/admin/scripts" class="nav-item <?= str_starts_with($currentPath, '/admin/scripts') ? 'active' : '' ?>">
                 Scripts
             </a>
+            <a href="/admin/configuracoes" class="nav-item <?= str_starts_with($currentPath, '/admin/configuracoes') ? 'active' : '' ?>">
+                Configuracoes
+            </a>
+            <a href="/admin/usuarios" class="nav-item <?= str_starts_with($currentPath, '/admin/usuarios') ? 'active' : '' ?>">
+                Usuarios
+            </a>
             <a href="/admin/utm" class="nav-item <?= str_starts_with($currentPath, '/admin/utm') ? 'active' : '' ?>">
                 UTM Builder
             </a>
