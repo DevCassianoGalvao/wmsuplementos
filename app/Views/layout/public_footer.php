@@ -3,8 +3,8 @@
 <footer class="site-footer">
     <div class="container footer-inner">
         <div class="footer-brand">
-            <img src="/assets/img/logo-white.svg" alt="Maia Suplementos" width="120" height="32">
-            <p class="footer-tagline">Suplementação premium para quem leva a sério.</p>
+            <img src="/assets/img/logo.png" alt="Maia Suplementos" width="132" height="44" loading="lazy">
+            <p class="footer-tagline">Suplementação premium para quem leva resultado a sério.</p>
         </div>
         <div class="footer-col">
             <h4>Navegação</h4>
@@ -31,15 +31,21 @@
     <div class="footer-bottom">
         <div class="container">
             <span class="text-muted">&copy; <?= date('Y') ?> Maia Suplementos. Todos os direitos reservados.</span>
-            <span class="footer-security">
-                <img src="/assets/img/ssl-badge.svg" alt="Site seguro SSL" width="60" height="24">
-                <img src="/assets/img/pagamento-seguro.svg" alt="Pagamento seguro" width="120" height="24">
+            <span class="footer-security" aria-label="Selos de segurança">
+                <span class="security-seal">
+                    <span class="security-seal__dot"></span>
+                    SSL Seguro
+                </span>
+                <span class="security-seal security-seal--payment">
+                    <span class="security-seal__card"></span>
+                    Pagamento Seguro
+                </span>
             </span>
         </div>
     </div>
 </footer>
 
-<script src="/assets/js/placeholder-images.js" defer></script>
-<script src="/assets/js/main.js" defer></script>
+<script src="/assets/js/placeholder-images.js?v=20260624" defer></script>
+<script src="/assets/js/main.js?v=20260624" defer></script>
 </body>
 </html>
