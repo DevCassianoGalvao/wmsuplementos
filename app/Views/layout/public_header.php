@@ -7,12 +7,20 @@
     <?php if (!empty($metaDesc)): ?>
     <meta name="description" content="<?= htmlspecialchars($metaDesc, ENT_QUOTES, 'UTF-8') ?>">
     <?php endif; ?>
+    <meta property="og:title" content="<?= htmlspecialchars($pageTitle ?? 'Maia Suplementos', ENT_QUOTES, 'UTF-8') ?>">
+    <?php if (!empty($metaDesc)): ?>
+    <meta property="og:description" content="<?= htmlspecialchars($metaDesc, ENT_QUOTES, 'UTF-8') ?>">
+    <?php endif; ?>
+    <meta property="og:type" content="<?= !empty($ogType) ? htmlspecialchars($ogType, ENT_QUOTES, 'UTF-8') : 'website' ?>">
+    <?php if (!empty($ogImage)): ?>
+    <meta property="og:image" content="<?= htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8') ?>">
+    <?php endif; ?>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/design-system.css?v=20260624-2">
     <link rel="stylesheet" href="/assets/css/animations.css?v=20260624-2">
-    <link rel="stylesheet" href="/assets/css/main.css?v=20260624-2">
+    <link rel="stylesheet" href="/assets/css/main.css?v=20260624-4">
     <?= \Maia\Helpers\ScriptInjector::head() ?>
 </head>
 <body>

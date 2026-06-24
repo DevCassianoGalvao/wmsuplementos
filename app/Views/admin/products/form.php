@@ -33,8 +33,25 @@
             </div>
 
             <div class="form-group">
+                <label for="sku">SKU</label>
+                <input type="text" id="sku" name="sku" maxlength="100"
+                       value="<?= htmlspecialchars($product['sku'] ?? $_POST['sku'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+
+            <div class="form-group">
                 <label for="description">Descrição</label>
                 <textarea id="description" name="description" rows="6"><?= htmlspecialchars($product['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="benefits">Beneficios</label>
+                <textarea id="benefits" name="benefits" rows="5"><?= htmlspecialchars($product['benefits'] ?? $_POST['benefits'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="nutrition_table">Tabela nutricional</label>
+                <textarea id="nutrition_table" name="nutrition_table" rows="5" placeholder="Proteina: 24g&#10;Carboidratos: 3g"><?= htmlspecialchars(is_array($product['nutrition_table'] ?? null) ? json_encode($product['nutrition_table'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) : ($product['nutrition_table'] ?? $_POST['nutrition_table'] ?? ''), ENT_QUOTES, 'UTF-8') ?></textarea>
+                <small>Use JSON ou linhas no formato Campo: Valor.</small>
             </div>
 
             <div class="form-row">
@@ -101,6 +118,7 @@
             <div class="form-check-row">
                 <label><input type="checkbox" name="active" value="1" <?= ($product['active'] ?? 1) ? 'checked' : '' ?>> Ativo</label>
                 <label><input type="checkbox" name="featured" value="1" <?= ($product['featured'] ?? 0) ? 'checked' : '' ?>> Destaque</label>
+                <label><input type="checkbox" name="bestseller" value="1" <?= ($product['bestseller'] ?? 0) ? 'checked' : '' ?>> Mais vendido</label>
             </div>
         </section>
 
@@ -110,7 +128,7 @@
             <div class="current-images">
                 <?php foreach ($product['images'] as $img): ?>
                 <div class="thumb-item">
-                    <img src="/uploads/products/<?= htmlspecialchars($img['filename_webp'] ?? $img['filename'], ENT_QUOTES, 'UTF-8') ?>"
+                    <img src="<?= htmlspecialchars($img['filename_webp'] ?? $img['filename'], ENT_QUOTES, 'UTF-8') ?>"
                          alt="" width="80" height="80">
                 </div>
                 <?php endforeach; ?>
@@ -126,13 +144,18 @@
         <section class="form-card">
             <h2>SEO</h2>
             <div class="form-group">
-                <label for="meta_title">Meta Title</label>
-                <input type="text" id="meta_title" name="meta_title" maxlength="70"
+                <label for="seo_title">Meta Title</label>
+                <input type="text" id="seo_title" name="seo_title" maxlength="70"
                        value="<?= htmlspecialchars($product['seo_title'] ?? $product['meta_title'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
             </div>
             <div class="form-group">
-                <label for="meta_description">Meta Description</label>
-                <textarea id="meta_description" name="meta_description" maxlength="160" rows="3"><?= htmlspecialchars($product['seo_description'] ?? $product['meta_description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                <label for="seo_description">Meta Description</label>
+                <textarea id="seo_description" name="seo_description" maxlength="160" rows="3"><?= htmlspecialchars($product['seo_description'] ?? $product['meta_description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+            <div class="form-group">
+                <label for="og_image">Open Graph image</label>
+                <input type="text" id="og_image" name="og_image" maxlength="255"
+                       value="<?= htmlspecialchars($product['og_image'] ?? $_POST['og_image'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
             </div>
         </section>
     </div>

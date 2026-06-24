@@ -171,10 +171,19 @@ class ProductController extends BaseController
 
     private function extractProductData(): array
     {
+        $name = Sanitizer::plainText($_POST['name'] ?? '');
+        $slug = Sanitizer::slug($_POST['slug'] ?? '');
+        if ($slug === '' && $name !== '') {
+            $slug = Sanitizer::slug($name);
+        }
+
         return [
-            'name'        => Sanitizer::plainText($_POST['name']        ?? ''),
-            'slug'        => Sanitizer::slug($_POST['slug']             ?? ''),
+            'name'        => $name,
+            'slug'        => $slug,
+            'sku'         => Sanitizer::plainText($_POST['sku']         ?? ''),
             'description' => Sanitizer::plainText($_POST['description'] ?? ''),
+            'benefits'    => Sanitizer::plainText($_POST['benefits']    ?? ''),
+            'nutrition_table' => $this->extractNutritionTable($_POST['nutrition_table'] ?? ''),
             'price'       => (float)str_replace(',', '.', $_POST['price'] ?? '0'),
             'price_sale'  => !empty($_POST['price_sale'])
                                 ? (float)str_replace(',', '.', $_POST['price_sale'])
@@ -186,9 +195,34 @@ class ProductController extends BaseController
             'weight_g'    => (int)($_POST['weight_g']    ?? 0) ?: null,
             'active'      => isset($_POST['active']) ? 1 : 0,
             'featured'    => isset($_POST['featured']) ? 1 : 0,
-            'meta_title'       => Sanitizer::plainText($_POST['meta_title']       ?? ''),
-            'meta_description' => Sanitizer::plainText($_POST['meta_description'] ?? ''),
+            'bestseller'   => isset($_POST['bestseller']) ? 1 : 0,
+            'seo_title'       => Sanitizer::plainText($_POST['seo_title']       ?? $_POST['meta_title'] ?? ''),
+            'seo_description' => Sanitizer::plainText($_POST['seo_description'] ?? $_POST['meta_description'] ?? ''),
+            'og_image'        => Sanitizer::plainText($_POST['og_image']        ?? ''),
         ];
+    }
+
+    private function extractNutritionTable(string $raw): ?array
+    {
+        $raw = trim($raw);
+        if ($raw === '') {
+            return null;
+        }
+
+        $decoded = json_decode($raw, true);
+        if (is_array($decoded)) {
+            return $decoded;
+        }
+
+        $rows = [];
+        foreach (preg_split('/\r\n|\r|\n/', $raw) as $line) {
+            $parts = array_map('trim', explode(':', $line, 2));
+            if (count($parts) === 2 && $parts[0] !== '') {
+                $rows[$parts[0]] = $parts[1];
+            }
+        }
+
+        return $rows ?: null;
     }
 
     private function validateProduct(array $data, ?int $ignoreId = null): Validator

@@ -64,6 +64,7 @@ class ProductController extends BaseController
             'pageTitle'  => $product['seo_title']       ?: $product['name'] . ' | Maia Suplementos',
             'metaDesc'   => $product['seo_description'] ?: '',
             'ogImage'    => $product['og_image']        ?: '',
+            'ogType'     => 'product',
             'product'    => $product,
             'related'    => $model->getRelated((int)$product['category_id'], (int)$product['id']),
             'reviews'    => $reviews,
