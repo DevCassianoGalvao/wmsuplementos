@@ -61,13 +61,14 @@ try {
 
     if ($tableExists) {
         $notifications = db()->query(
-            'SELECT sn.id, sn.email, sn.customer_name, sn.product_id,
+            "SELECT sn.id, sn.email, COALESCE(u.name, 'Cliente') AS customer_name, sn.product_id,
                     p.name AS product_name, p.slug AS product_slug, p.stock
                FROM stock_notifications sn
                JOIN products p ON p.id = sn.product_id
-              WHERE sn.sent_at IS NULL
+               LEFT JOIN users u ON u.id = sn.user_id
+              WHERE sn.notified_at IS NULL
                 AND p.stock > 0
-              LIMIT 100'
+              LIMIT 100"
         )->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach ($notifications as $notif) {
@@ -77,7 +78,7 @@ try {
             ]);
 
             db()->prepare(
-                'UPDATE stock_notifications SET sent_at = NOW() WHERE id = ?'
+                'UPDATE stock_notifications SET notified_at = NOW() WHERE id = ?'
             )->execute([$notif['id']]);
 
             $notificationsCount++;

@@ -6,6 +6,10 @@ namespace Maia\Controllers;
 
 use Maia\Models\ProductModel;
 use Maia\Models\CategoryModel;
+use Maia\Helpers\Auth;
+use Maia\Helpers\CSRF;
+use Maia\Helpers\Sanitizer;
+use Maia\Helpers\Validator;
 
 class ProductController extends BaseController
 {
@@ -70,7 +74,50 @@ class ProductController extends BaseController
             'reviews'    => $reviews,
             'avgRating'  => $model->getAverageRating((int)$product['id']),
             'reviewCount'=> $model->countReviews((int)$product['id']),
+            'flash'      => $this->getFlash(),
         ]);
+    }
+
+    public function notifyStock(array $params): void
+    {
+        CSRF::verify();
+
+        $slug = $params['slug'] ?? '';
+        $product = (new ProductModel())->findBySlug($slug);
+
+        if (!$product) {
+            http_response_code(404);
+            $this->render('errors/404');
+            return;
+        }
+
+        $email = Auth::isUserLogged()
+            ? (string)($_SESSION['user_email'] ?? '')
+            : Sanitizer::email($_POST['email'] ?? '');
+
+        $validator = new Validator(['email' => $email]);
+        $validator->required('email')->email('email');
+        if ($validator->fails()) {
+            $this->flash('error', implode(' ', $validator->errors()));
+            $this->redirect('/produto/' . $slug);
+        }
+
+        $existing = db()->prepare(
+            'SELECT id FROM stock_notifications
+              WHERE product_id = ? AND email = ? AND notified_at IS NULL
+              LIMIT 1'
+        );
+        $existing->execute([(int)$product['id'], $email]);
+
+        if (!$existing->fetchColumn()) {
+            db()->prepare(
+                'INSERT INTO stock_notifications (product_id, user_id, email, created_at)
+                 VALUES (?, ?, ?, NOW())'
+            )->execute([(int)$product['id'], Auth::userId(), $email]);
+        }
+
+        $this->flash('success', 'Avisaremos voce quando este produto voltar ao estoque.');
+        $this->redirect('/produto/' . $slug);
     }
 
     private function trackFunnelEvent(string $step, int $productId): void

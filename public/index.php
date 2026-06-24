@@ -143,6 +143,7 @@ $router->get('/produtos',                'ProductController@index');
 $router->get('/combos',                  'ComboController@index');
 $router->get('/categoria/{slug}',        'CategoryController@show');
 $router->get('/produto/{slug}',          'ProductController@show');
+$router->post('/produto/{slug}/avisar',  'ProductController@notifyStock');
 $router->get('/combo/{slug}',            'ComboController@show');
 $router->get('/busca',                   'SearchController@index');
 

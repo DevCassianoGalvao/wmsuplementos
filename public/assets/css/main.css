@@ -573,6 +573,16 @@ main { display: block; }
     border: 1px solid rgba(255,255,255,0.08);
     margin-top: 0.75rem;
 }
+.stock-notify-form {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.75rem;
+    max-width: 420px;
+}
+.stock-notify-copy {
+    margin: 0;
+    color: var(--color-text-secondary);
+}
 
 /* ============================================================
    CART

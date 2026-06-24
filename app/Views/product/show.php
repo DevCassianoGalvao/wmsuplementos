@@ -24,6 +24,12 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
 ?>
 
 <div class="container">
+    <?php if (!empty($flash)): ?>
+    <div class="alert alert-<?= htmlspecialchars($flash['type'] ?? 'success', ENT_QUOTES, 'UTF-8') ?>">
+        <?= htmlspecialchars($flash['message'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+    </div>
+    <?php endif; ?>
+
     <nav class="breadcrumb" aria-label="Navegacao">
         <ol>
             <li><a href="/">Home</a></li>
@@ -102,6 +108,16 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
             </form>
             <?php else: ?>
             <p class="out-of-stock-msg">Produto temporariamente indisponivel</p>
+            <form action="/produto/<?= htmlspecialchars($product['slug'], ENT_QUOTES, 'UTF-8') ?>/avisar" method="post" class="stock-notify-form">
+                <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+                <?php if (!\Maia\Helpers\Auth::isUserLogged()): ?>
+                <label for="stock-email">Receber aviso por e-mail</label>
+                <input type="email" id="stock-email" name="email" placeholder="voce@email.com" required>
+                <?php else: ?>
+                <p class="stock-notify-copy">Vamos avisar no e-mail da sua conta.</p>
+                <?php endif; ?>
+                <button type="submit" class="btn btn-outline btn-block">Avise-me quando voltar</button>
+            </form>
             <?php endif; ?>
 
             <?php if (!empty($product['description'])): ?>
