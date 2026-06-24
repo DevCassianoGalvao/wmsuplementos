@@ -1,19 +1,25 @@
-<?php use Maia\Helpers\Sanitizer; ?>
+<?php use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
 
 <div class="page-header">
     <h1><?= htmlspecialchars($customer['name'], ENT_QUOTES, 'UTF-8') ?></h1>
-    <a href="/admin/clientes" class="btn btn-outline">← Voltar</a>
+    <div class="page-actions">
+        <form action="/admin/clientes/<?= (int)$customer['id'] ?>/anonimizar" method="post"
+              onsubmit="return confirm('Anonimizar este cliente? Esta acao remove dados pessoais e nao deve ser revertida.');">
+            <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+            <button type="submit" class="btn btn-outline">Anonimizar LGPD</button>
+        </form>
+        <a href="/admin/clientes" class="btn btn-outline">Voltar</a>
+    </div>
 </div>
 
 <div class="customer-detail-grid">
-
     <section class="detail-card">
         <h2>Dados Pessoais</h2>
         <dl>
             <dt>E-mail:</dt><dd><?= htmlspecialchars($customer['email'], ENT_QUOTES, 'UTF-8') ?></dd>
-            <dt>Telefone:</dt><dd><?= htmlspecialchars($customer['phone'] ?? '—', ENT_QUOTES, 'UTF-8') ?></dd>
+            <dt>Telefone:</dt><dd><?= htmlspecialchars($customer['phone'] ?? '-', ENT_QUOTES, 'UTF-8') ?></dd>
             <dt>Cadastro:</dt><dd><?= htmlspecialchars(substr($customer['created_at'] ?? '', 0, 10), ENT_QUOTES, 'UTF-8') ?></dd>
-            <dt>Opt-in e-mail:</dt><dd><?= $customer['email_opt_in'] ? 'Sim' : 'Não' ?></dd>
+            <dt>Opt-in e-mail:</dt><dd><?= !empty($customer['email_opt_in']) ? 'Sim' : 'Nao' ?></dd>
         </dl>
     </section>
 
@@ -22,7 +28,7 @@
         <dl>
             <dt>Total de Pedidos:</dt><dd><?= (int)($customer['total_orders'] ?? 0) ?></dd>
             <dt>Total Gasto:</dt><dd>R$ <?= Sanitizer::money((float)($customer['total_spent'] ?? 0)) ?></dd>
-            <dt>Última Compra:</dt><dd><?= htmlspecialchars($customer['last_order_at'] ? substr($customer['last_order_at'], 0, 10) : '—', ENT_QUOTES, 'UTF-8') ?></dd>
+            <dt>Ultima Compra:</dt><dd><?= htmlspecialchars(!empty($customer['last_order_at']) ? substr($customer['last_order_at'], 0, 10) : '-', ENT_QUOTES, 'UTF-8') ?></dd>
         </dl>
     </section>
 
@@ -47,5 +53,4 @@
         </table>
         <?php endif; ?>
     </section>
-
 </div>

@@ -169,6 +169,7 @@ class UserModel extends BaseModel
     public function anonymize(int $id): bool
     {
         $anon = 'anonimizado_' . $id;
+        $hash = password_hash(bin2hex(random_bytes(32)), PASSWORD_BCRYPT, ['cost' => 12]);
         $this->query(
             'UPDATE users
                 SET name          = ?,
@@ -179,7 +180,7 @@ class UserModel extends BaseModel
                     password_hash = ?,
                     email_opt_in  = 0
               WHERE id = ?',
-            [$anon, $anon . '@removido.local', bin2hex(random_bytes(16)), $id]
+            [$anon, $anon . '@removido.local', $hash, $id]
         );
         return true;
     }

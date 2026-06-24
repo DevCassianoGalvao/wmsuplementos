@@ -6,6 +6,7 @@ namespace Maia\Controllers\Admin;
 
 use Maia\Controllers\BaseController;
 use Maia\Helpers\Auth;
+use Maia\Helpers\CSRF;
 use Maia\Models\UserModel;
 use Maia\Models\OrderModel;
 
@@ -97,5 +98,22 @@ class CustomerController extends BaseController
 
         fclose($out);
         exit;
+    }
+
+    public function anonymize(array $params): void
+    {
+        Auth::requireAdminRole();
+        CSRF::verify();
+
+        $id = (int)($params['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('error', 'Cliente invalido.');
+            $this->redirect('/admin/clientes');
+        }
+
+        (new UserModel())->anonymize($id);
+
+        $this->flash('success', 'Cliente anonimizado conforme LGPD.');
+        $this->redirect('/admin/clientes');
     }
 }
