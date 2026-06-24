@@ -157,6 +157,20 @@ class CartService
             return ['error' => "Pedido mínimo de R$ {$min} para usar este cupom."];
         }
 
+        $userId = (int)($_SESSION['user_id'] ?? 0);
+        $maxUsesPerUser = (int)($coupon['max_uses_per_user'] ?? 0);
+        if ($userId > 0 && $maxUsesPerUser > 0) {
+            $usageStmt = db()->prepare(
+                'SELECT COUNT(*) FROM orders
+                  WHERE user_id = ? AND coupon_id = ? AND status != ?'
+            );
+            $usageStmt->execute([$userId, (int)$coupon['id'], 'cancelado']);
+
+            if ((int)$usageStmt->fetchColumn() >= $maxUsesPerUser) {
+                return ['error' => 'Este cupom ja atingiu o limite de uso para sua conta.'];
+            }
+        }
+
         $_SESSION[self::COUPON_KEY] = $coupon;
         $this->persist();
 

@@ -53,12 +53,12 @@ class CouponController extends BaseController
         }
 
         $stmt = db()->prepare(
-            'INSERT INTO coupons (code, type, value, min_order, max_uses, expires_at, active)
-             VALUES (?, ?, ?, ?, ?, ?, ?)'
+            'INSERT INTO coupons (code, type, value, min_order, max_uses, max_uses_per_user, expires_at, active)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
         );
         $stmt->execute([
             $data['code'], $data['type'], $data['value'],
-            $data['min_order'] ?: null, $data['max_uses'] ?: null,
+            $data['min_order'] ?: null, $data['max_uses'] ?: null, $data['max_uses_per_user'],
             $data['expires_at'] ?: null, $data['active'],
         ]);
 
@@ -104,10 +104,10 @@ class CouponController extends BaseController
 
         db()->prepare(
             'UPDATE coupons SET code = ?, type = ?, value = ?, min_order = ?,
-             max_uses = ?, expires_at = ?, active = ? WHERE id = ?'
+             max_uses = ?, max_uses_per_user = ?, expires_at = ?, active = ? WHERE id = ?'
         )->execute([
             $data['code'], $data['type'], $data['value'],
-            $data['min_order'] ?: null, $data['max_uses'] ?: null,
+            $data['min_order'] ?: null, $data['max_uses'] ?: null, $data['max_uses_per_user'],
             $data['expires_at'] ?: null, $data['active'], $id,
         ]);
 
@@ -135,6 +135,7 @@ class CouponController extends BaseController
             'value'      => (float)str_replace(',', '.', $_POST['value'] ?? '0'),
             'min_order'  => (float)str_replace(',', '.', $_POST['min_order'] ?? '0'),
             'max_uses'   => (int)($_POST['max_uses']   ?? 0),
+            'max_uses_per_user' => max(1, (int)($_POST['max_uses_per_user'] ?? 1)),
             'expires_at' => $_POST['expires_at'] ?? '',
             'active'     => isset($_POST['active']) ? 1 : 0,
         ];

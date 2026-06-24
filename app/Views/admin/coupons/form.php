@@ -47,6 +47,12 @@
                 <small>0 = ilimitado</small>
             </div>
             <div class="form-group">
+                <label for="max_uses_per_user">Max. por Cliente</label>
+                <input type="number" id="max_uses_per_user" name="max_uses_per_user" min="1"
+                       value="<?= (int)($coupon['max_uses_per_user'] ?? 1) ?>">
+                <small>Para clientes logados</small>
+            </div>
+            <div class="form-group">
                 <label for="expires_at">Validade</label>
                 <input type="date" id="expires_at" name="expires_at"
                        value="<?= htmlspecialchars(substr($coupon['expires_at'] ?? '', 0, 10), ENT_QUOTES, 'UTF-8') ?>">

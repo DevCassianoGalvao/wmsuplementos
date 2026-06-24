@@ -19,8 +19,8 @@
                 <?php foreach ($brands as $brand): ?>
                 <label class="filter-label">
                     <input type="checkbox" name="marca[]"
-                           value="<?= htmlspecialchars($brand['slug'] ?? $brand['name'], ENT_QUOTES, 'UTF-8') ?>"
-                           <?= in_array($brand['slug'] ?? $brand['name'], (array)($_GET['marca'] ?? []), true) ? 'checked' : '' ?>>
+                           value="<?= (int)$brand['id'] ?>"
+                           <?= in_array((string)$brand['id'], array_map('strval', (array)($_GET['marca'] ?? [])), true) ? 'checked' : '' ?>>
                     <?= htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8') ?>
                 </label>
                 <?php endforeach; ?>
@@ -48,12 +48,12 @@
             <h1><?= htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8') ?></h1>
             <div class="category-controls">
                 <span><?= (int)$total ?> produto<?= $total !== 1 ? 's' : '' ?></span>
-                <select name="ordem" onchange="document.getElementById('filter-form').submit()">
+                <select name="ordem" form="filter-form" onchange="document.getElementById('filter-form').submit()">
                     <option value="relevancia" <?= ($_GET['ordem'] ?? '') === 'relevancia' ? 'selected' : '' ?>>Relevância</option>
-                    <option value="menor_preco" <?= ($_GET['ordem'] ?? '') === 'menor_preco' ? 'selected' : '' ?>>Menor Preço</option>
-                    <option value="maior_preco" <?= ($_GET['ordem'] ?? '') === 'maior_preco' ? 'selected' : '' ?>>Maior Preço</option>
-                    <option value="mais_vendido" <?= ($_GET['ordem'] ?? '') === 'mais_vendido' ? 'selected' : '' ?>>Mais Vendidos</option>
-                    <option value="novidade" <?= ($_GET['ordem'] ?? '') === 'novidade' ? 'selected' : '' ?>>Novidades</option>
+                    <option value="preco_asc" <?= ($_GET['ordem'] ?? '') === 'preco_asc' ? 'selected' : '' ?>>Menor Preço</option>
+                    <option value="preco_desc" <?= ($_GET['ordem'] ?? '') === 'preco_desc' ? 'selected' : '' ?>>Maior Preço</option>
+                    <option value="mais_vendidos" <?= ($_GET['ordem'] ?? '') === 'mais_vendidos' ? 'selected' : '' ?>>Mais Vendidos</option>
+                    <option value="novidades" <?= ($_GET['ordem'] ?? '') === 'novidades' ? 'selected' : '' ?>>Novidades</option>
                 </select>
             </div>
         </header>

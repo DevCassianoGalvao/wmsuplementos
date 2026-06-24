@@ -130,30 +130,73 @@
 <script>
 (function() {
     const daily = <?= json_encode($daily, JSON_UNESCAPED_UNICODE) ?>;
-    const labels  = daily.map(d => d.date);
-    const revenue = daily.map(d => parseFloat(d.revenue));
-
     const ctx = document.getElementById('salesChart');
-    if (!ctx || !window.Chart) return;
+    if (!ctx) return;
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels,
-            datasets: [{
-                label: 'Receita (R$)',
-                data: revenue,
-                borderColor: '#E63329',
-                backgroundColor: 'rgba(230,51,41,0.12)',
-                tension: 0.3,
-                fill: true,
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-        }
+    const canvas = ctx;
+    const parentWidth = canvas.parentElement ? canvas.parentElement.clientWidth : 800;
+    const dpr = window.devicePixelRatio || 1;
+    const width = Math.max(parentWidth, 320);
+    const height = 260;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+
+    const chart = canvas.getContext('2d');
+    chart.scale(dpr, dpr);
+    chart.clearRect(0, 0, width, height);
+
+    const padding = { top: 24, right: 18, bottom: 34, left: 48 };
+    const values = daily.map(d => Number.parseFloat(d.revenue) || 0);
+    const max = Math.max(...values, 1);
+    const plotW = width - padding.left - padding.right;
+    const plotH = height - padding.top - padding.bottom;
+
+    chart.strokeStyle = 'rgba(255,255,255,0.08)';
+    chart.lineWidth = 1;
+    chart.font = '12px Space Grotesk, sans-serif';
+    chart.fillStyle = 'rgba(255,255,255,0.45)';
+
+    for (let i = 0; i <= 4; i++) {
+        const y = padding.top + (plotH / 4) * i;
+        chart.beginPath();
+        chart.moveTo(padding.left, y);
+        chart.lineTo(width - padding.right, y);
+        chart.stroke();
+        const label = Math.round(max - (max / 4) * i);
+        chart.fillText('R$ ' + label, 8, y + 4);
+    }
+
+    const points = values.map((value, index) => {
+        const x = padding.left + (values.length <= 1 ? 0 : (plotW / (values.length - 1)) * index);
+        const y = padding.top + plotH - (value / max) * plotH;
+        return { x, y };
     });
+
+    if (points.length > 0) {
+        const gradient = chart.createLinearGradient(0, padding.top, 0, height - padding.bottom);
+        gradient.addColorStop(0, 'rgba(230,51,41,0.28)');
+        gradient.addColorStop(1, 'rgba(230,51,41,0)');
+
+        chart.beginPath();
+        chart.moveTo(points[0].x, height - padding.bottom);
+        points.forEach(point => chart.lineTo(point.x, point.y));
+        chart.lineTo(points[points.length - 1].x, height - padding.bottom);
+        chart.closePath();
+        chart.fillStyle = gradient;
+        chart.fill();
+
+        chart.beginPath();
+        points.forEach((point, index) => {
+            if (index === 0) chart.moveTo(point.x, point.y);
+            else chart.lineTo(point.x, point.y);
+        });
+        chart.strokeStyle = '#E63329';
+        chart.lineWidth = 3;
+        chart.lineJoin = 'round';
+        chart.lineCap = 'round';
+        chart.stroke();
+    }
 })();
 </script>

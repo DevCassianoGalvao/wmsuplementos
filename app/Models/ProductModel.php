@@ -72,6 +72,16 @@ class ProductModel extends BaseModel
             $params[] = (int)$filters['brand_id'];
         }
 
+        if (!empty($filters['brand_ids']) && is_array($filters['brand_ids'])) {
+            $brandIds = array_values(array_filter(array_map('intval', $filters['brand_ids'])));
+            if (!empty($brandIds)) {
+                $where[] = 'p.brand_id IN (' . implode(',', array_fill(0, count($brandIds), '?')) . ')';
+                foreach ($brandIds as $brandId) {
+                    $params[] = $brandId;
+                }
+            }
+        }
+
         if (isset($filters['featured'])) {
             $where[]  = 'p.featured = ?';
             $params[] = (int)$filters['featured'];

@@ -17,6 +17,7 @@
             <th>Valor</th>
             <th>Mín. Pedido</th>
             <th>Usos</th>
+            <th>Por Cliente</th>
             <th>Validade</th>
             <th>Status</th>
             <th>Ações</th>
@@ -24,7 +25,7 @@
     </thead>
     <tbody>
     <?php if (empty($coupons)): ?>
-    <tr><td colspan="8" class="empty-state">Nenhum cupom cadastrado.</td></tr>
+    <tr><td colspan="9" class="empty-state">Nenhum cupom cadastrado.</td></tr>
     <?php else: ?>
     <?php foreach ($coupons as $c): ?>
     <tr>
@@ -33,6 +34,7 @@
         <td><?= $c['type'] === 'percent' ? (float)$c['value'] . '%' : 'R$ ' . Sanitizer::money((float)$c['value']) ?></td>
         <td><?= $c['min_order'] ? 'R$ ' . Sanitizer::money((float)$c['min_order']) : '—' ?></td>
         <td><?= (int)$c['used_count'] ?><?= $c['max_uses'] ? '/' . (int)$c['max_uses'] : '' ?></td>
+        <td><?= (int)($c['max_uses_per_user'] ?? 1) ?></td>
         <td><?= $c['expires_at'] ? htmlspecialchars(substr($c['expires_at'], 0, 10), ENT_QUOTES, 'UTF-8') : '—' ?></td>
         <td><span class="badge <?= $c['active'] ? 'badge-success' : 'badge-muted' ?>"><?= $c['active'] ? 'Ativo' : 'Inativo' ?></span></td>
         <td class="actions">

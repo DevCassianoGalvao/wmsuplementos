@@ -25,7 +25,7 @@ class CategoryController extends BaseController
             return;
         }
 
-        $brand    = !empty($_GET['marca'])     ? (int)$_GET['marca']     : null;
+        $brandIds = array_filter(array_map('intval', (array)($_GET['marca'] ?? [])));
         $minPrice = !empty($_GET['preco_min']) ? (float)$_GET['preco_min'] : null;
         $maxPrice = !empty($_GET['preco_max']) ? (float)$_GET['preco_max'] : null;
         $order    = $_GET['ordem'] ?? 'relevancia';
@@ -35,14 +35,14 @@ class CategoryController extends BaseController
         $filters = [
             'active'      => 1,
             'category_id' => $category['id'],
-            'brand_id'    => $brand,
+            'brand_ids'   => $brandIds,
             'min_price'   => $minPrice,
             'max_price'   => $maxPrice,
             'order_by'    => $order,
         ];
 
         // Sem filtros e página 1 → cacheia lista por 5 min
-        $hasFilters = $brand || $minPrice || $maxPrice || $order !== 'relevancia' || $page > 1;
+        $hasFilters = !empty($brandIds) || $minPrice || $maxPrice || $order !== 'relevancia' || $page > 1;
 
         $productModel = new ProductModel();
 

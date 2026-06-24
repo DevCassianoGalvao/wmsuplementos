@@ -31,8 +31,9 @@ define('ROOT_PATH', dirname(__DIR__));
 })();
 
 // ─── Configuração de erros ────────────────────────────────────────────────────
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
+$debug = filter_var(getenv('APP_DEBUG') ?: '0', FILTER_VALIDATE_BOOLEAN);
+ini_set('display_errors', $debug ? '1' : '0');
+ini_set('display_startup_errors', $debug ? '1' : '0');
 error_reporting(E_ALL);
 
 ini_set('log_errors', '1');
@@ -61,12 +62,18 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // ─── Middleware: security headers + audit log ─────────────────────────────────
 Maia\Middleware\SecurityHeaders::send();
-Maia\Middleware\AuditLogger::autoLog();
 
 // ─── Rate limiting em endpoints sensíveis ─────────────────────────────────────
 (function (): void {
-    $uri    = $_SERVER['REQUEST_URI'] ?? '';
+    $uri    = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '';
     $method = $_SERVER['REQUEST_METHOD'] ?? '';
+    $basePath = dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '/public/index.php'));
+    if ($basePath === '.' || $basePath === '/') {
+        $basePath = '';
+    }
+    if ($basePath !== '' && str_starts_with($uri, $basePath . '/')) {
+        $uri = substr($uri, strlen($basePath));
+    }
 
     // Checkout: 5 por minuto por IP
     if ($method === 'POST' && $uri === '/finalizar-compra') {
@@ -97,6 +104,7 @@ if ($_basePath === '.' || $_basePath === '/') {
 }
 // Constante global usada em BaseController::redirect() e em helpers
 define('APP_BASE', $_basePath);
+Maia\Middleware\AuditLogger::autoLog();
 
 // Output buffer que reescreve href/src/action="/..." → "/maiasuplementos/..."
 // Resolve o problema de subdiretório sem alterar nenhuma view.

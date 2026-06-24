@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Maia\Middleware;
 
 /**
- * Registra ações administrativas em logs/audit.log.
- * Formato: [datetime] [admin_id] [admin_email] [IP] [METHOD] [URI] [action] [detail]
- *
- * Uso no controller:
- *   AuditLogger::log('product.update', 'Produto #42 atualizado: nome alterado');
+ * Logs admin actions to audit_logs. Falls back to logs/audit.log if the table
+ * is unavailable, so audit failures do not break admin POST requests.
  */
 class AuditLogger
 {
@@ -22,28 +19,33 @@ class AuditLogger
                 ? ROOT_PATH . '/logs/audit.log'
                 : sys_get_temp_dir() . '/maia_audit.log';
         }
+
         return self::$logFile;
     }
 
     public static function log(string $action, string $detail = ''): void
     {
-        $adminId    = $_SESSION['admin_id']    ?? 0;
-        $adminEmail = $_SESSION['admin_email'] ?? 'anon';
-        $ip         = self::clientIp();
-        $method     = $_SERVER['REQUEST_METHOD'] ?? 'CLI';
-        $uri        = $_SERVER['REQUEST_URI']    ?? '';
-        $ts         = date('Y-m-d H:i:s');
+        $adminId = (int)($_SESSION['admin_id'] ?? 0);
+        $adminEmail = (string)($_SESSION['admin_email'] ?? 'anon');
+        $ip = self::clientIp();
+        $method = (string)($_SERVER['REQUEST_METHOD'] ?? 'CLI');
+        $uri = (string)($_SERVER['REQUEST_URI'] ?? '');
+        $ts = date('Y-m-d H:i:s');
+
+        if (self::logToDatabase($action, $detail, $adminId, $ip, $method, $uri)) {
+            return;
+        }
 
         $line = sprintf(
             "[%s] admin_id=%d email=%s ip=%s %s %s action=%s detail=%s\n",
             $ts,
-            (int)$adminId,
+            $adminId,
             $adminEmail,
             $ip,
             $method,
             $uri,
             $action,
-            $detail !== '' ? '"' . addslashes($detail) . '"' : '—'
+            $detail !== '' ? '"' . addslashes($detail) . '"' : '-'
         );
 
         $dir = dirname(self::logFile());
@@ -51,7 +53,6 @@ class AuditLogger
             mkdir($dir, 0750, true);
         }
 
-        // Rotação automática: renomeia se > 10 MB
         $logFile = self::logFile();
         if (is_file($logFile) && filesize($logFile) > 10 * 1024 * 1024) {
             rename($logFile, $logFile . '.' . date('Ymd-His'));
@@ -60,46 +61,106 @@ class AuditLogger
         file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
     }
 
-    /**
-     * Middleware automático: loga toda requisição POST no painel admin.
-     * Chamado uma vez em index.php, antes de dispatch().
-     */
     public static function autoLog(): void
     {
-        $uri    = $_SERVER['REQUEST_URI'] ?? '';
-        $method = $_SERVER['REQUEST_METHOD'] ?? '';
+        $uri = (string)($_SERVER['REQUEST_URI'] ?? '');
+        $method = (string)($_SERVER['REQUEST_METHOD'] ?? '');
+        $path = parse_url($uri, PHP_URL_PATH) ?: '';
+        $base = defined('APP_BASE') ? APP_BASE : '';
 
-        if ($method !== 'POST' || !str_starts_with($uri, '/admin/')) {
+        if ($base !== '' && str_starts_with($path, $base . '/')) {
+            $path = substr($path, strlen($base));
+        }
+
+        if ($method !== 'POST' || !str_starts_with($path, '/admin/')) {
             return;
         }
 
-        // Não loga logout (sem dado sensível a auditar)
-        if (str_ends_with($uri, '/logout') || str_ends_with($uri, '/sair')) {
+        if (str_ends_with($path, '/logout') || str_ends_with($path, '/sair')) {
             return;
         }
 
-        // Captura campos POST excluindo CSRF token e senhas
         $safe = [];
-        foreach ($_POST as $k => $v) {
-            if (in_array($k, ['csrf_token', 'password', 'password_confirm'], true)) {
+        foreach ($_POST as $key => $value) {
+            if (self::isSensitiveKey((string)$key)) {
                 continue;
             }
-            $val = is_array($v) ? json_encode($v) : (string)$v;
-            // Trunca valores longos (ex: custom_head scripts)
-            $safe[] = $k . '=' . (mb_strlen($val) > 80 ? mb_substr($val, 0, 80) . '…' : $val);
+
+            $raw = is_array($value)
+                ? json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+                : (string)$value;
+            $safe[] = $key . '=' . (mb_strlen($raw) > 80 ? mb_substr($raw, 0, 80) . '...' : $raw);
         }
 
         self::log('admin.post', implode(', ', $safe));
     }
 
-    private static function clientIp(): string
+    private static function logToDatabase(
+        string $action,
+        string $detail,
+        int $adminId,
+        string $ip,
+        string $method,
+        string $uri
+    ): bool {
+        if (!function_exists('db')) {
+            return false;
+        }
+
+        try {
+            $entity = 'admin';
+            if (str_contains($action, '.')) {
+                [$entity] = explode('.', $action, 2);
+                $entity = preg_replace('/[^a-z0-9_-]/i', '', $entity) ?: 'admin';
+            }
+
+            $payload = [
+                'detail' => $detail,
+                'method' => $method,
+                'uri' => $uri,
+            ];
+
+            $stmt = db()->prepare(
+                'INSERT INTO audit_logs (admin_user_id, action, entity, entity_id, old_value, new_value, ip)
+                 VALUES (:admin_user_id, :action, :entity, NULL, NULL, :new_value, :ip)'
+            );
+            $stmt->execute([
+                'admin_user_id' => $adminId > 0 ? $adminId : null,
+                'action' => mb_substr($action, 0, 100),
+                'entity' => mb_substr($entity, 0, 100),
+                'new_value' => json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                'ip' => $ip,
+            ]);
+
+            return true;
+        } catch (\Throwable $e) {
+            error_log('[AuditLogger] Falha ao gravar audit_logs: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    private static function isSensitiveKey(string $key): bool
     {
-        $headers = ['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'];
-        foreach ($headers as $h) {
-            if (!empty($_SERVER[$h])) {
-                return trim(explode(',', $_SERVER[$h])[0]);
+        $key = strtolower($key);
+        $blocked = ['csrf_token', 'password', 'senha', 'token', 'secret', 'api_key', 'client_secret'];
+
+        foreach ($blocked as $term) {
+            if (str_contains($key, $term)) {
+                return true;
             }
         }
+
+        return false;
+    }
+
+    private static function clientIp(): string
+    {
+        foreach (['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'] as $header) {
+            if (!empty($_SERVER[$header])) {
+                return trim(explode(',', (string)$_SERVER[$header])[0]);
+            }
+        }
+
         return '0.0.0.0';
     }
 }

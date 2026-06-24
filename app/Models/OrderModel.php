@@ -288,6 +288,7 @@ class OrderModel extends BaseModel
             }
 
             $items = $this->getItems($orderId);
+            $order = $this->findById($orderId);
             $productModel = new ProductModel();
 
             foreach ($items as $item) {
@@ -313,6 +314,10 @@ class OrderModel extends BaseModel
                         $productModel->incrementSold($productId, $quantity);
                     }
                 }
+            }
+
+            if (!empty($order['user_id'])) {
+                (new UserModel())->recordPurchase((int)$order['user_id'], (float)$order['total']);
             }
 
             if ($startedTransaction) {
