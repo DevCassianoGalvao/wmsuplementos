@@ -64,38 +64,43 @@ class DashboardController extends BaseController
 
     private function getFunnelStats(): array
     {
-        $steps = [
-            'visit'          => 'Visitas',
-            'product_view'   => 'Produto',
-            'add_to_cart'    => 'Carrinho',
-            'checkout_start' => 'Checkout',
-            'purchase'       => 'Compra',
-        ];
-
-        $stmt = db()->query(
-            "SELECT step, COUNT(DISTINCT COALESCE(session_id, CONCAT('evt-', id))) AS total
-               FROM funnel_events
-              WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-              GROUP BY step"
-        );
-
-        $counts = [];
-        foreach ($stmt->fetchAll() as $row) {
-            $counts[$row['step']] = (int)$row['total'];
-        }
-
-        $visitTotal = max(1, $counts['visit'] ?? 0);
-        $funnel = [];
-        foreach ($steps as $step => $label) {
-            $total = $counts[$step] ?? 0;
-            $funnel[] = [
-                'step'       => $step,
-                'label'      => $label,
-                'total'      => $total,
-                'conversion' => round(($total / $visitTotal) * 100, 1),
+        // funnel_events pode não existir — retorna vazio sem quebrar o dashboard
+        try {
+            $steps = [
+                'visit'          => 'Visitas',
+                'product_view'   => 'Produto',
+                'add_to_cart'    => 'Carrinho',
+                'checkout_start' => 'Checkout',
+                'purchase'       => 'Compra',
             ];
-        }
 
-        return $funnel;
+            $stmt = db()->query(
+                "SELECT step, COUNT(DISTINCT COALESCE(session_id, CONCAT('evt-', id))) AS total
+                   FROM funnel_events
+                  WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                  GROUP BY step"
+            );
+
+            $counts = [];
+            foreach ($stmt->fetchAll() as $row) {
+                $counts[$row['step']] = (int)$row['total'];
+            }
+
+            $visitTotal = max(1, $counts['visit'] ?? 0);
+            $funnel = [];
+            foreach ($steps as $step => $label) {
+                $total = $counts[$step] ?? 0;
+                $funnel[] = [
+                    'step'       => $step,
+                    'label'      => $label,
+                    'total'      => $total,
+                    'conversion' => round(($total / $visitTotal) * 100, 1),
+                ];
+            }
+
+            return $funnel;
+        } catch (\Throwable) {
+            return [];
+        }
     }
 }
