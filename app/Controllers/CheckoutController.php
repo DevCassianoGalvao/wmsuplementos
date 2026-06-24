@@ -6,6 +6,8 @@ namespace Maia\Controllers;
 
 use Maia\Models\OrderModel;
 use Maia\Models\UserModel;
+use Maia\Models\ProductModel;
+use Maia\Models\ComboModel;
 use Maia\Services\CartService;
 use Maia\Services\MercadoPagoService;
 use Maia\Helpers\CSRF;
@@ -67,6 +69,12 @@ class CheckoutController extends BaseController
             $this->redirect('/finalizar-compra');
         }
 
+        $stockError = $this->validateCartStock();
+        if ($stockError !== null) {
+            $this->flash('error', $stockError);
+            $this->redirect('/carrinho');
+        }
+
         // Persiste e-mail no cart_sessions para recuperação de abandono
         $this->cart->persist($email);
 
@@ -107,6 +115,7 @@ class CheckoutController extends BaseController
 
         // Funil
         $this->trackFunnel('purchase', $orderId);
+        $_SESSION['last_order_id'] = $orderId;
 
         // Cria preferência no Mercado Pago
         $mpResult = $this->createMercadoPagoPreference($orderId, $email, $name, $method);
@@ -130,10 +139,20 @@ class CheckoutController extends BaseController
             return;
         }
 
-        // Apenas o cliente do pedido ou admin pode ver
         $userId = $_SESSION['user_id'] ?? null;
-        if ($userId && (int)$order['user_id'] !== (int)$userId) {
-            $this->redirect('/minha-conta/pedidos');
+        $orderUserId = (int)($order['user_id'] ?? 0);
+        $lastOrderId = (int)($_SESSION['last_order_id'] ?? 0);
+
+        if ($orderUserId > 0 && (int)$userId !== $orderUserId) {
+            http_response_code(404);
+            $this->render('errors/404');
+            return;
+        }
+
+        if ($orderUserId === 0 && $lastOrderId !== $orderId) {
+            http_response_code(404);
+            $this->render('errors/404');
+            return;
         }
 
         $this->render('checkout/confirmation', [
@@ -171,6 +190,44 @@ class CheckoutController extends BaseController
         }
 
         return $result;
+    }
+
+    private function validateCartStock(): ?string
+    {
+        foreach ($this->cart->getItems() as $item) {
+            $quantity = max(1, (int)($item['quantity'] ?? 1));
+
+            if (($item['type'] ?? 'product') === 'combo' && !empty($item['combo_id'])) {
+                $combo = (new ComboModel())->findById((int)$item['combo_id']);
+                if (!$combo || empty($combo['active'])) {
+                    return 'Um combo do carrinho nao esta mais disponivel.';
+                }
+
+                foreach (($combo['items'] ?? []) as $comboItem) {
+                    $needed = (int)$comboItem['quantity'] * $quantity;
+                    if ((int)$comboItem['stock'] < $needed) {
+                        return 'Estoque insuficiente para o combo ' . $combo['name'] . '.';
+                    }
+                }
+
+                continue;
+            }
+
+            if (empty($item['product_id'])) {
+                return 'Um item do carrinho nao esta mais disponivel.';
+            }
+
+            $product = (new ProductModel())->findById((int)$item['product_id']);
+            if (!$product || empty($product['active'])) {
+                return 'O produto ' . ($item['product_name'] ?? '') . ' nao esta mais disponivel.';
+            }
+
+            if ((int)$product['stock'] < $quantity) {
+                return 'Estoque insuficiente para ' . $product['name'] . '.';
+            }
+        }
+
+        return null;
     }
 
     private function trackFunnel(string $step, ?int $orderId = null): void

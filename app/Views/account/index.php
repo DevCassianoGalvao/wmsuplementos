@@ -20,7 +20,7 @@
         <div class="account-content">
             <section class="account-section">
                 <h2>Meus Dados</h2>
-                <form action="/minha-conta/atualizar" method="post" novalidate>
+                <form action="/minha-conta/dados" method="post" novalidate>
                     <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
 
                     <div class="form-group">

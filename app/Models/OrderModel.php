@@ -251,14 +251,84 @@ class OrderModel extends BaseModel
 
     public function updateStatus(int $id, string $status, ?string $note = null, ?int $adminId = null): bool
     {
-        $this->query('UPDATE orders SET status = ? WHERE id = ?', [$status, $id]);
+        $this->query('UPDATE orders SET status = ?, updated_at = NOW() WHERE id = ?', [$status, $id]);
         $this->addStatusHistory($id, $status, $note, $adminId);
+
+        if ($status === self::STATUS_PAID) {
+            $this->decrementStockForPaidOrder($id);
+        }
+
         return true;
+    }
+
+    public function decrementStockForPaidOrder(int $orderId): void
+    {
+        $pdo = db();
+        $startedTransaction = !$pdo->inTransaction();
+
+        if ($startedTransaction) {
+            $pdo->beginTransaction();
+        }
+
+        try {
+            $stmt = $pdo->prepare(
+                "SELECT COUNT(*)
+                   FROM stock_movements
+                  WHERE reference_id = ?
+                    AND reason = 'order_paid'
+                    AND type = 'out'"
+            );
+            $stmt->execute([$orderId]);
+
+            if ((int)$stmt->fetchColumn() > 0) {
+                if ($startedTransaction) {
+                    $pdo->commit();
+                }
+                return;
+            }
+
+            $items = $this->getItems($orderId);
+            $productModel = new ProductModel();
+
+            foreach ($items as $item) {
+                $orderQuantity = max(1, (int)$item['quantity']);
+
+                if (!empty($item['product_id'])) {
+                    $productId = (int)$item['product_id'];
+                    $productModel->adjustStock($productId, $orderQuantity, 'out', 'order_paid', $orderId);
+                    $productModel->incrementSold($productId, $orderQuantity);
+                    continue;
+                }
+
+                if (!empty($item['combo_id'])) {
+                    $comboItems = $pdo->prepare(
+                        'SELECT product_id, quantity FROM combo_items WHERE combo_id = ?'
+                    );
+                    $comboItems->execute([(int)$item['combo_id']]);
+
+                    foreach ($comboItems->fetchAll(\PDO::FETCH_ASSOC) as $comboItem) {
+                        $productId = (int)$comboItem['product_id'];
+                        $quantity = max(1, (int)$comboItem['quantity']) * $orderQuantity;
+                        $productModel->adjustStock($productId, $quantity, 'out', 'order_paid', $orderId);
+                        $productModel->incrementSold($productId, $quantity);
+                    }
+                }
+            }
+
+            if ($startedTransaction) {
+                $pdo->commit();
+            }
+        } catch (\Throwable $e) {
+            if ($startedTransaction && $pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
+        }
     }
 
     public function updateTrackingCode(int $id, string $code): bool
     {
-        $this->query('UPDATE orders SET tracking_code = ? WHERE id = ?', [$code, $id]);
+        $this->query('UPDATE orders SET tracking_code = ?, updated_at = NOW() WHERE id = ?', [$code, $id]);
         return true;
     }
 

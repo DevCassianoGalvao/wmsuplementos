@@ -86,17 +86,11 @@ class OrderController extends BaseController
             $this->redirect('/admin/pedidos/' . $id);
         }
 
-        db()->prepare('UPDATE orders SET status = ?, updated_at = NOW() WHERE id = ?')
-            ->execute([$newStatus, $id]);
-
         if ($trackingCode) {
-            db()->prepare('UPDATE orders SET tracking_code = ? WHERE id = ?')
-                ->execute([$trackingCode, $id]);
+            $this->model->updateTrackingCode($id, $trackingCode);
         }
 
-        db()->prepare(
-            'INSERT INTO order_status_history (order_id, status, note, created_by, created_at) VALUES (?, ?, ?, ?, NOW())'
-        )->execute([$id, $newStatus, $note ?: null, $_SESSION['admin_id'] ?? null]);
+        $this->model->updateStatus($id, $newStatus, $note ?: null, $_SESSION['admin_id'] ?? null);
 
         // Enfileira e-mail de status
         $this->queueStatusEmail($id, $newStatus);

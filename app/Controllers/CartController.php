@@ -90,6 +90,12 @@ class CartController extends BaseController
 
         $cartKey   = (string)($_POST['cart_key'] ?? ($_POST['product_id'] ?? ''));
         $quantity  = (int)($_POST['quantity']   ?? 0);
+        $items     = $this->cart->getItems();
+
+        if ($quantity > 0 && isset($items[$cartKey]) && !$this->hasStockForCartItem($items[$cartKey], $quantity)) {
+            $this->json(['error' => 'Estoque insuficiente para esta quantidade.'], 422);
+            return;
+        }
 
         $this->cart->update($cartKey, $quantity);
 
@@ -186,6 +192,32 @@ class CartController extends BaseController
             ['ok' => true, 'count' => $this->cart->count(), 'total' => $this->cart->total()],
             '/carrinho'
         );
+    }
+
+    private function hasStockForCartItem(array $item, int $quantity): bool
+    {
+        if (($item['type'] ?? 'product') === 'combo' && !empty($item['combo_id'])) {
+            $combo = (new ComboModel())->findById((int)$item['combo_id']);
+            if (!$combo || empty($combo['active'])) {
+                return false;
+            }
+
+            foreach (($combo['items'] ?? []) as $comboItem) {
+                $needed = (int)$comboItem['quantity'] * $quantity;
+                if ((int)$comboItem['stock'] < $needed) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        if (empty($item['product_id'])) {
+            return false;
+        }
+
+        $product = (new ProductModel())->findById((int)$item['product_id']);
+        return $product && !empty($product['active']) && (int)$product['stock'] >= $quantity;
     }
 
     private function trackFunnel(string $step): void

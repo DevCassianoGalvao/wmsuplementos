@@ -36,7 +36,7 @@
                             <?= htmlspecialchars(ucfirst(str_replace('_', ' ', $order['status'] ?? '')), ENT_QUOTES, 'UTF-8') ?>
                         </span>
                     </td>
-                    <td><a href="/minha-conta/pedidos/<?= (int)$order['id'] ?>">Ver detalhes</a></td>
+                    <td><a href="/minha-conta/pedido/<?= (int)$order['id'] ?>">Ver detalhes</a></td>
                 </tr>
                 <?php endforeach; ?>
                 </tbody>

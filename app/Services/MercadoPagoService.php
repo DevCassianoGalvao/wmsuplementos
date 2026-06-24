@@ -183,6 +183,8 @@ class MercadoPagoService
 
         // Notifica admin em pagamentos aprovados
         if ($newOrderStatus === OrderModel::STATUS_PAID) {
+            $orderModel->decrementStockForPaidOrder($orderId);
+
             NotificationService::create(
                 NotificationService::TYPE_PAYMENT,
                 'Pagamento aprovado — Pedido #' . $orderId,
