@@ -5,9 +5,34 @@ declare(strict_types=1);
 namespace Maia\Controllers;
 
 use Maia\Models\ProductModel;
+use Maia\Models\CategoryModel;
 
 class ProductController extends BaseController
 {
+    public function index(array $params = []): void
+    {
+        $page    = max(1, (int)($_GET['pagina'] ?? 1));
+        $order   = $_GET['ordem'] ?? 'relevancia';
+        $perPage = $this->config['pagination']['per_page'];
+        $model   = new ProductModel();
+        $result  = $model->getList([
+            'active'   => 1,
+            'search'   => $_GET['busca'] ?? '',
+            'order_by' => $order,
+        ], $page, $perPage);
+
+        $this->render('product/index', [
+            'pageTitle'   => 'Produtos | Maia Suplementos',
+            'products'    => $result['items'],
+            'total'       => $result['total'],
+            'page'        => $page,
+            'totalPages'  => (int)ceil($result['total'] / $perPage),
+            'categories'  => (new CategoryModel())->getActiveWithProducts(),
+            'currentSort' => $order,
+            'search'      => $_GET['busca'] ?? '',
+        ]);
+    }
+
     public function show(array $params): void
     {
         $slug    = $params['slug'] ?? '';

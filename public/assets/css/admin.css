@@ -591,3 +591,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-radius: 8px;
     border: 1px solid rgba(255,255,255,0.08);
 }
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.table-actions form { margin: 0; }
+.btn-sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+}

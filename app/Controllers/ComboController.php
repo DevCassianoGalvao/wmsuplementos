@@ -6,6 +6,25 @@ namespace Maia\Controllers;
 
 class ComboController extends BaseController
 {
+    public function index(array $params = []): void
+    {
+        $stmt = db()->query(
+            'SELECT c.*,
+                    COUNT(ci.id) AS item_count
+               FROM combos c
+               LEFT JOIN combo_items ci ON ci.combo_id = c.id
+              WHERE c.active = 1
+              GROUP BY c.id
+              ORDER BY c.id DESC'
+        );
+
+        $this->render('combo/index', [
+            'pageTitle' => 'Combos | Maia Suplementos',
+            'combos'    => $stmt->fetchAll(),
+            'flash'     => $this->getFlash(),
+        ]);
+    }
+
     public function show(array $params): void
     {
         $slug = $params['slug'] ?? '';

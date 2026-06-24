@@ -13,9 +13,33 @@ class CategoryModel extends BaseModel
         );
     }
 
+    public function getActiveWithProducts(): array
+    {
+        return $this->fetchAll(
+            'SELECT c.*, COUNT(p.id) AS product_count
+               FROM categories c
+               JOIN products p ON p.category_id = c.id AND p.active = 1
+              WHERE c.active = 1
+              GROUP BY c.id
+              ORDER BY c.sort_order ASC, c.name ASC'
+        );
+    }
+
     public function getAll(): array
     {
         return $this->fetchAll('SELECT * FROM categories ORDER BY sort_order ASC, name ASC');
+    }
+
+    public function getAllWithProductCount(): array
+    {
+        return $this->fetchAll(
+            'SELECT c.*,
+                    COUNT(p.id) AS product_count
+               FROM categories c
+               LEFT JOIN products p ON p.category_id = c.id
+              GROUP BY c.id
+              ORDER BY c.sort_order ASC, c.name ASC'
+        );
     }
 
     public function findById(int $id): ?array
@@ -82,7 +106,7 @@ class CategoryModel extends BaseModel
     public function countProducts(int $id): int
     {
         return (int)$this->fetchColumn(
-            'SELECT COUNT(*) FROM products WHERE category_id = ? AND active = 1',
+            'SELECT COUNT(*) FROM products WHERE category_id = ?',
             [$id]
         );
     }

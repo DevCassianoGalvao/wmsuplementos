@@ -11,9 +11,9 @@
         <div class="hero__content">
             <p class="hero__label animate-in">Performance &amp; Resultados</p>
             <h1 class="hero__title animate-in">
-                Suplementos para quem<br>leva a <em>performance</em> a sério.
+                Suplementos para<br><em>performance</em> real.
             </h1>
-            <p class="hero__subtitle animate-in">Qualidade que você sente. Resultados que você vê.</p>
+            <p class="hero__subtitle animate-in">Produtos selecionados para treino, rotina e evolução.</p>
             <div class="hero__actions animate-in">
                 <a href="/produtos" class="btn btn--primary">Ver Produtos</a>
                 <a href="/combos" class="btn btn--ghost">Ver Combos</a>
@@ -35,6 +35,7 @@
             <a href="/categoria/<?= htmlspecialchars($cat['slug'], ENT_QUOTES, 'UTF-8') ?>" class="category-card animate-in">
                 <div class="category-card__body">
                     <span class="category-card__name"><?= htmlspecialchars($cat['name'], ENT_QUOTES, 'UTF-8') ?></span>
+                    <span class="category-card__count"><?= (int)($cat['product_count'] ?? 0) ?></span>
                 </div>
             </a>
             <?php endforeach; ?>

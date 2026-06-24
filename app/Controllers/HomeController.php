@@ -19,7 +19,7 @@ class HomeController extends BaseController
 
         $this->render('home/index', [
             'pageTitle'   => $settings['store_name'] ?? 'Maia Suplementos',
-            'categories'  => Cache::remember('home_categories', 300, fn() => $categories->getAllActive()),
+            'categories'  => Cache::remember('home_categories', 300, fn() => $categories->getActiveWithProducts()),
             'featured'    => Cache::remember('home_featured', 300, fn() => $products->getFeatured(8)),
             'bestsellers' => Cache::remember('home_bestsellers', 300, fn() => $products->getBestsellers(8)),
             'combos'      => Cache::remember('home_combos', 300, fn() => $this->getActiveCombos()),

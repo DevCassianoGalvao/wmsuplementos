@@ -126,14 +126,38 @@ main { display: block; }
 .hero {
     position: relative;
     background: var(--color-bg-base);
-    min-height: 520px;
+    min-height: 560px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
+    padding: 5rem 0;
 }
-.hero__bg-grid,
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.76) 48%, rgba(10,10,10,0.9) 100%),
+        url('/assets/img/hero-supplement.webp') center right / cover no-repeat;
+    opacity: 0.72;
+    z-index: 0;
+}
 .hero::before {
+    content: "";
+    position: absolute;
+    width: min(44vw, 560px);
+    height: min(44vw, 560px);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(230,51,41,0.34) 0%, rgba(230,51,41,0.14) 34%, rgba(230,51,41,0) 68%);
+    filter: blur(14px);
+    animation: hero-red-pulse 4.8s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+.hero__bg-grid {
     content: "";
     position: absolute;
     inset: 0;
@@ -141,11 +165,14 @@ main { display: block; }
         repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 60px),
         repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 60px);
     pointer-events: none;
-    z-index: 0;
+    z-index: 2;
 }
-.hero__bg-grid { z-index: 0; }
-.hero .container { position: relative; z-index: 1; }
-.hero__content { max-width: 720px; }
+.hero .container { position: relative; z-index: 3; }
+.hero__content {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+}
 .hero__label {
     font-size: var(--text-label);
     font-weight: 600;
@@ -157,7 +184,7 @@ main { display: block; }
 .hero__title {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: clamp(2.375rem, 4.2vw, 4rem);
     line-height: 1.05;
     color: var(--color-text-primary);
 }
@@ -167,12 +194,17 @@ main { display: block; }
     font-weight: 400;
     color: var(--color-text-secondary);
     max-width: 480px;
-    margin: 1.25rem 0;
+    margin: 1.25rem auto;
 }
 .hero__actions {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    justify-content: center;
+}
+@keyframes hero-red-pulse {
+    0%, 100% { opacity: 0.36; transform: translate(-50%, -50%) scale(0.92); }
+    50% { opacity: 0.95; transform: translate(-50%, -50%) scale(1.08); }
 }
 
 /* ============================================================
@@ -189,23 +221,47 @@ main { display: block; }
 .category-card {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.875rem 1.25rem;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.95rem 1.25rem;
     background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
-    border-radius: 10px;
+    border-radius: 8px;
     text-decoration: none;
     color: var(--color-text-primary);
     white-space: nowrap;
     transition: all var(--transition);
-    min-width: 140px;
+    min-width: 170px;
 }
 .category-card:hover {
     border-color: var(--color-red);
     background: var(--color-red-muted);
     color: var(--color-red);
 }
-.category-card__name { font-size: var(--text-body); font-weight: 500; }
+.category-card__body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+}
+.category-card__name { font-size: var(--text-body); font-weight: 600; }
+.category-card__count {
+    min-width: 26px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.category-card:hover .category-card__count {
+    background: rgba(230,51,41,0.2);
+    color: #FFFFFF;
+}
 
 /* ============================================================
    PRODUCT CARD extras
@@ -684,4 +740,49 @@ main { display: block; }
     .combos-grid, .reviews-grid { grid-template-columns: repeat(2, 1fr); }
     .footer-inner { grid-template-columns: 1fr 1fr; }
     .hero { text-align: left; }
+}
+
+/* Round 3 hero/listing polish */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+.listing-hero {
+    background: #0A0A0A;
+    border-bottom: 1px solid var(--color-border);
+    padding: 3rem 0 2rem;
+}
+.listing-subtitle {
+    color: var(--color-text-secondary);
+    max-width: 520px;
+    margin-top: 0.75rem;
+}
+.listing-toolbar {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+.listing-toolbar input,
+.listing-toolbar select {
+    min-width: 220px;
+    background: #1A1A1A;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: #FFFFFF;
+    padding: 0.75rem 0.9rem;
+    font-family: var(--font-body);
+}
+.categories-band {
+    padding-top: 1.5rem;
+    padding-bottom: 0;
+}
+@media (max-width: 1024px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+    .hero::after { background-position: center; opacity: 0.5; }
+    .hero::before { width: 86vw; height: 86vw; }
 }

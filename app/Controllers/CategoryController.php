@@ -72,6 +72,7 @@ class CategoryController extends BaseController
             'total'      => $result['total'],
             'page'       => $page,
             'perPage'    => $perPage,
+            'totalPages' => (int)ceil($result['total'] / $perPage),
             'brands'     => $brands,
             'filters'    => $filters,
         ]);

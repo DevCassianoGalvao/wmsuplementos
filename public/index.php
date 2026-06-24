@@ -127,6 +127,8 @@ $router = new Maia\Router($_basePath);
 
 // Área pública
 $router->get('/',                        'HomeController@index');
+$router->get('/produtos',                'ProductController@index');
+$router->get('/combos',                  'ComboController@index');
 $router->get('/categoria/{slug}',        'CategoryController@show');
 $router->get('/produto/{slug}',          'ProductController@show');
 $router->get('/combo/{slug}',            'ComboController@show');
@@ -179,6 +181,15 @@ $router->get('/admin/produtos/{id}',     'Admin\ProductController@edit');
 $router->post('/admin/produtos/{id}',    'Admin\ProductController@update');
 $router->post('/admin/produtos/{id}/toggle', 'Admin\ProductController@toggle');
 $router->post('/admin/produtos/{id}/duplicar', 'Admin\ProductController@duplicate');
+
+// Categorias
+$router->get('/admin/categorias',          'Admin\CategoryController@index');
+$router->get('/admin/categorias/novo',     'Admin\CategoryController@create');
+$router->post('/admin/categorias',         'Admin\CategoryController@store');
+$router->get('/admin/categorias/{id}',     'Admin\CategoryController@edit');
+$router->post('/admin/categorias/{id}',    'Admin\CategoryController@update');
+$router->post('/admin/categorias/{id}/toggle', 'Admin\CategoryController@toggle');
+$router->post('/admin/categorias/{id}/excluir', 'Admin\CategoryController@delete');
 
 // Estoque
 $router->get('/admin/estoque',           'Admin\StockController@index');

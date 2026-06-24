@@ -32,6 +32,9 @@
             <a href="/admin/produtos" class="nav-item <?= str_starts_with($currentPath, '/admin/produtos') ? 'active' : '' ?>">
                 Produtos
             </a>
+            <a href="/admin/categorias" class="nav-item <?= str_starts_with($currentPath, '/admin/categorias') ? 'active' : '' ?>">
+                Categorias
+            </a>
             <a href="/admin/estoque" class="nav-item <?= str_starts_with($currentPath, '/admin/estoque') ? 'active' : '' ?>">
                 Estoque
             </a>
