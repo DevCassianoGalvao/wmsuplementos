@@ -52,7 +52,7 @@ class Auth
     public static function requireUser(): void
     {
         if (!self::isUserLogged()) {
-            header('Location: /entrar');
+            self::redirect('/entrar');
             exit;
         }
     }
@@ -105,7 +105,7 @@ class Auth
     public static function requireAdmin(): void
     {
         if (!self::isAdminLogged()) {
-            header('Location: /admin/login');
+            self::redirect('/admin/login');
             exit;
         }
     }
@@ -172,5 +172,15 @@ class Auth
         // Renova timestamp a cada request
         $_SESSION[$tsKey] = time();
         return true;
+    }
+
+    private static function redirect(string $path): void
+    {
+        $base = defined('APP_BASE') ? (string)APP_BASE : '';
+        if ($base !== '' && str_starts_with($path, '/') && !str_starts_with($path, $base . '/')) {
+            $path = $base . $path;
+        }
+
+        header('Location: ' . $path);
     }
 }
