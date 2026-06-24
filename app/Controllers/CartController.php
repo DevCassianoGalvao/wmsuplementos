@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Maia\Controllers;
 
 use Maia\Models\ProductModel;
+use Maia\Models\ComboModel;
 use Maia\Services\CartService;
 use Maia\Helpers\CSRF;
 
@@ -39,7 +40,13 @@ class CartController extends BaseController
         CSRF::verify();
 
         $productId = (int)($_POST['product_id'] ?? 0);
+        $comboId   = (int)($_POST['combo_id'] ?? 0);
         $quantity  = max(1, (int)($_POST['quantity'] ?? 1));
+
+        if ($comboId > 0) {
+            $this->addCombo($comboId, $quantity);
+            return;
+        }
 
         if (!$productId) {
             $this->jsonOrRedirect(['error' => 'Produto inválido.'], '/carrinho');
@@ -81,10 +88,10 @@ class CartController extends BaseController
     {
         CSRF::verify();
 
-        $productId = (int)($_POST['product_id'] ?? 0);
+        $cartKey   = (string)($_POST['cart_key'] ?? ($_POST['product_id'] ?? ''));
         $quantity  = (int)($_POST['quantity']   ?? 0);
 
-        $this->cart->update($productId, $quantity);
+        $this->cart->update($cartKey, $quantity);
 
         $this->json([
             'ok'       => true,
@@ -99,8 +106,8 @@ class CartController extends BaseController
     {
         CSRF::verify();
 
-        $productId = (int)($_POST['product_id'] ?? 0);
-        $this->cart->remove($productId);
+        $cartKey = (string)($_POST['cart_key'] ?? ($_POST['product_id'] ?? ''));
+        $this->cart->remove($cartKey);
 
         $this->json([
             'ok'       => true,
@@ -144,6 +151,41 @@ class CartController extends BaseController
             $this->flash('error', $data['error']);
         }
         $this->redirect($fallback);
+    }
+
+    private function addCombo(int $comboId, int $quantity): void
+    {
+        $combo = (new ComboModel())->findById($comboId);
+
+        if (!$combo || empty($combo['active'])) {
+            $this->jsonOrRedirect(['error' => 'Combo nao encontrado.'], '/combos');
+            return;
+        }
+
+        foreach (($combo['items'] ?? []) as $item) {
+            $needed = (int)$item['quantity'] * $quantity;
+            if ((int)$item['stock'] < $needed) {
+                $this->jsonOrRedirect(['error' => 'Estoque insuficiente para este combo.'], '/combo/' . $combo['slug']);
+                return;
+            }
+        }
+
+        $this->cart->add([
+            'cart_key'     => 'combo_' . $comboId,
+            'product_id'   => null,
+            'combo_id'     => $comboId,
+            'product_name' => $combo['name'],
+            'slug'         => $combo['slug'],
+            'type'         => 'combo',
+            'price'        => (float)$combo['price'],
+            'quantity'     => $quantity,
+            'image'        => $combo['image'] ?? '',
+        ]);
+
+        $this->jsonOrRedirect(
+            ['ok' => true, 'count' => $this->cart->count(), 'total' => $this->cart->total()],
+            '/carrinho'
+        );
     }
 
     private function trackFunnel(string $step): void

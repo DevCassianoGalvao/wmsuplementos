@@ -12,7 +12,7 @@
 
     <?php if (empty($items)): ?>
     <div class="empty-cart">
-        <p>Seu carrinho está vazio.</p>
+        <p>Seu carrinho est&aacute; vazio.</p>
         <a href="/produtos" class="btn btn-primary">Continuar Comprando</a>
     </div>
     <?php else: ?>
@@ -23,7 +23,7 @@
                 <thead>
                     <tr>
                         <th>Produto</th>
-                        <th>Preço</th>
+                        <th>Pre&ccedil;o</th>
                         <th>Quantidade</th>
                         <th>Subtotal</th>
                         <th><span class="sr-only">Remover</span></th>
@@ -31,30 +31,31 @@
                 </thead>
                 <tbody>
                 <?php foreach ($items as $item): ?>
-                <tr class="cart-item" data-product-id="<?= (int)$item['product_id'] ?>">
+                <?php $cartKey = (string)($item['cart_key'] ?? $item['product_id'] ?? ''); ?>
+                <?php $isCombo = ($item['type'] ?? '') === 'combo'; ?>
+                <tr class="cart-item" data-cart-key="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
                     <td class="item-product">
                         <?php if (!empty($item['image'])): ?>
-                        <img src="/uploads/products/<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>"
-                             alt="" width="60" height="60">
+                        <img src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>" alt="" width="60" height="60">
                         <?php endif; ?>
-                        <a href="/produto/<?= htmlspecialchars($item['slug'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                        <a href="<?= $isCombo ? '/combo/' : '/produto/' ?><?= htmlspecialchars($item['slug'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                             <?= htmlspecialchars($item['product_name'], ENT_QUOTES, 'UTF-8') ?>
                         </a>
                     </td>
                     <td class="item-price">R$ <?= Sanitizer::money((float)$item['price']) ?></td>
                     <td class="item-qty">
                         <div class="qty-control">
-                            <button type="button" class="qty-btn qty-minus" data-id="<?= (int)$item['product_id'] ?>">−</button>
+                            <button type="button" class="qty-btn qty-minus" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">-</button>
                             <input type="number" class="qty-input" value="<?= (int)$item['quantity'] ?>"
-                                   min="1" data-id="<?= (int)$item['product_id'] ?>">
-                            <button type="button" class="qty-btn qty-plus" data-id="<?= (int)$item['product_id'] ?>">+</button>
+                                   min="1" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
+                            <button type="button" class="qty-btn qty-plus" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">+</button>
                         </div>
                     </td>
-                    <td class="item-subtotal" id="subtotal-<?= (int)$item['product_id'] ?>">
+                    <td class="item-subtotal" id="subtotal-<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
                         R$ <?= Sanitizer::money((float)$item['price'] * (int)$item['quantity']) ?>
                     </td>
                     <td class="item-remove">
-                        <button type="button" class="remove-btn" data-id="<?= (int)$item['product_id'] ?>" aria-label="Remover">✕</button>
+                        <button type="button" class="remove-btn" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>" aria-label="Remover">&times;</button>
                     </td>
                 </tr>
                 <?php endforeach; ?>

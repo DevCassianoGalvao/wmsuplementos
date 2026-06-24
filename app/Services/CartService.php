@@ -32,13 +32,16 @@ class CartService
     public function add(array $item): void
     {
         $cart = $this->getItems();
-        $key  = $item['product_id'];
+        $key  = (string)($item['cart_key'] ?? $item['product_id']);
 
         if (isset($cart[$key])) {
             $cart[$key]['quantity'] += max(1, (int)$item['quantity']);
         } else {
             $cart[$key] = [
-                'product_id'   => (int)$item['product_id'],
+                'product_id'   => !empty($item['product_id']) ? (int)$item['product_id'] : null,
+                'combo_id'     => !empty($item['combo_id']) ? (int)$item['combo_id'] : null,
+                'cart_key'     => $key,
+                'type'         => $item['type'] ?? 'product',
                 'product_name' => $item['product_name'],
                 'slug'         => $item['slug'],
                 'price'        => (float)$item['price'],
@@ -51,24 +54,25 @@ class CartService
         $this->persist();
     }
 
-    public function update(int $productId, int $quantity): void
+    public function update(int|string $cartKey, int $quantity): void
     {
         $cart = $this->getItems();
+        $cartKey = (string)$cartKey;
 
         if ($quantity <= 0) {
-            unset($cart[$productId]);
-        } elseif (isset($cart[$productId])) {
-            $cart[$productId]['quantity'] = $quantity;
+            unset($cart[$cartKey]);
+        } elseif (isset($cart[$cartKey])) {
+            $cart[$cartKey]['quantity'] = $quantity;
         }
 
         $_SESSION[self::SESSION_KEY] = $cart;
         $this->persist();
     }
 
-    public function remove(int $productId): void
+    public function remove(int|string $cartKey): void
     {
         $cart = $this->getItems();
-        unset($cart[$productId]);
+        unset($cart[(string)$cartKey]);
         $_SESSION[self::SESSION_KEY] = $cart;
         $this->persist();
     }
@@ -219,7 +223,7 @@ class CartService
 
         $cart = [];
         foreach ($items as $item) {
-            $cart[$item['product_id']] = $item;
+            $cart[(string)($item['cart_key'] ?? $item['product_id'])] = $item;
         }
 
         $_SESSION[self::SESSION_KEY] = $cart;

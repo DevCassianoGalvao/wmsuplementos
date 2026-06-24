@@ -15,6 +15,15 @@ if (toggleBtn && sidebar) {
     });
 }
 
+var addComboItem = document.querySelector('[data-add-combo-item]');
+var comboEditor = document.getElementById('combo-items-editor');
+var comboTemplate = document.getElementById('combo-item-template');
+if (addComboItem && comboEditor && comboTemplate) {
+    addComboItem.addEventListener('click', function() {
+        comboEditor.appendChild(comboTemplate.content.cloneNode(true));
+    });
+}
+
 /* ── Flash message auto-dismiss ─────────────────────────────── */
 document.querySelectorAll('.alert').forEach(function(el) {
     setTimeout(function() {

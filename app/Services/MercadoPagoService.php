@@ -33,7 +33,9 @@ class MercadoPagoService
         $mpItems = [];
         foreach ($items as $item) {
             $mpItems[] = [
-                'id'          => (string)$item['product_id'],
+                'id'          => !empty($item['product_id'])
+                    ? (string)$item['product_id']
+                    : 'combo-' . (string)($item['combo_id'] ?? ''),
                 'title'       => $item['product_name'],
                 'quantity'    => (int)$item['quantity'],
                 'unit_price'  => round((float)$item['price'], 2),

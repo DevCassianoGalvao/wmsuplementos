@@ -74,8 +74,8 @@ class CheckoutController extends BaseController
         $items      = [];
         foreach ($this->cart->getItems() as $item) {
             $items[] = [
-                'product_id'   => $item['product_id'],
-                'combo_id'     => null,
+                'product_id'   => $item['product_id'] ?? null,
+                'combo_id'     => $item['combo_id'] ?? null,
                 'product_name' => $item['product_name'],
                 'price'        => $item['price'],
                 'quantity'     => $item['quantity'],

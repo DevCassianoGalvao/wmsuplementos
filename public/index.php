@@ -182,6 +182,15 @@ $router->post('/admin/produtos/{id}',    'Admin\ProductController@update');
 $router->post('/admin/produtos/{id}/toggle', 'Admin\ProductController@toggle');
 $router->post('/admin/produtos/{id}/duplicar', 'Admin\ProductController@duplicate');
 
+// Marcas
+$router->get('/admin/marcas',          'Admin\BrandController@index');
+$router->get('/admin/marcas/novo',     'Admin\BrandController@create');
+$router->post('/admin/marcas',         'Admin\BrandController@store');
+$router->get('/admin/marcas/{id}',     'Admin\BrandController@edit');
+$router->post('/admin/marcas/{id}',    'Admin\BrandController@update');
+$router->post('/admin/marcas/{id}/toggle', 'Admin\BrandController@toggle');
+$router->post('/admin/marcas/{id}/excluir', 'Admin\BrandController@delete');
+
 // Categorias
 $router->get('/admin/categorias',          'Admin\CategoryController@index');
 $router->get('/admin/categorias/novo',     'Admin\CategoryController@create');
@@ -190,6 +199,15 @@ $router->get('/admin/categorias/{id}',     'Admin\CategoryController@edit');
 $router->post('/admin/categorias/{id}',    'Admin\CategoryController@update');
 $router->post('/admin/categorias/{id}/toggle', 'Admin\CategoryController@toggle');
 $router->post('/admin/categorias/{id}/excluir', 'Admin\CategoryController@delete');
+
+// Combos
+$router->get('/admin/combos',          'Admin\ComboController@index');
+$router->get('/admin/combos/novo',     'Admin\ComboController@create');
+$router->post('/admin/combos',         'Admin\ComboController@store');
+$router->get('/admin/combos/{id}',     'Admin\ComboController@edit');
+$router->post('/admin/combos/{id}',    'Admin\ComboController@update');
+$router->post('/admin/combos/{id}/toggle', 'Admin\ComboController@toggle');
+$router->post('/admin/combos/{id}/excluir', 'Admin\ComboController@delete');
 
 // Estoque
 $router->get('/admin/estoque',           'Admin\StockController@index');

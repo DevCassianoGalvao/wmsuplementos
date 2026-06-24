@@ -1,4 +1,4 @@
 </main>
-<script src="/assets/js/admin.js" defer></script>
+<script src="/assets/js/admin.js?v=20260624-3" defer></script>
 </body>
 </html>
