@@ -9,6 +9,7 @@ use Maia\Helpers\Auth;
 use Maia\Helpers\CSRF;
 use Maia\Models\UserModel;
 use Maia\Models\OrderModel;
+use Maia\Services\BrevoService;
 
 class CustomerController extends BaseController
 {
@@ -108,6 +109,33 @@ class CustomerController extends BaseController
 
         fclose($out);
         exit;
+    }
+
+    public function syncBrevo(array $params = []): void
+    {
+        Auth::requireAdmin();
+        CSRF::verify();
+
+        $filters = [
+            'search' => $_GET['busca'] ?? '',
+            'segment' => $_GET['segmento'] ?? '',
+            'opt_in' => '1',
+            'tag' => $_GET['tag'] ?? '',
+            'spent_above_value' => $_GET['gastou_acima'] ?? '',
+        ];
+        if ($filters['spent_above_value'] !== '') {
+            $filters['segment'] = 'spent_above';
+        }
+
+        $result = (new UserModel())->getList($filters, 1, 500);
+        $sync = (new BrevoService())->syncContacts($result['items'] ?? []);
+
+        $this->flash(
+            $sync['failed'] > 0 ? 'error' : 'success',
+            'Brevo: ' . (int)$sync['synced'] . ' contato(s) sincronizado(s), '
+            . (int)$sync['failed'] . ' falha(s).'
+        );
+        $this->redirect('/admin/clientes?' . http_build_query($_GET));
     }
 
     public function anonymize(array $params): void

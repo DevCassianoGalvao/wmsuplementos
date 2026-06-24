@@ -107,12 +107,6 @@ class CheckoutController extends BaseController
             'items'          => $items,
         ]);
 
-        // Incrementa used_count do cupom
-        if ($coupon) {
-            db()->prepare('UPDATE coupons SET used_count = used_count + 1 WHERE id = ?')
-                ->execute([$coupon['id']]);
-        }
-
         // Funil
         $this->trackFunnel('purchase', $orderId);
         $_SESSION['last_order_id'] = $orderId;

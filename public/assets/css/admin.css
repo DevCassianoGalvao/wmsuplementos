@@ -653,6 +653,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     margin: 0;
     letter-spacing: 0;
 }
+.page-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.page-actions form {
+    margin: 0;
+}
 .page-subtitle {
     margin-top: 0.35rem;
     max-width: 680px;

@@ -2,5 +2,9 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /cron/
+Disallow: /carrinho
+Disallow: /finalizar-compra
+Disallow: /pedido/confirmacao/
+Disallow: /minha-conta/
 
 Sitemap: https://cassianogalvao.com.br/maiasuplementos/sitemap.xml

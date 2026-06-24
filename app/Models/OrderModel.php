@@ -320,6 +320,11 @@ class OrderModel extends BaseModel
                 (new UserModel())->recordPurchase((int)$order['user_id'], (float)$order['total']);
             }
 
+            if (!empty($order['coupon_id'])) {
+                $pdo->prepare('UPDATE coupons SET used_count = used_count + 1 WHERE id = ?')
+                    ->execute([(int)$order['coupon_id']]);
+            }
+
             if ($startedTransaction) {
                 $pdo->commit();
             }

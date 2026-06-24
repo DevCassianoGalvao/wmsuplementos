@@ -45,6 +45,62 @@
     </div>
 </footer>
 
+<?php
+$appUrl = rtrim((string)(getenv('APP_URL') ?: 'https://maiasuplementos.com.br'), '/');
+$currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+$basePath = defined('APP_BASE') ? APP_BASE : '';
+if ($basePath !== '' && str_starts_with($currentPath, $basePath . '/')) {
+    $currentPath = substr($currentPath, strlen($basePath));
+}
+$currentUrl = $appUrl . ($currentPath === '/' ? '/' : $currentPath);
+$organizationSchema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'Organization',
+    'name' => 'Maia Suplementos',
+    'url' => $appUrl . '/',
+    'logo' => $appUrl . '/assets/img/logo.png',
+    'contactPoint' => [
+        '@type' => 'ContactPoint',
+        'contactType' => 'customer service',
+        'email' => 'contato@maiasuplementos.com.br',
+        'areaServed' => 'BR',
+        'availableLanguage' => 'Portuguese',
+    ],
+];
+$breadcrumbItems = [
+    [
+        '@type' => 'ListItem',
+        'position' => 1,
+        'name' => 'Home',
+        'item' => $appUrl . '/',
+    ],
+];
+$segments = array_values(array_filter(explode('/', trim($currentPath, '/'))));
+$accumulated = '';
+foreach ($segments as $segment) {
+    $accumulated .= '/' . $segment;
+    $breadcrumbItems[] = [
+        '@type' => 'ListItem',
+        'position' => count($breadcrumbItems) + 1,
+        'name' => ucwords(str_replace('-', ' ', $segment)),
+        'item' => $appUrl . $accumulated,
+    ];
+}
+$breadcrumbSchema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => $breadcrumbItems,
+];
+?>
+<script type="application/ld+json">
+<?= json_encode($organizationSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
+</script>
+<?php if (count($breadcrumbItems) > 1): ?>
+<script type="application/ld+json">
+<?= json_encode($breadcrumbSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) ?>
+</script>
+<?php endif; ?>
+
 <script src="/assets/js/placeholder-images.js?v=20260624-2" defer></script>
 <script src="/assets/js/main.js?v=20260624-2" defer></script>
 </body>

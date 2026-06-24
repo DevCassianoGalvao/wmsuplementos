@@ -11,6 +11,7 @@ return [
         'api_key'      => getenv('BREVO_API_KEY')       ?: '',
         'sender_name'  => getenv('BREVO_SENDER_NAME')   ?: 'Maia Suplementos',
         'sender_email' => getenv('BREVO_SENDER_EMAIL')  ?: '',
+        'list_id'      => (int)(getenv('BREVO_LIST_ID') ?: 0),
         'api_url'      => 'https://api.brevo.com/v3/smtp/email',
     ],
 

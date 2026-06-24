@@ -64,6 +64,48 @@ class BrevoService
         ]);
     }
 
+    public function syncContact(array $user): bool
+    {
+        $email = (string)($user['email'] ?? '');
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        $nameParts = preg_split('/\s+/', trim((string)($user['name'] ?? ''))) ?: [];
+        $payload = [
+            'email' => $email,
+            'attributes' => [
+                'FIRSTNAME' => $nameParts[0] ?? '',
+                'LASTNAME' => count($nameParts) > 1 ? implode(' ', array_slice($nameParts, 1)) : '',
+            ],
+            'emailBlacklisted' => empty($user['email_opt_in']),
+            'updateEnabled' => true,
+        ];
+        $listId = (int)($this->config['brevo']['list_id'] ?? 0);
+        if ($listId > 0) {
+            $payload['listIds'] = [$listId];
+        }
+
+        return $this->postToBrevo('/contacts', $payload, [201, 204]);
+    }
+
+    public function syncContacts(array $users): array
+    {
+        $synced = 0;
+        $failed = 0;
+
+        foreach ($users as $user) {
+            if ($this->syncContact($user)) {
+                $synced++;
+            } else {
+                $failed++;
+            }
+        }
+
+        return ['synced' => $synced, 'failed' => $failed];
+    }
+
     // ─── Processamento da Fila ────────────────────────────────────────────────
 
     /**
@@ -134,8 +176,8 @@ class BrevoService
 
         $payload = json_encode([
             'sender'      => [
-                'email' => $this->config['brevo']['sender']['email'] ?? '',
-                'name'  => $this->config['brevo']['sender']['name']  ?? 'Maia Suplementos',
+                'email' => $this->config['brevo']['sender_email'] ?? '',
+                'name'  => $this->config['brevo']['sender_name']  ?? 'Maia Suplementos',
             ],
             'to'          => [['email' => $toEmail, 'name' => $toName]],
             'subject'     => $subject,
@@ -175,6 +217,45 @@ class BrevoService
     }
 
     // ─── Fallback SMTP ────────────────────────────────────────────────────────
+
+    private function postToBrevo(string $endpoint, array $payload, array $successCodes = [200, 201, 204]): bool
+    {
+        $apiKey = $this->config['brevo']['api_key'] ?? '';
+        if ($apiKey === '') {
+            return false;
+        }
+
+        $ch = curl_init('https://api.brevo.com/v3' . $endpoint);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            CURLOPT_HTTPHEADER => [
+                'Accept: application/json',
+                'Content-Type: application/json',
+                'api-key: ' . $apiKey,
+            ],
+            CURLOPT_TIMEOUT => 12,
+            CURLOPT_SSL_VERIFYPEER => true,
+        ]);
+
+        $body = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $err = curl_error($ch);
+        curl_close($ch);
+
+        if ($err) {
+            error_log('[Brevo] cURL error on ' . $endpoint . ': ' . $err);
+            return false;
+        }
+
+        if (!in_array($httpCode, $successCodes, true)) {
+            error_log('[Brevo] HTTP ' . $httpCode . ' on ' . $endpoint . ': ' . $body);
+            return false;
+        }
+
+        return true;
+    }
 
     private function sendViaSmtp(string $toEmail, string $toName, string $subject, string $html): bool
     {

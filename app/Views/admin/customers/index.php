@@ -1,8 +1,14 @@
-<?php use Maia\Helpers\Sanitizer; ?>
+<?php use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
 
 <div class="page-header">
     <h1>Clientes</h1>
-    <a class="btn btn-outline" href="/admin/clientes/exportar?<?= http_build_query($_GET) ?>">Exportar CSV</a>
+    <div class="page-actions">
+        <form method="post" action="/admin/clientes/sync-brevo?<?= http_build_query($_GET) ?>">
+            <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+            <button type="submit" class="btn btn-outline">Sincronizar Brevo</button>
+        </form>
+        <a class="btn btn-outline" href="/admin/clientes/exportar?<?= http_build_query($_GET) ?>">Exportar CSV</a>
+    </div>
 </div>
 
 <form class="filter-bar" method="get" action="/admin/clientes">
