@@ -90,6 +90,10 @@ Maia\Middleware\SecurityHeaders::send();
         Maia\Middleware\RateLimiter::enforce('webhook_mp', 60, 60);
     }
 
+    if ($method === 'POST' && $uri === '/webhook/brevo') {
+        Maia\Middleware\RateLimiter::enforce('webhook_brevo', 120, 60);
+    }
+
     // Cadastro: 3 por 5 minutos por IP
     if ($method === 'POST' && $uri === '/cadastro') {
         Maia\Middleware\RateLimiter::enforce('register', 3, 300);
@@ -154,6 +158,7 @@ $router->get('/finalizar-compra',        'CheckoutController@index');
 $router->post('/finalizar-compra',       'CheckoutController@store');
 $router->get('/pedido/confirmacao/{id}', 'CheckoutController@confirmation');
 $router->post('/webhook/mercadopago',    'WebhookController@mercadoPago');
+$router->post('/webhook/brevo',          'WebhookController@brevo');
 
 // Área do cliente
 $router->get('/cadastro',                'AuthController@registerForm');
