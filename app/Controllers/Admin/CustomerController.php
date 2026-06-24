@@ -59,4 +59,43 @@ class CustomerController extends BaseController
             'orders'    => $orders,
         ], 'admin');
     }
+
+    public function export(array $params = []): void
+    {
+        Auth::requireAdmin();
+
+        $filters = [
+            'search'  => $_GET['busca']     ?? '',
+            'segment' => $_GET['segmento']  ?? '',
+            'opt_in'  => $_GET['opt_in']    ?? '',
+        ];
+
+        $result = (new UserModel())->getList($filters, 1, 100000);
+
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="clientes-' . date('Ymd') . '.csv"');
+
+        $out = fopen('php://output', 'w');
+        fputcsv($out, ['ID', 'Nome', 'Email', 'Telefone', 'Cidade', 'Estado', 'Tag', 'Pedidos', 'Total gasto', 'Ultima compra', 'Opt-in', 'Cadastro']);
+
+        foreach ($result['items'] as $row) {
+            fputcsv($out, [
+                $row['id'],
+                $row['name'],
+                $row['email'],
+                $row['phone'],
+                $row['city'],
+                $row['state'],
+                $row['tag'],
+                $row['total_orders'],
+                number_format((float)$row['total_spent'], 2, ',', '.'),
+                $row['last_purchase_at'],
+                !empty($row['email_opt_in']) ? 'sim' : 'nao',
+                $row['created_at'],
+            ]);
+        }
+
+        fclose($out);
+        exit;
+    }
 }

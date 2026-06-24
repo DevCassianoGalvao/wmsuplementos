@@ -58,6 +58,21 @@
     </div>
 </div>
 
+<?php if (!empty($funnel)): ?>
+<section class="dashboard-card">
+    <h2>Funil de Conversao (30 dias)</h2>
+    <div class="funnel-grid">
+        <?php foreach ($funnel as $step): ?>
+        <div class="funnel-step">
+            <span class="funnel-label"><?= htmlspecialchars($step['label'], ENT_QUOTES, 'UTF-8') ?></span>
+            <strong><?= number_format((int)$step['total']) ?></strong>
+            <small><?= number_format((float)$step['conversion'], 1) ?>% das visitas</small>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
+
 <div class="dashboard-row">
     <section class="dashboard-card">
         <h2>Faturamento (30 dias)</h2>

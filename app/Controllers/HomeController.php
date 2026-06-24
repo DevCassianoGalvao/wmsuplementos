@@ -14,6 +14,7 @@ class HomeController extends BaseController
     {
         $products   = new ProductModel();
         $categories = new CategoryModel();
+        $this->trackVisit();
 
         $settings = Cache::remember('home_settings', 600, fn() => $this->getSettings());
 
@@ -58,5 +59,24 @@ class HomeController extends BaseController
     {
         $rows = db()->query('SELECT `key`, `value` FROM settings')->fetchAll();
         return array_column($rows, 'value', 'key');
+    }
+
+    private function trackVisit(): void
+    {
+        try {
+            $stmt = db()->prepare(
+                'INSERT INTO funnel_events (session_id, user_id, step, ip, user_agent)
+                 VALUES (?, ?, ?, ?, ?)'
+            );
+            $stmt->execute([
+                session_id(),
+                $_SESSION['user_id'] ?? null,
+                'visit',
+                $this->clientIp(),
+                mb_substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 500),
+            ]);
+        } catch (\Throwable $e) {
+            error_log('[Funnel] visit track failed: ' . $e->getMessage());
+        }
     }
 }

@@ -221,6 +221,7 @@ $router->get('/admin/pedidos/exportar',  'Admin\OrderController@export');
 
 // Clientes
 $router->get('/admin/clientes',          'Admin\CustomerController@index');
+$router->get('/admin/clientes/exportar', 'Admin\CustomerController@export');
 $router->get('/admin/clientes/{id}',     'Admin\CustomerController@show');
 
 // Cupons

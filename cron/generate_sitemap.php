@@ -21,6 +21,8 @@ try {
 
     // Página inicial
     $urls[] = ['loc' => $appUrl . '/', 'changefreq' => 'daily', 'priority' => '1.0', 'lastmod' => $today];
+    $urls[] = ['loc' => $appUrl . '/produtos', 'changefreq' => 'daily', 'priority' => '0.9', 'lastmod' => $today];
+    $urls[] = ['loc' => $appUrl . '/combos', 'changefreq' => 'weekly', 'priority' => '0.8', 'lastmod' => $today];
 
     // Categorias ativas
     $cats = db()->query("SELECT slug, updated_at FROM categories WHERE active = 1")->fetchAll(\PDO::FETCH_ASSOC);
@@ -44,11 +46,27 @@ try {
         ];
     }
 
+    $combos = db()->query("SELECT slug, updated_at FROM combos WHERE active = 1")->fetchAll(\PDO::FETCH_ASSOC);
+    foreach ($combos as $combo) {
+        $urls[] = [
+            'loc'        => $appUrl . '/combo/' . $combo['slug'],
+            'changefreq' => 'weekly',
+            'priority'   => '0.7',
+            'lastmod'    => substr($combo['updated_at'] ?? $today, 0, 10),
+        ];
+    }
+
     // Páginas institucionais
     $pages = db()->query("SELECT slug, updated_at FROM pages WHERE active = 1")->fetchAll(\PDO::FETCH_ASSOC);
     foreach ($pages as $page) {
+        $path = match ($page['slug']) {
+            'politica-de-privacidade' => '/politica-de-privacidade',
+            'termos-de-uso' => '/termos-de-uso',
+            default => '/pagina/' . $page['slug'],
+        };
+
         $urls[] = [
-            'loc'        => $appUrl . '/pagina/' . $page['slug'],
+            'loc'        => $appUrl . $path,
             'changefreq' => 'monthly',
             'priority'   => '0.4',
             'lastmod'    => substr($page['updated_at'] ?? $today, 0, 10),

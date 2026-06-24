@@ -2,6 +2,7 @@
 
 <div class="page-header">
     <h1>Clientes</h1>
+    <a class="btn btn-outline" href="/admin/clientes/exportar?<?= http_build_query($_GET) ?>">Exportar CSV</a>
 </div>
 
 <form class="filter-bar" method="get" action="/admin/clientes">

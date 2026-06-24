@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /cron/
+
+Sitemap: https://cassianogalvao.com.br/maiasuplementos/sitemap.xml

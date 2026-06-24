@@ -43,6 +43,11 @@ class UserModel extends BaseModel
             $params[] = $filters['tag'];
         }
 
+        if (($filters['opt_in'] ?? '') !== '' && ($filters['opt_in'] ?? null) !== null) {
+            $where[]  = 'email_opt_in = ?';
+            $params[] = (int)$filters['opt_in'];
+        }
+
         if (!empty($filters['segment'])) {
             switch ($filters['segment']) {
                 case 'never_bought':
@@ -79,7 +84,7 @@ class UserModel extends BaseModel
         $params[]         = $offset;
 
         $rows = $this->fetchAll(
-            "SELECT id, name, email, phone, city, state, tag, total_orders,
+            "SELECT id, name, email, phone, city, state, tag, email_opt_in, total_orders,
                     total_spent, last_purchase_at, created_at
                FROM users
               WHERE {$whereStr}
@@ -196,9 +201,39 @@ class UserModel extends BaseModel
             $where[]  = '(name LIKE ? OR email LIKE ? OR phone LIKE ?)';
             $params   = array_merge($params, [$term, $term, $term]);
         }
-        if (!empty($filters['opt_in'])) {
+        if (!empty($filters['tag'])) {
+            $where[]  = 'tag = ?';
+            $params[] = $filters['tag'];
+        }
+        if (($filters['opt_in'] ?? '') !== '' && ($filters['opt_in'] ?? null) !== null) {
             $where[]  = 'email_opt_in = ?';
             $params[] = (int)$filters['opt_in'];
+        }
+        if (!empty($filters['segment'])) {
+            switch ($filters['segment']) {
+                case 'never_bought':
+                    $where[] = 'total_orders = 0';
+                    break;
+                case 'bought_once':
+                    $where[] = 'total_orders = 1';
+                    break;
+                case 'bought_3plus':
+                    $where[] = 'total_orders >= 3';
+                    break;
+                case 'inactive_30':
+                    $where[] = 'last_purchase_at < DATE_SUB(NOW(), INTERVAL 30 DAY)';
+                    break;
+                case 'inactive_60':
+                    $where[] = 'last_purchase_at < DATE_SUB(NOW(), INTERVAL 60 DAY)';
+                    break;
+                case 'inactive_90':
+                    $where[] = 'last_purchase_at < DATE_SUB(NOW(), INTERVAL 90 DAY)';
+                    break;
+                case 'spent_above':
+                    $where[]  = 'total_spent >= ?';
+                    $params[] = (float)($filters['spent_above_value'] ?? 0);
+                    break;
+            }
         }
 
         return (int)$this->fetchColumn(
