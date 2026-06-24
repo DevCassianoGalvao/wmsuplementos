@@ -565,6 +565,14 @@ main { display: block; }
     padding: 1.25rem;
     margin-bottom: 1rem;
 }
+.review-photo {
+    width: min(180px, 100%);
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-top: 0.75rem;
+}
 
 /* ============================================================
    CART

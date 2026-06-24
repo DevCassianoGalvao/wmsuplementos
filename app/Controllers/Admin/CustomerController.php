@@ -21,7 +21,12 @@ class CustomerController extends BaseController
             'search'  => $_GET['busca']     ?? '',
             'segment' => $_GET['segmento']  ?? '',
             'opt_in'  => $_GET['opt_in']    ?? '',
+            'tag'     => $_GET['tag']       ?? '',
+            'spent_above_value' => $_GET['gastou_acima'] ?? '',
         ];
+        if ($filters['spent_above_value'] !== '') {
+            $filters['segment'] = 'spent_above';
+        }
 
         $model     = new UserModel();
         $customerList = $model->getList($filters, $page, 30);
@@ -69,7 +74,12 @@ class CustomerController extends BaseController
             'search'  => $_GET['busca']     ?? '',
             'segment' => $_GET['segmento']  ?? '',
             'opt_in'  => $_GET['opt_in']    ?? '',
+            'tag'     => $_GET['tag']       ?? '',
+            'spent_above_value' => $_GET['gastou_acima'] ?? '',
         ];
+        if ($filters['spent_above_value'] !== '') {
+            $filters['segment'] = 'spent_above';
+        }
 
         $result = (new UserModel())->getList($filters, 1, 100000);
 
@@ -115,5 +125,25 @@ class CustomerController extends BaseController
 
         $this->flash('success', 'Cliente anonimizado conforme LGPD.');
         $this->redirect('/admin/clientes');
+    }
+
+    public function updateTag(array $params): void
+    {
+        Auth::requireAdmin();
+        CSRF::verify();
+
+        $id = (int)($params['id'] ?? 0);
+        $tag = (string)($_POST['tag'] ?? '');
+        $allowed = ['', 'vip', 'atacado', 'bloqueado'];
+
+        if ($id <= 0 || !in_array($tag, $allowed, true)) {
+            $this->flash('error', 'Tag de cliente invalida.');
+            $this->redirect('/admin/clientes');
+        }
+
+        (new UserModel())->updateTag($id, $tag);
+
+        $this->flash('success', 'Tag do cliente atualizada.');
+        $this->redirect('/admin/clientes/' . $id);
     }
 }

@@ -145,6 +145,9 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
                 <?php endfor; ?>
             </div>
             <p class="review-comment"><?= htmlspecialchars($review['comment'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+            <?php if (!empty($review['photo'])): ?>
+            <img src="<?= htmlspecialchars($review['photo'], ENT_QUOTES, 'UTF-8') ?>" alt="" class="review-photo" loading="lazy">
+            <?php endif; ?>
             <p class="review-meta">
                 <strong><?= htmlspecialchars($review['customer_name'] ?? $review['user_name'] ?? 'Cliente', ENT_QUOTES, 'UTF-8') ?></strong>
                 &middot; <?= htmlspecialchars($review['created_at'] ?? '', ENT_QUOTES, 'UTF-8') ?>

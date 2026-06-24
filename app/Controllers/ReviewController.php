@@ -7,6 +7,8 @@ namespace Maia\Controllers;
 use Maia\Helpers\CSRF;
 use Maia\Helpers\Sanitizer;
 use Maia\Helpers\Validator;
+use Maia\Services\ImageService;
+use Maia\Services\NotificationService;
 
 class ReviewController extends BaseController
 {
@@ -46,6 +48,7 @@ class ReviewController extends BaseController
 
         $rating  = (int)($_POST['rating']   ?? 0);
         $comment = Sanitizer::plainText($_POST['comment'] ?? '');
+        $photo = $review['photo'] ?? null;
 
         $v = new Validator(['rating' => $rating, 'comment' => $comment]);
         $v->required('rating')->in('rating', ['1','2','3','4','5'], 'Nota')
@@ -56,9 +59,30 @@ class ReviewController extends BaseController
             $this->redirect('/avaliar/' . $token);
         }
 
+        if (!empty($_FILES['photo']['tmp_name']) && is_uploaded_file($_FILES['photo']['tmp_name'])) {
+            if (($_FILES['photo']['size'] ?? 0) > 5 * 1024 * 1024) {
+                $this->flash('error', 'A foto deve ter no maximo 5MB.');
+                $this->redirect('/avaliar/' . $token);
+            }
+
+            try {
+                $paths = ImageService::processUpload($_FILES['photo'], 'reviews');
+                $photo = $paths['medium'] ?? null;
+            } catch (\Throwable $e) {
+                $this->flash('error', $e->getMessage());
+                $this->redirect('/avaliar/' . $token);
+            }
+        }
+
         db()->prepare(
-            'UPDATE reviews SET rating = ?, comment = ?, status = ? WHERE review_token = ?'
-        )->execute([$rating, $comment ?: null, 'pending', $token]);
+            'UPDATE reviews SET rating = ?, comment = ?, photo = ?, status = ? WHERE review_token = ?'
+        )->execute([$rating, $comment ?: null, $photo, 'pending', $token]);
+
+        NotificationService::create(
+            NotificationService::TYPE_REVIEW,
+            'Nova avaliacao pendente',
+            'Produto #' . (int)$review['product_id'] . ' recebeu uma avaliacao para moderacao.'
+        );
 
         $this->render('review/thanks', [
             'pageTitle' => 'Avaliação Enviada | Maia Suplementos',

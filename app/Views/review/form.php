@@ -12,7 +12,7 @@
         <div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
         <?php endif; ?>
 
-        <form action="/avaliar/<?= htmlspecialchars($review['review_token'], ENT_QUOTES, 'UTF-8') ?>" method="post" novalidate>
+        <form action="/avaliar/<?= htmlspecialchars($review['review_token'], ENT_QUOTES, 'UTF-8') ?>" method="post" enctype="multipart/form-data" novalidate>
             <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
 
             <fieldset class="form-group">
@@ -29,11 +29,16 @@
             </fieldset>
 
             <div class="form-group">
-                <label for="comment">Seu comentário <small>(opcional, máx. 1000 caracteres)</small></label>
-                <textarea id="comment" name="comment" rows="5" maxlength="1000" placeholder="Conte como foi sua experiência com o produto..."><?= htmlspecialchars($_POST['comment'] ?? $review['comment'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                <label for="comment">Seu comentario <small>(opcional, max. 1000 caracteres)</small></label>
+                <textarea id="comment" name="comment" rows="5" maxlength="1000" placeholder="Conte como foi sua experiencia com o produto..."><?= htmlspecialchars($_POST['comment'] ?? $review['comment'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Enviar Avaliação</button>
+            <div class="form-group">
+                <label for="photo">Foto do produto <small>(opcional, JPG/PNG/WebP, max. 5MB)</small></label>
+                <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Enviar Avaliacao</button>
         </form>
     </div>
 </div>

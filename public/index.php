@@ -230,6 +230,7 @@ $router->get('/admin/pedidos/exportar',  'Admin\OrderController@export');
 // Clientes
 $router->get('/admin/clientes',          'Admin\CustomerController@index');
 $router->get('/admin/clientes/exportar', 'Admin\CustomerController@export');
+$router->post('/admin/clientes/{id}/tag', 'Admin\CustomerController@updateTag');
 $router->post('/admin/clientes/{id}/anonimizar', 'Admin\CustomerController@anonymize');
 $router->get('/admin/clientes/{id}',     'Admin\CustomerController@show');
 
@@ -243,6 +244,7 @@ $router->post('/admin/cupons/{id}/toggle', 'Admin\CouponController@toggle');
 
 // Avaliações
 $router->get('/admin/avaliacoes',        'Admin\ReviewController@index');
+$router->post('/admin/avaliacoes/lote',  'Admin\ReviewController@bulk');
 $router->post('/admin/avaliacoes/{id}/aprovar', 'Admin\ReviewController@approve');
 $router->post('/admin/avaliacoes/{id}/rejeitar', 'Admin\ReviewController@reject');
 

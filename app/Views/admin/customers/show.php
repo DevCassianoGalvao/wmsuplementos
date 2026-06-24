@@ -20,6 +20,19 @@
             <dt>Telefone:</dt><dd><?= htmlspecialchars($customer['phone'] ?? '-', ENT_QUOTES, 'UTF-8') ?></dd>
             <dt>Cadastro:</dt><dd><?= htmlspecialchars(substr($customer['created_at'] ?? '', 0, 10), ENT_QUOTES, 'UTF-8') ?></dd>
             <dt>Opt-in e-mail:</dt><dd><?= !empty($customer['email_opt_in']) ? 'Sim' : 'Nao' ?></dd>
+            <dt>Tag CRM:</dt>
+            <dd>
+                <form action="/admin/clientes/<?= (int)$customer['id'] ?>/tag" method="post" class="inline-form">
+                    <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+                    <select name="tag">
+                        <option value="" <?= ($customer['tag'] ?? '') === '' ? 'selected' : '' ?>>Sem tag</option>
+                        <option value="vip" <?= ($customer['tag'] ?? '') === 'vip' ? 'selected' : '' ?>>VIP</option>
+                        <option value="atacado" <?= ($customer['tag'] ?? '') === 'atacado' ? 'selected' : '' ?>>Atacado</option>
+                        <option value="bloqueado" <?= ($customer['tag'] ?? '') === 'bloqueado' ? 'selected' : '' ?>>Bloqueado</option>
+                    </select>
+                    <button type="submit" class="btn btn-outline">Salvar</button>
+                </form>
+            </dd>
         </dl>
     </section>
 
@@ -28,7 +41,7 @@
         <dl>
             <dt>Total de Pedidos:</dt><dd><?= (int)($customer['total_orders'] ?? 0) ?></dd>
             <dt>Total Gasto:</dt><dd>R$ <?= Sanitizer::money((float)($customer['total_spent'] ?? 0)) ?></dd>
-            <dt>Ultima Compra:</dt><dd><?= htmlspecialchars(!empty($customer['last_order_at']) ? substr($customer['last_order_at'], 0, 10) : '-', ENT_QUOTES, 'UTF-8') ?></dd>
+            <dt>Ultima Compra:</dt><dd><?= htmlspecialchars(!empty($customer['last_purchase_at']) ? substr($customer['last_purchase_at'], 0, 10) : '-', ENT_QUOTES, 'UTF-8') ?></dd>
         </dl>
     </section>
 

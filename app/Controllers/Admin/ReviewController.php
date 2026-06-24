@@ -15,8 +15,12 @@ class ReviewController extends BaseController
         Auth::requireAdmin();
 
         $status = $_GET['status'] ?? 'pending';
-        $page   = max(1, (int)($_GET['pagina'] ?? 1));
-        $limit  = 30;
+        if (!in_array($status, ['pending', 'approved', 'rejected'], true)) {
+            $status = 'pending';
+        }
+
+        $page = max(1, (int)($_GET['pagina'] ?? 1));
+        $limit = 30;
         $offset = ($page - 1) * $limit;
 
         $stmt = db()->prepare(
@@ -36,13 +40,13 @@ class ReviewController extends BaseController
         $total = (int)$stmt->fetchColumn();
 
         $this->render('admin/reviews/index', [
-            'pageTitle'  => 'Avaliações | Admin Maia',
-            'reviews'    => $reviews,
-            'total'      => $total,
-            'page'       => $page,
+            'pageTitle' => 'Avaliacoes | Admin Maia',
+            'reviews' => $reviews,
+            'total' => $total,
+            'page' => $page,
             'totalPages' => (int)ceil($total / $limit),
-            'status'     => $status,
-            'flash'      => $this->getFlash(),
+            'status' => $status,
+            'flash' => $this->getFlash(),
         ], 'admin');
     }
 
@@ -52,9 +56,10 @@ class ReviewController extends BaseController
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);
-        db()->prepare("UPDATE reviews SET status = 'approved' WHERE id = ?")->execute([$id]);
+        db()->prepare("UPDATE reviews SET status = 'approved', rejection_reason = NULL WHERE id = ?")
+            ->execute([$id]);
 
-        $this->flash('success', 'Avaliação aprovada.');
+        $this->flash('success', 'Avaliacao aprovada.');
         $this->redirect('/admin/avaliacoes');
     }
 
@@ -64,9 +69,41 @@ class ReviewController extends BaseController
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);
-        db()->prepare("UPDATE reviews SET status = 'rejected' WHERE id = ?")->execute([$id]);
+        $reason = trim((string)($_POST['rejection_reason'] ?? ''));
 
-        $this->flash('success', 'Avaliação rejeitada.');
+        db()->prepare("UPDATE reviews SET status = 'rejected', rejection_reason = ? WHERE id = ?")
+            ->execute([$reason !== '' ? $reason : null, $id]);
+
+        $this->flash('success', 'Avaliacao rejeitada.');
+        $this->redirect('/admin/avaliacoes');
+    }
+
+    public function bulk(array $params = []): void
+    {
+        Auth::requireAdmin();
+        CSRF::verify();
+
+        $action = (string)($_POST['bulk_action'] ?? '');
+        $ids = array_values(array_filter(array_map('intval', (array)($_POST['review_ids'] ?? []))));
+
+        if (!in_array($action, ['approve', 'reject'], true) || empty($ids)) {
+            $this->flash('error', 'Selecione avaliacoes e uma acao valida.');
+            $this->redirect('/admin/avaliacoes');
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+
+        if ($action === 'approve') {
+            db()->prepare("UPDATE reviews SET status = 'approved', rejection_reason = NULL WHERE id IN ({$placeholders})")
+                ->execute($ids);
+            $this->flash('success', 'Avaliacoes aprovadas.');
+        } else {
+            $reason = trim((string)($_POST['rejection_reason'] ?? ''));
+            db()->prepare("UPDATE reviews SET status = 'rejected', rejection_reason = ? WHERE id IN ({$placeholders})")
+                ->execute(array_merge([$reason !== '' ? $reason : null], $ids));
+            $this->flash('success', 'Avaliacoes rejeitadas.');
+        }
+
         $this->redirect('/admin/avaliacoes');
     }
 }
