@@ -30,7 +30,8 @@
             <p class="section__label">Explorar</p>
             <h2 class="section__title">Categorias</h2>
         </div>
-        <div class="categories-scroll">
+        <div class="category-carousel">
+        <div class="categories-scroll" data-category-carousel>
             <?php foreach ($categories as $cat): ?>
             <a href="/categoria/<?= htmlspecialchars($cat['slug'], ENT_QUOTES, 'UTF-8') ?>" class="category-card animate-in">
                 <div class="category-card__body">
@@ -39,6 +40,15 @@
                 </div>
             </a>
             <?php endforeach; ?>
+        </div>
+        <div class="category-carousel__controls" aria-label="Navegar categorias">
+            <button type="button" class="category-arrow" data-category-prev aria-label="Categorias anteriores">
+                <span aria-hidden="true">&larr;</span>
+            </button>
+            <button type="button" class="category-arrow" data-category-next aria-label="Próximas categorias">
+                <span aria-hidden="true">&rarr;</span>
+            </button>
+        </div>
         </div>
     </div>
 </section>

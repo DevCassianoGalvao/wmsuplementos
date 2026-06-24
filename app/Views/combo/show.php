@@ -24,15 +24,15 @@
             </div>
 
             <?php if ($combo['description']): ?>
-            <p style="margin-bottom:1.2rem;color:#555;"><?= nl2br(htmlspecialchars($combo['description'], ENT_QUOTES, 'UTF-8')) ?></p>
+            <p class="combo-detail__desc"><?= nl2br(htmlspecialchars($combo['description'], ENT_QUOTES, 'UTF-8')) ?></p>
             <?php endif; ?>
 
             <?php if (!empty($items)): ?>
-            <div style="margin-bottom:1.5rem;">
-                <h3 style="font-size:.95rem;margin-bottom:.6rem;color:#666;">Produtos inclusos:</h3>
-                <ul style="display:flex;flex-direction:column;gap:.4rem;">
+            <div class="combo-detail__items">
+                <h3>Produtos inclusos:</h3>
+                <ul>
                     <?php foreach ($items as $item): ?>
-                    <li style="font-size:.9rem;">
+                    <li>
                         <strong><?= (int)$item['quantity'] ?>x</strong>
                         <a href="/produto/<?= htmlspecialchars($item['slug'], ENT_QUOTES, 'UTF-8') ?>">
                             <?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>

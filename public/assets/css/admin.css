@@ -753,3 +753,105 @@ button.btn-link:hover {
         overflow-x: auto;
     }
 }
+
+/* Round 5: admin spacing and metric alignment */
+.admin-main {
+    min-height: 100vh;
+}
+.admin-content {
+    padding: clamp(1.5rem, 2.2vw, 2.75rem);
+}
+.admin-content > h1 {
+    margin-bottom: 1.75rem;
+}
+.kpi-grid {
+    gap: 1rem;
+}
+.kpi-card {
+    min-height: 180px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.8rem;
+}
+.kpi-icon {
+    margin-inline: auto;
+}
+.kpi-body {
+    width: 100%;
+    text-align: center;
+}
+.kpi-label,
+.kpi-card h3 {
+    text-align: center;
+}
+.kpi-value,
+.kpi-card .kpi-value {
+    display: block;
+    text-align: center;
+}
+.kpi-card a {
+    margin-top: 0;
+    justify-content: center;
+}
+.dashboard-row {
+    gap: 1.5rem;
+}
+.dashboard-card {
+    padding: 1.6rem;
+}
+.summary-stat {
+    min-height: 54px;
+}
+.filter-bar {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(180px, 260px) minmax(160px, 240px) auto;
+    gap: 0.75rem;
+    align-items: end;
+}
+.filter-bar .btn,
+.filter-bar button {
+    min-height: 44px;
+}
+.admin-table {
+    margin-top: 0.75rem;
+}
+.admin-table thead th {
+    padding: 0.9rem 1rem;
+}
+.admin-table tbody td {
+    padding: 1rem;
+}
+.form-card,
+.detail-card,
+.config-section,
+.utm-form-card,
+.script-card {
+    padding: 1.4rem;
+}
+.form-grid {
+    gap: 1rem;
+}
+.table-actions {
+    gap: 0.6rem;
+}
+
+@media (max-width: 1100px) {
+    .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .filter-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .admin-content {
+        padding: 1rem;
+    }
+    .kpi-grid,
+    .dashboard-row,
+    .filter-bar {
+        grid-template-columns: 1fr;
+    }
+}

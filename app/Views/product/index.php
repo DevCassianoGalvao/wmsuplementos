@@ -19,13 +19,23 @@
 <?php if (!empty($categories)): ?>
 <section class="section categories-band">
     <div class="container">
-        <div class="categories-scroll">
+        <div class="category-carousel">
+        <div class="categories-scroll" data-category-carousel>
             <?php foreach ($categories as $category): ?>
             <a href="/categoria/<?= htmlspecialchars($category['slug'], ENT_QUOTES, 'UTF-8') ?>" class="category-card">
                 <span class="category-card__name"><?= htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8') ?></span>
                 <span class="category-card__count"><?= (int)($category['product_count'] ?? 0) ?></span>
             </a>
             <?php endforeach; ?>
+        </div>
+        <div class="category-carousel__controls" aria-label="Navegar categorias">
+            <button type="button" class="category-arrow" data-category-prev aria-label="Categorias anteriores">
+                <span aria-hidden="true">&larr;</span>
+            </button>
+            <button type="button" class="category-arrow" data-category-next aria-label="Próximas categorias">
+                <span aria-hidden="true">&rarr;</span>
+            </button>
+        </div>
         </div>
     </div>
 </section>

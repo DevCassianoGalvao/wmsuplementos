@@ -10,9 +10,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/design-system.css?v=20260624">
-    <link rel="stylesheet" href="/assets/css/animations.css?v=20260624">
-    <link rel="stylesheet" href="/assets/css/main.css?v=20260624">
+    <link rel="stylesheet" href="/assets/css/design-system.css?v=20260624-2">
+    <link rel="stylesheet" href="/assets/css/animations.css?v=20260624-2">
+    <link rel="stylesheet" href="/assets/css/main.css?v=20260624-2">
     <?= \Maia\Helpers\ScriptInjector::head() ?>
 </head>
 <body>

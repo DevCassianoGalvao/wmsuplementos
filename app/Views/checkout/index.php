@@ -1,6 +1,6 @@
 <?php use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
 
-<div class="container">
+<div class="container checkout-page">
     <h1>Finalizar Compra</h1>
 
     <?php if (!empty($flash['error'])): ?>

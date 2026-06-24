@@ -3,9 +3,9 @@
 <section class="auth-page">
     <div class="container auth-shell">
         <div class="auth-panel">
-            <p class="section__label">Área do cliente</p>
-            <h1>Entrar na sua conta</h1>
-            <p class="auth-lead">Acompanhe pedidos, dados de entrega e histórico de compras.</p>
+            <p class="section__label">&Aacute;rea do cliente</p>
+            <h1>Entrar</h1>
+            <p class="auth-lead">Acompanhe pedidos, dados de entrega e hist&oacute;rico de compras.</p>
 
             <?php if (!empty($flash['error'])): ?>
             <div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
@@ -34,16 +34,8 @@
             </form>
 
             <div class="auth-links">
-                <p>Não tem conta? <a href="/cadastro">Criar conta grátis</a></p>
+                <p>N&atilde;o tem conta? <a href="/cadastro">Criar conta gr&aacute;tis</a></p>
             </div>
         </div>
-        <aside class="auth-aside" aria-label="Benefícios">
-            <img src="/assets/img/logo.png" alt="Maia Suplementos" width="150" height="50" loading="lazy">
-            <ul>
-                <li>Checkout mais rápido</li>
-                <li>Histórico de pedidos</li>
-                <li>Acompanhamento de compra</li>
-            </ul>
-        </aside>
     </div>
 </section>

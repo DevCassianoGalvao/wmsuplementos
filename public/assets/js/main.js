@@ -87,6 +87,23 @@ document.querySelectorAll('[data-confirm]').forEach(function(el) {
 });
 
 /* ── CEP autocomplete (via ViaCEP) ──────────────────────────── */
+/* Category carousel controls */
+document.querySelectorAll('.category-carousel').forEach(function(carousel) {
+    var track = carousel.querySelector('[data-category-carousel]');
+    var prev = carousel.querySelector('[data-category-prev]');
+    var next = carousel.querySelector('[data-category-next]');
+    if (!track || !prev || !next) return;
+
+    var scrollCategories = function(direction) {
+        var card = track.querySelector('.category-card');
+        var distance = card ? card.getBoundingClientRect().width + 16 : 220;
+        track.scrollBy({ left: distance * direction, behavior: 'smooth' });
+    };
+
+    prev.addEventListener('click', function() { scrollCategories(-1); });
+    next.addEventListener('click', function() { scrollCategories(1); });
+});
+
 var cepInput = document.getElementById('zip_code');
 if (cepInput) {
     cepInput.addEventListener('blur', function() {

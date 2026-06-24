@@ -1,6 +1,6 @@
 <?php use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
 
-<div class="container">
+<div class="container cart-page">
     <h1>Meu Carrinho</h1>
 
     <?php if (!empty($flash['error'])): ?>
