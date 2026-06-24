@@ -157,11 +157,11 @@ main { display: block; }
 .hero__title {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: var(--text-hero);
-    line-height: 1.1;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.05;
     color: var(--color-text-primary);
 }
-.hero__title em { color: var(--color-red); font-style: italic; }
+.hero__title em { color: var(--color-red); font-style: italic; font-weight: 800; }
 .hero__subtitle {
     font-family: var(--font-body);
     font-weight: 400;
@@ -232,7 +232,21 @@ main { display: block; }
     gap: 0.5rem;
 }
 .product-card__form { margin-top: auto; }
-.product-card__btn { font-size: var(--text-small); padding: 0.625rem 1rem; }
+.product-card__btn {
+    width: 100%;
+    padding: 0.625rem;
+    background: #E63329;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin-top: 0.75rem;
+}
+.product-card__btn:hover { background: #FF3D33; }
 .product-card__img,
 .product-card__img-placeholder {
     width: 100%;

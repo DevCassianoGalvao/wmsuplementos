@@ -119,6 +119,7 @@
             <div class="form-group">
                 <label for="images">Adicionar imagens (JPG/PNG/WebP, máx. 5MB cada)</label>
                 <input type="file" id="images" name="images[]" multiple accept="image/jpeg,image/png,image/webp">
+                <div id="image-preview" class="image-preview" aria-live="polite"></div>
             </div>
         </section>
 

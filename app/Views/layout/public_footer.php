@@ -39,6 +39,7 @@
     </div>
 </footer>
 
+<script src="/assets/js/placeholder-images.js" defer></script>
 <script src="/assets/js/main.js" defer></script>
 </body>
 </html>

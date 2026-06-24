@@ -420,3 +420,174 @@
     .kpi-grid { grid-template-columns: 1fr; }
     .admin-content { padding: 1.25rem; }
 }
+
+/* Round 2 admin polish */
+.admin-main { min-height: calc(100vh - 60px); }
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    color: #A0A0A0;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    margin-bottom: 2px;
+}
+.sidebar-nav a:hover { background: rgba(255,255,255,0.05); color: #FFFFFF; }
+.sidebar-nav a.active {
+    background: rgba(230,51,41,0.12);
+    color: #E63329;
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 #E63329;
+}
+
+.kpi-card {
+    background: #111111;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.kpi-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(230,51,41,0.12);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #E63329;
+}
+.kpi-body { min-width: 0; }
+.kpi-label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #555555;
+    margin-bottom: 0.25rem;
+}
+.kpi-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="search"],
+select,
+textarea {
+    background: #1A1A1A !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    border-radius: 8px !important;
+    color: #FFFFFF !important;
+    padding: 0.625rem 0.875rem !important;
+    font-family: var(--font-body) !important;
+    font-size: 0.875rem !important;
+    outline: none !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="search"]:focus,
+select:focus,
+textarea:focus {
+    border-color: #E63329 !important;
+    box-shadow: 0 0 0 3px rgba(230,51,41,0.12) !important;
+}
+input::placeholder,
+textarea::placeholder { color: #555555 !important; }
+select option { background: #1A1A1A; color: #FFFFFF; }
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) opacity(0.4);
+    cursor: pointer;
+}
+
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table thead th {
+    background: #1A1A1A;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #555555;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.admin-table tbody td {
+    padding: 0.875rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: #A0A0A0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.admin-table tbody tr:hover td { background: rgba(255,255,255,0.02); color: #FFFFFF; }
+.admin-table input[type="number"] { width: 60px; text-align: center; }
+
+.scripts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+.script-card,
+.config-section,
+.form-card,
+.detail-card,
+.utm-form-card {
+    background: #111111;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+.script-header,
+.config-section__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.config-section__header h3,
+.script-label {
+    font-family: var(--font-display);
+    color: #FFFFFF;
+    font-weight: 700;
+}
+.config-section__header p { color: #A0A0A0; font-size: 0.875rem; }
+
+.image-preview,
+#image-preview {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+}
+.image-preview img,
+#image-preview img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08);
+}

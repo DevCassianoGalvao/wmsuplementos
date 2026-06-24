@@ -6,16 +6,12 @@ $price = (float)($product['price_sale'] ?? $product['price'] ?? 0);
 $orig  = !empty($product['price_sale']) ? (float)$product['price'] : 0;
 $inStock = (int)($product['stock'] ?? 0) > 0;
 ?>
-<article class="product-card animate-in">
+<article class="product-card animate-in" data-category="<?= htmlspecialchars($product['category_slug'] ?? $product['category_name'] ?? 'default', ENT_QUOTES, 'UTF-8') ?>">
     <div class="product-card__image-wrap">
         <a href="/produto/<?= htmlspecialchars($product['slug'], ENT_QUOTES, 'UTF-8') ?>" class="product-card__link" aria-label="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>">
-            <?php if ($img): ?>
-            <img src="/uploads/products/<?= htmlspecialchars($img, ENT_QUOTES, 'UTF-8') ?>"
+            <img src="<?= $img ? '/uploads/products/' . htmlspecialchars($img, ENT_QUOTES, 'UTF-8') : '' ?>"
                  alt="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
                  loading="lazy" width="400" height="400" class="product-card__img">
-            <?php else: ?>
-            <div class="skeleton" style="width:100%;height:100%;"></div>
-            <?php endif; ?>
         </a>
         <?php if (!empty($product['bestseller'])): ?>
         <span class="product-card__badge badge badge--red">Mais Vendido</span>

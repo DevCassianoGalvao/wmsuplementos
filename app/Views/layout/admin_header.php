@@ -6,7 +6,7 @@
     <title><?= htmlspecialchars($pageTitle ?? 'Admin | Maia Suplementos', ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/design-system.css?v=20260623">
     <link rel="stylesheet" href="/assets/css/admin.css?v=20260623">
     <meta name="robots" content="noindex, nofollow">
@@ -21,38 +21,39 @@
             </a>
         </div>
 
+        <?php $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/admin', PHP_URL_PATH) ?: '/admin'; ?>
         <nav class="sidebar-nav" aria-label="Menu administrativo">
-            <a href="/admin/dashboard" class="nav-item <?= str_starts_with($_SERVER['REQUEST_URI'], '/admin/dashboard') || $_SERVER['REQUEST_URI'] === '/admin' ? 'active' : '' ?>">
+            <a href="/admin/dashboard" class="nav-item <?= str_starts_with($currentPath, '/admin/dashboard') || $currentPath === '/admin' ? 'active' : '' ?>">
                 Dashboard
             </a>
-            <a href="/admin/pedidos" class="nav-item <?= str_starts_with($_SERVER['REQUEST_URI'], '/admin/pedidos') ? 'active' : '' ?>">
+            <a href="/admin/pedidos" class="nav-item <?= str_starts_with($currentPath, '/admin/pedidos') ? 'active' : '' ?>">
                 Pedidos
             </a>
-            <a href="/admin/produtos" class="nav-item <?= str_starts_with($_SERVER['REQUEST_URI'], '/admin/produtos') ? 'active' : '' ?>">
+            <a href="/admin/produtos" class="nav-item <?= str_starts_with($currentPath, '/admin/produtos') ? 'active' : '' ?>">
                 Produtos
             </a>
-            <a href="/admin/estoque" class="nav-item <?= str_starts_with($_SERVER['REQUEST_URI'], '/admin/estoque') ? 'active' : '' ?>">
+            <a href="/admin/estoque" class="nav-item <?= str_starts_with($currentPath, '/admin/estoque') ? 'active' : '' ?>">
                 Estoque
             </a>
-            <a href="/admin/clientes" class="nav-item <?= str_starts_with($_SERVER['REQUEST_URI'], '/admin/clientes') ? 'active' : '' ?>">
+            <a href="/admin/clientes" class="nav-item <?= str_starts_with($currentPath, '/admin/clientes') ? 'active' : '' ?>">
                 Clientes
             </a>
-            <a href="/admin/cupons" class="nav-item <?= str_starts_with($_SERVER['REQUEST_URI'], '/admin/cupons') ? 'active' : '' ?>">
+            <a href="/admin/cupons" class="nav-item <?= str_starts_with($currentPath, '/admin/cupons') ? 'active' : '' ?>">
                 Cupons
             </a>
-            <a href="/admin/avaliacoes" class="nav-item <?= str_starts_with($_SERVER['REQUEST_URI'], '/admin/avaliacoes') ? 'active' : '' ?>">
+            <a href="/admin/avaliacoes" class="nav-item <?= str_starts_with($currentPath, '/admin/avaliacoes') ? 'active' : '' ?>">
                 Avaliações
             </a>
-            <a href="/admin/scripts" class="nav-item <?= str_starts_with($_SERVER['REQUEST_URI'], '/admin/scripts') ? 'active' : '' ?>">
+            <a href="/admin/scripts" class="nav-item <?= str_starts_with($currentPath, '/admin/scripts') ? 'active' : '' ?>">
                 Scripts
             </a>
-            <a href="/admin/utm" class="nav-item <?= str_starts_with($_SERVER['REQUEST_URI'], '/admin/utm') ? 'active' : '' ?>">
+            <a href="/admin/utm" class="nav-item <?= str_starts_with($currentPath, '/admin/utm') ? 'active' : '' ?>">
                 UTM Builder
             </a>
             <?php
             $unreadCount = \Maia\Services\NotificationService::countUnread();
             ?>
-            <a href="/admin/notificacoes" class="nav-item <?= str_starts_with($_SERVER['REQUEST_URI'], '/admin/notificacoes') ? 'active' : '' ?>">
+            <a href="/admin/notificacoes" class="nav-item <?= str_starts_with($currentPath, '/admin/notificacoes') ? 'active' : '' ?>">
                 Notificações
                 <?php if ($unreadCount > 0): ?>
                 <span class="nav-badge"><?= $unreadCount ?></span>

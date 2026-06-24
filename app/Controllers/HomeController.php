@@ -31,7 +31,12 @@ class HomeController extends BaseController
 
     private function getActiveCombos(): array
     {
-        return db()->query('SELECT * FROM combos WHERE active = 1 ORDER BY id DESC')->fetchAll();
+        return db()->query(
+            'SELECT c.*, c.price AS total_price
+               FROM combos c
+              WHERE c.active = 1
+              ORDER BY c.id DESC'
+        )->fetchAll();
     }
 
     private function getApprovedReviews(int $limit): array

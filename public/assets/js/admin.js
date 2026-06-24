@@ -59,7 +59,7 @@ if (imageInput && previewContainer) {
             reader.onload = function(e) {
                 var img = document.createElement('img');
                 img.src = e.target.result;
-                img.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #ddd;';
+                img.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,0.08);';
                 previewContainer.appendChild(img);
             };
             reader.readAsDataURL(file);

@@ -42,14 +42,15 @@
     <tr><td colspan="7" class="empty-state">Nenhum cliente encontrado.</td></tr>
     <?php else: ?>
     <?php foreach ($customers as $c): ?>
+    <?php if (!is_array($c)) { continue; } ?>
     <tr>
-        <td><?= (int)$c['id'] ?></td>
-        <td><?= htmlspecialchars($c['name'], ENT_QUOTES, 'UTF-8') ?></td>
-        <td><?= htmlspecialchars($c['email'], ENT_QUOTES, 'UTF-8') ?></td>
-        <td><?= (int)$c['total_orders'] ?></td>
+        <td><?= (int)($c['id'] ?? 0) ?></td>
+        <td><?= htmlspecialchars($c['name'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+        <td><?= htmlspecialchars($c['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+        <td><?= (int)($c['total_orders'] ?? 0) ?></td>
         <td>R$ <?= Sanitizer::money((float)($c['total_spent'] ?? 0)) ?></td>
         <td><?= htmlspecialchars(substr($c['created_at'] ?? '', 0, 10), ENT_QUOTES, 'UTF-8') ?></td>
-        <td><a href="/admin/clientes/<?= (int)$c['id'] ?>">Ver</a></td>
+        <td><a href="/admin/clientes/<?= (int)($c['id'] ?? 0) ?>">Ver</a></td>
     </tr>
     <?php endforeach; ?>
     <?php endif; ?>

@@ -542,17 +542,6 @@ CREATE TABLE IF NOT EXISTS `stock_notifications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================================================
--- Admin padrão
--- Senha: admin123  →  TROQUE NO PRIMEIRO LOGIN
--- Para gerar novo hash: php -r "echo password_hash('SuaSenha', PASSWORD_BCRYPT, ['cost'=>12]);"
--- =============================================================================
-INSERT IGNORE INTO `admin_users` (`name`, `email`, `password_hash`, `role`, `active`) VALUES
-(
-    'Administrador',
-    'cassianogalvao2020@gmail.com',
-    '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-    'admin',
-    1
-);
+-- Admin inicial deve ser criado fora do schema com senha forte.
 
 SET foreign_key_checks = 1;

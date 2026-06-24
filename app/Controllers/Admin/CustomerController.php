@@ -23,8 +23,9 @@ class CustomerController extends BaseController
         ];
 
         $model     = new UserModel();
-        $customers = $model->getList($filters, $page, 30);
-        $total     = $model->countList($filters);
+        $customerList = $model->getList($filters, $page, 30);
+        $customers    = $customerList['items'] ?? [];
+        $total        = (int)($customerList['total'] ?? $model->countList($filters));
 
         $this->render('admin/customers/index', [
             'pageTitle'  => 'Clientes | Admin Maia',

@@ -31,10 +31,9 @@ define('ROOT_PATH', dirname(__DIR__));
 })();
 
 // ─── Configuração de erros ────────────────────────────────────────────────────
-// DEBUG TEMPORÁRIO — remover após resolver 500s
-ini_set('display_errors', '1');
+ini_set('display_errors', '0');
+ini_set('display_startup_errors', '0');
 error_reporting(E_ALL);
-$debug = true;
 
 ini_set('log_errors', '1');
 ini_set('error_log', ROOT_PATH . '/' . (getenv('LOG_PATH') ?: 'logs/') . 'php_errors.log');
