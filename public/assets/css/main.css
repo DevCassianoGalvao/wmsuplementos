@@ -213,9 +213,10 @@ main { display: block; }
 .categories-scroll {
     display: flex;
     gap: 0.75rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    scrollbar-width: none;
+    flex-wrap: wrap;
+    overflow: visible;
+    padding-bottom: 0;
+    scrollbar-width: auto;
 }
 .categories-scroll::-webkit-scrollbar { display: none; }
 .category-card {
@@ -231,7 +232,9 @@ main { display: block; }
     color: var(--color-text-primary);
     white-space: nowrap;
     transition: all var(--transition);
-    min-width: 170px;
+    min-width: min(180px, 100%);
+    flex: 1 1 170px;
+    max-width: 260px;
 }
 .category-card:hover {
     border-color: var(--color-red);
@@ -809,7 +812,9 @@ main { display: block; }
     padding: 0.95rem 1rem 0.95rem 1.15rem;
     background: linear-gradient(180deg, #1B1B1B 0%, #151515 100%);
     border: 1px solid rgba(255,255,255,0.09);
-    min-width: 176px;
+    min-width: min(176px, 100%);
+    flex: 1 1 176px;
+    max-width: 260px;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
 }
 .category-card:hover {
@@ -1130,5 +1135,15 @@ main > .section:first-child,
     .footer-bottom .container {
         align-items: flex-start;
         flex-direction: column;
+    }
+    .categories-scroll {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 0.75rem;
+        scrollbar-width: none;
+    }
+    .category-card {
+        flex: 0 0 178px;
+        max-width: none;
     }
 }
