@@ -68,7 +68,10 @@ class HomeController extends BaseController
         $stmt->execute(['faq']);
         $page = $stmt->fetch();
 
-        return $page ?: null;
+        return $page ?: [
+            'title' => 'Perguntas Frequentes',
+            'content' => '<h3>Os produtos sao originais?</h3><p>Sim. Trabalhamos apenas com produtos de procedencia e marcas reconhecidas.</p><h3>Entregam para todo o Brasil?</h3><p>Sim. O prazo depende da regiao e da modalidade escolhida.</p><h3>Posso acompanhar meu pedido?</h3><p>Sim. Depois da compra voce acompanha o status pela sua conta e recebe atualizacoes por e-mail.</p>',
+        ];
     }
 
     private function trackVisit(): void
