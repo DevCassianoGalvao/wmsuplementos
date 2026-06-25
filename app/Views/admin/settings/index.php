@@ -61,6 +61,79 @@
     </div>
 
     <section class="form-card">
+        <h2>Hero da Home</h2>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="hero_label">Selo superior</label>
+                <input type="text" id="hero_label" name="hero_label"
+                       value="<?= htmlspecialchars($settings['hero_label'] ?? 'Performance & Resultados', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+            <div class="form-group">
+                <label for="hero_image">Imagem de fundo</label>
+                <input type="text" id="hero_image" name="hero_image"
+                       placeholder="/assets/img/hero-supplement.webp"
+                       value="<?= htmlspecialchars($settings['hero_image'] ?? '/assets/img/hero-supplement.webp', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="hero_title_before">Titulo antes do destaque</label>
+                <input type="text" id="hero_title_before" name="hero_title_before"
+                       value="<?= htmlspecialchars($settings['hero_title_before'] ?? 'Suplementos para', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+            <div class="form-group">
+                <label for="hero_title_emphasis">Palavra em destaque</label>
+                <input type="text" id="hero_title_emphasis" name="hero_title_emphasis"
+                       value="<?= htmlspecialchars($settings['hero_title_emphasis'] ?? 'performance', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+            <div class="form-group">
+                <label for="hero_title_after">Titulo depois do destaque</label>
+                <input type="text" id="hero_title_after" name="hero_title_after"
+                       value="<?= htmlspecialchars($settings['hero_title_after'] ?? 'real.', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="hero_subtitle">Subtitulo</label>
+            <textarea id="hero_subtitle" name="hero_subtitle" rows="2"><?= htmlspecialchars($settings['hero_subtitle'] ?? 'Produtos selecionados para treino, rotina e evolucao.', ENT_QUOTES, 'UTF-8') ?></textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="hero_primary_label">Botao principal</label>
+                <input type="text" id="hero_primary_label" name="hero_primary_label"
+                       value="<?= htmlspecialchars($settings['hero_primary_label'] ?? 'Ver Produtos', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+            <div class="form-group">
+                <label for="hero_primary_url">URL principal</label>
+                <input type="text" id="hero_primary_url" name="hero_primary_url"
+                       value="<?= htmlspecialchars($settings['hero_primary_url'] ?? '/produtos', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+            <div class="form-group">
+                <label for="hero_secondary_label">Botao secundario</label>
+                <input type="text" id="hero_secondary_label" name="hero_secondary_label"
+                       value="<?= htmlspecialchars($settings['hero_secondary_label'] ?? 'Ver Combos', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+            <div class="form-group">
+                <label for="hero_secondary_url">URL secundaria</label>
+                <input type="text" id="hero_secondary_url" name="hero_secondary_url"
+                       value="<?= htmlspecialchars($settings['hero_secondary_url'] ?? '/combos', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+        </div>
+    </section>
+
+    <section class="form-card">
+        <h2>FAQ da Home</h2>
+        <label class="checkbox-row">
+            <input type="checkbox" name="home_faq_enabled" value="1"
+                   <?= ($settings['home_faq_enabled'] ?? '1') === '1' ? 'checked' : '' ?>>
+            Exibir perguntas frequentes na Home
+        </label>
+        <div class="form-group">
+            <label for="faq_content">Conteudo do FAQ</label>
+            <textarea id="faq_content" name="faq_content" rows="10"><?= htmlspecialchars($pages['faq']['content'] ?? $settings['faq_content'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+        </div>
+    </section>
+
+    <section class="form-card">
         <h2>LGPD e Politica de Privacidade</h2>
         <div class="form-group">
             <label for="privacy_policy">Conteudo da politica</label>

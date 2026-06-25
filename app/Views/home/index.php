@@ -5,18 +5,35 @@
 <?php endif; ?>
 
 <!-- HERO -->
-<section class="hero">
+<?php
+$heroImage = $settings['hero_image'] ?? '/assets/img/hero-supplement.webp';
+if (!preg_match('#^(https?://|/)#', $heroImage)) {
+    $heroImage = '/assets/img/hero-supplement.webp';
+}
+$safeHeroUrl = static function (string $url, string $fallback): string {
+    return preg_match('#^(https?://|/)#', $url) ? $url : $fallback;
+};
+$heroPrimaryUrl = $safeHeroUrl((string)($settings['hero_primary_url'] ?? '/produtos'), '/produtos');
+$heroSecondaryUrl = $safeHeroUrl((string)($settings['hero_secondary_url'] ?? '/combos'), '/combos');
+?>
+<section class="hero" style="--hero-image: url('<?= htmlspecialchars($heroImage, ENT_QUOTES, 'UTF-8') ?>');">
     <div class="hero__bg-grid"></div>
     <div class="container">
         <div class="hero__content">
-            <p class="hero__label animate-in">Performance &amp; Resultados</p>
+            <p class="hero__label animate-in"><?= htmlspecialchars($settings['hero_label'] ?? 'Performance & Resultados', ENT_QUOTES, 'UTF-8') ?></p>
             <h1 class="hero__title animate-in">
-                Suplementos para<br><em>performance</em> real.
+                <?= htmlspecialchars($settings['hero_title_before'] ?? 'Suplementos para', ENT_QUOTES, 'UTF-8') ?><br>
+                <em><?= htmlspecialchars($settings['hero_title_emphasis'] ?? 'performance', ENT_QUOTES, 'UTF-8') ?></em>
+                <?= htmlspecialchars($settings['hero_title_after'] ?? 'real.', ENT_QUOTES, 'UTF-8') ?>
             </h1>
-            <p class="hero__subtitle animate-in">Produtos selecionados para treino, rotina e evolução.</p>
+            <p class="hero__subtitle animate-in"><?= htmlspecialchars($settings['hero_subtitle'] ?? 'Produtos selecionados para treino, rotina e evolucao.', ENT_QUOTES, 'UTF-8') ?></p>
             <div class="hero__actions animate-in">
-                <a href="/produtos" class="btn btn--primary">Ver Produtos</a>
-                <a href="/combos" class="btn btn--ghost">Ver Combos</a>
+                <a href="<?= htmlspecialchars($heroPrimaryUrl, ENT_QUOTES, 'UTF-8') ?>" class="btn btn--primary">
+                    <?= htmlspecialchars($settings['hero_primary_label'] ?? 'Ver Produtos', ENT_QUOTES, 'UTF-8') ?>
+                </a>
+                <a href="<?= htmlspecialchars($heroSecondaryUrl, ENT_QUOTES, 'UTF-8') ?>" class="btn btn--ghost">
+                    <?= htmlspecialchars($settings['hero_secondary_label'] ?? 'Ver Combos', ENT_QUOTES, 'UTF-8') ?>
+                </a>
             </div>
         </div>
     </div>
@@ -31,24 +48,24 @@
             <h2 class="section__title">Categorias</h2>
         </div>
         <div class="category-carousel">
-        <div class="categories-scroll" data-category-carousel>
-            <?php foreach ($categories as $cat): ?>
-            <a href="/categoria/<?= htmlspecialchars($cat['slug'], ENT_QUOTES, 'UTF-8') ?>" class="category-card animate-in">
-                <div class="category-card__body">
-                    <span class="category-card__name"><?= htmlspecialchars($cat['name'], ENT_QUOTES, 'UTF-8') ?></span>
-                    <span class="category-card__count"><?= (int)($cat['product_count'] ?? 0) ?></span>
-                </div>
-            </a>
-            <?php endforeach; ?>
-        </div>
-        <div class="category-carousel__controls" aria-label="Navegar categorias">
-            <button type="button" class="category-arrow" data-category-prev aria-label="Categorias anteriores">
-                <span aria-hidden="true">&larr;</span>
-            </button>
-            <button type="button" class="category-arrow" data-category-next aria-label="Próximas categorias">
-                <span aria-hidden="true">&rarr;</span>
-            </button>
-        </div>
+            <div class="categories-scroll" data-category-carousel>
+                <?php foreach ($categories as $cat): ?>
+                <a href="/categoria/<?= htmlspecialchars($cat['slug'], ENT_QUOTES, 'UTF-8') ?>" class="category-card animate-in">
+                    <div class="category-card__body">
+                        <span class="category-card__name"><?= htmlspecialchars($cat['name'], ENT_QUOTES, 'UTF-8') ?></span>
+                        <span class="category-card__count"><?= (int)($cat['product_count'] ?? 0) ?></span>
+                    </div>
+                </a>
+                <?php endforeach; ?>
+            </div>
+            <div class="category-carousel__controls" aria-label="Navegar categorias">
+                <button type="button" class="category-arrow" data-category-prev aria-label="Categorias anteriores">
+                    <span aria-hidden="true">&larr;</span>
+                </button>
+                <button type="button" class="category-arrow" data-category-next aria-label="Proximas categorias">
+                    <span aria-hidden="true">&rarr;</span>
+                </button>
+            </div>
         </div>
     </div>
 </section>
@@ -116,13 +133,13 @@
 </section>
 <?php endif; ?>
 
-<!-- AVALIAÇÕES -->
+<!-- AVALIACOES -->
 <?php if (!empty($reviews)): ?>
 <section class="section reviews-section">
     <div class="container">
         <div class="section__header">
             <p class="section__label">Clientes</p>
-            <h2 class="section__title">O que dizem sobre nós</h2>
+            <h2 class="section__title">O que dizem sobre nos</h2>
         </div>
         <div class="reviews-grid">
             <?php foreach ($reviews as $review): ?>
@@ -136,6 +153,21 @@
                 <span class="review-card__author"><?= htmlspecialchars($review['customer_name'] ?? 'Cliente', ENT_QUOTES, 'UTF-8') ?></span>
             </div>
             <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- FAQ -->
+<?php if (($settings['home_faq_enabled'] ?? '1') === '1' && !empty($faq['content'])): ?>
+<section class="section faq-section">
+    <div class="container">
+        <div class="section__header">
+            <p class="section__label">Ajuda</p>
+            <h2 class="section__title"><?= htmlspecialchars($faq['title'] ?? 'Perguntas Frequentes', ENT_QUOTES, 'UTF-8') ?></h2>
+        </div>
+        <div class="faq-content">
+            <?= $faq['content'] ?>
         </div>
     </div>
 </section>

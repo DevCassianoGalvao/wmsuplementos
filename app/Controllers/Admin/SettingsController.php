@@ -6,6 +6,7 @@ namespace Maia\Controllers\Admin;
 
 use Maia\Controllers\BaseController;
 use Maia\Helpers\Auth;
+use Maia\Helpers\Cache;
 use Maia\Helpers\CSRF;
 use Maia\Helpers\Sanitizer;
 
@@ -19,6 +20,17 @@ class SettingsController extends BaseController
         'store_color_primary',
         'free_shipping_above',
         'stock_alert_min',
+        'hero_label',
+        'hero_title_before',
+        'hero_title_emphasis',
+        'hero_title_after',
+        'hero_subtitle',
+        'hero_image',
+        'hero_primary_label',
+        'hero_primary_url',
+        'hero_secondary_label',
+        'hero_secondary_url',
+        'home_faq_enabled',
     ];
 
     public function index(array $params = []): void
@@ -46,6 +58,8 @@ class SettingsController extends BaseController
                 $value = number_format((float)str_replace(',', '.', (string)$value), 2, '.', '');
             } elseif ($key === 'stock_alert_min') {
                 $value = (string)max(0, (int)$value);
+            } elseif ($key === 'home_faq_enabled') {
+                $value = isset($_POST[$key]) ? '1' : '0';
             } else {
                 $value = Sanitizer::plainText((string)$value);
             }
@@ -58,6 +72,9 @@ class SettingsController extends BaseController
 
         $this->updateLegalPage('politica-de-privacidade', 'Politica de Privacidade', $_POST['privacy_policy'] ?? '');
         $this->updateLegalPage('termos-de-uso', 'Termos de Uso', $_POST['terms_of_use'] ?? '');
+        $this->updateLegalPage('faq', 'Perguntas Frequentes', $_POST['faq_content'] ?? '');
+
+        Cache::flush('home_');
 
         $this->flash('success', 'Configuracoes atualizadas.');
         $this->redirect('/admin/configuracoes');
@@ -78,7 +95,7 @@ class SettingsController extends BaseController
         $stmt = db()->prepare(
             "SELECT slug, title, content
                FROM pages
-              WHERE slug IN ('politica-de-privacidade', 'termos-de-uso')"
+              WHERE slug IN ('politica-de-privacidade', 'termos-de-uso', 'faq')"
         );
         $stmt->execute();
 
@@ -99,13 +116,19 @@ class SettingsController extends BaseController
              ON DUPLICATE KEY UPDATE title = VALUES(title), content = VALUES(content), active = 1'
         )->execute([$slug, $title, $content !== '' ? $content : null]);
 
-        db()->prepare(
-            'INSERT INTO settings (`key`, `value`) VALUES (?, ?)
-             ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)'
-        )->execute([
-            $slug === 'politica-de-privacidade' ? 'privacy_policy' : 'terms_of_use',
-            $content !== '' ? $content : null,
-        ]);
+        $settingKey = match ($slug) {
+            'politica-de-privacidade' => 'privacy_policy',
+            'termos-de-uso' => 'terms_of_use',
+            'faq' => 'faq_content',
+            default => null,
+        };
+
+        if ($settingKey !== null) {
+            db()->prepare(
+                'INSERT INTO settings (`key`, `value`) VALUES (?, ?)
+                 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)'
+            )->execute([$settingKey, $content !== '' ? $content : null]);
+        }
     }
 
     private function sanitizeLegalHtml(string $content): string

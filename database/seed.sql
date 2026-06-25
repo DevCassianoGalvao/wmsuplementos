@@ -272,7 +272,18 @@ INSERT INTO settings (`key`, `value`) VALUES
 ('store_whatsapp', '5511999999999'),
 ('store_email',    'contato@maiasuplementos.com.br'),
 ('store_address',  'São Paulo, SP'),
-('free_shipping_above', '199.00')
+('free_shipping_above', '199.00'),
+('hero_label', 'Performance & Resultados'),
+('hero_title_before', 'Suplementos para'),
+('hero_title_emphasis', 'performance'),
+('hero_title_after', 'real.'),
+('hero_subtitle', 'Produtos selecionados para treino, rotina e evolucao.'),
+('hero_image', '/assets/img/hero-supplement.webp'),
+('hero_primary_label', 'Ver Produtos'),
+('hero_primary_url', '/produtos'),
+('hero_secondary_label', 'Ver Combos'),
+('hero_secondary_url', '/combos'),
+('home_faq_enabled', '1')
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
 
 SET FOREIGN_KEY_CHECKS = 1;

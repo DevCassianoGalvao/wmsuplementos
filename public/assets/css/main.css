@@ -139,7 +139,7 @@ main { display: block; }
     inset: 0;
     background:
         linear-gradient(90deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.76) 48%, rgba(10,10,10,0.9) 100%),
-        url('/assets/img/hero-supplement.webp') center right / cover no-repeat;
+        var(--hero-image, url('/assets/img/hero-supplement.webp')) center right / cover no-repeat;
     opacity: 0.72;
     z-index: 0;
 }
@@ -1335,6 +1335,34 @@ main > .section:first-child,
 }
 .reviews-section {
     background: #0A0A0A;
+}
+.faq-section {
+    background: #0A0A0A;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+.faq-content {
+    display: grid;
+    gap: 0.9rem;
+    max-width: 860px;
+}
+.faq-content h2,
+.faq-content h3,
+.faq-content h4 {
+    margin: 0.8rem 0 0.15rem;
+    color: #FFFFFF;
+    font-size: 1.1rem;
+}
+.faq-content p,
+.faq-content li {
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+}
+.faq-content p {
+    margin: 0;
+}
+.faq-content ul,
+.faq-content ol {
+    padding-left: 1.2rem;
 }
 
 .listing-hero {

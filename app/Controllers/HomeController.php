@@ -25,6 +25,7 @@ class HomeController extends BaseController
             'bestsellers' => Cache::remember('home_bestsellers', 300, fn() => $products->getBestsellers(8)),
             'combos'      => Cache::remember('home_combos', 300, fn() => $this->getActiveCombos()),
             'reviews'     => Cache::remember('home_reviews', 600, fn() => $this->getApprovedReviews(6)),
+            'faq'         => Cache::remember('home_faq', 600, fn() => $this->getFaqPage()),
             'settings'    => $settings,
             'flash'       => $this->getFlash(),
         ]);
@@ -59,6 +60,15 @@ class HomeController extends BaseController
     {
         $rows = db()->query('SELECT `key`, `value` FROM settings')->fetchAll();
         return array_column($rows, 'value', 'key');
+    }
+
+    private function getFaqPage(): ?array
+    {
+        $stmt = db()->prepare('SELECT title, content FROM pages WHERE slug = ? AND active = 1 LIMIT 1');
+        $stmt->execute(['faq']);
+        $page = $stmt->fetch();
+
+        return $page ?: null;
     }
 
     private function trackVisit(): void
