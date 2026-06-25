@@ -1631,6 +1631,75 @@ main > .section:first-child,
     font-size: 0.95rem;
 }
 
+.account-section--danger {
+    margin-top: 1.25rem;
+    border-color: rgba(230,51,41,0.28);
+    background: linear-gradient(180deg, rgba(230,51,41,0.08), rgba(16,16,16,0.98));
+}
+.account-section--danger p {
+    max-width: 720px;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+}
+.btn-danger {
+    border-color: rgba(230,51,41,0.55) !important;
+    color: #FF5A52 !important;
+}
+.btn-danger:hover {
+    background: rgba(230,51,41,0.12) !important;
+    color: #FFFFFF !important;
+}
+
+.cookie-consent {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    z-index: 60;
+    width: min(calc(100vw - 2rem), 960px);
+    transform: translate(-50%, 18px);
+    opacity: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid rgba(230,51,41,0.35);
+    border-radius: 14px;
+    background: rgba(12,12,12,0.96);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.cookie-consent[hidden] {
+    display: none;
+}
+.cookie-consent.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+.cookie-consent strong {
+    display: block;
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+}
+.cookie-consent p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+.cookie-consent__actions {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.cookie-consent__actions .btn {
+    min-height: 40px;
+    white-space: nowrap;
+}
+
 @media (max-width: 980px) {
     .cart-layout,
     .checkout-layout {
@@ -1666,5 +1735,15 @@ main > .section:first-child,
     .cart-table td {
         padding: 0.5rem 0;
         border-bottom: 0;
+    }
+    .cookie-consent {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+    .cookie-consent__actions {
+        justify-content: stretch;
+    }
+    .cookie-consent__actions .btn {
+        flex: 1 1 auto;
     }
 }

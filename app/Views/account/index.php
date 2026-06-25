@@ -49,6 +49,25 @@
                     <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                 </form>
             </section>
+
+            <section class="account-section account-section--danger">
+                <h2>Excluir dados pessoais</h2>
+                <p>
+                    Remove nome, e-mail, telefone e acesso da conta. Pedidos antigos continuam no sistema
+                    de forma anonimizada para auditoria financeira e fiscal.
+                </p>
+                <form action="/minha-conta/excluir" method="post" novalidate>
+                    <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+                    <div class="form-group">
+                        <label for="delete-confirmation">Digite EXCLUIR para confirmar</label>
+                        <input type="text" id="delete-confirmation" name="confirmation" autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-outline btn-danger"
+                            data-confirm="Esta acao remove seus dados pessoais e encerra sua sessao. Continuar?">
+                        Remover meus dados
+                    </button>
+                </form>
+            </section>
         </div>
     </div>
 </div>

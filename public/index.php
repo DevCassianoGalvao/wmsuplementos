@@ -171,6 +171,7 @@ $router->get('/minha-conta',             'AccountController@index');
 $router->get('/minha-conta/pedidos',     'AccountController@orders');
 $router->get('/minha-conta/pedido/{id}', 'AccountController@orderDetail');
 $router->post('/minha-conta/dados',      'AccountController@updateProfile');
+$router->post('/minha-conta/excluir',    'AccountController@deleteAccount');
 $router->get('/avaliar/{token}',         'ReviewController@form');
 $router->post('/avaliar/{token}',        'ReviewController@store');
 

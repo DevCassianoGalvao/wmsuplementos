@@ -147,3 +147,26 @@ if (phoneInput) {
         this.value = v.substring(0, 15);
     });
 }
+
+/* LGPD cookie consent */
+var cookieConsent = document.querySelector('[data-cookie-consent]');
+if (cookieConsent) {
+    var consentKey = 'maia_cookie_consent';
+    var savedConsent = localStorage.getItem(consentKey);
+    if (!savedConsent) {
+        cookieConsent.hidden = false;
+        requestAnimationFrame(function() {
+            cookieConsent.classList.add('is-visible');
+        });
+    }
+
+    cookieConsent.querySelectorAll('[data-cookie-choice]').forEach(function(button) {
+        button.addEventListener('click', function() {
+            localStorage.setItem(consentKey, this.dataset.cookieChoice || 'necessary');
+            cookieConsent.classList.remove('is-visible');
+            setTimeout(function() {
+                cookieConsent.hidden = true;
+            }, 220);
+        });
+    });
+}

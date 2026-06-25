@@ -92,4 +92,26 @@ class AccountController extends BaseController
         $this->flash('success', 'Dados atualizados com sucesso.');
         $this->redirect('/minha-conta');
     }
+
+    public function deleteAccount(array $params = []): void
+    {
+        Auth::requireUser();
+        CSRF::verify();
+
+        $confirmation = trim((string)($_POST['confirmation'] ?? ''));
+        if ($confirmation !== 'EXCLUIR') {
+            $this->flash('error', 'Digite EXCLUIR para confirmar a remocao dos seus dados pessoais.');
+            $this->redirect('/minha-conta');
+        }
+
+        (new UserModel())->anonymize(Auth::userId());
+        Auth::logoutUser();
+
+        $_SESSION['flash'] = [
+            'type' => 'success',
+            'message' => 'Conta anonimizada. Seus dados pessoais foram removidos e o historico financeiro permanece sem identificacao pessoal.',
+        ];
+
+        $this->redirect('/entrar');
+    }
 }
