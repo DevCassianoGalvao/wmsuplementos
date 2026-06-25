@@ -248,8 +248,22 @@ class ProductController extends BaseController
 
         $config  = require ROOT_PATH . '/config/app.php';
         $maxSize = $config['upload']['max_size'] ?? 5242880;
+        $countStmt = db()->prepare('SELECT COUNT(*) FROM product_images WHERE product_id = ?');
+        $countStmt->execute([$productId]);
+        $existingCount = (int)$countStmt->fetchColumn();
+        $remainingSlots = max(0, 10 - $existingCount);
+
+        if ($remainingSlots === 0) {
+            return;
+        }
+
+        $uploadedCount = 0;
 
         foreach ($_FILES['images']['tmp_name'] as $i => $tmpName) {
+            if ($uploadedCount >= $remainingSlots) {
+                break;
+            }
+
             if (!is_uploaded_file($tmpName)) {
                 continue;
             }
@@ -279,16 +293,19 @@ class ProductController extends BaseController
             );
             $sortStmt->execute([$productId]);
             $sort = (int)$sortStmt->fetchColumn();
+            $isMain = ($existingCount === 0 && $uploadedCount === 0) ? 1 : 0;
 
             db()->prepare(
-                'INSERT INTO product_images (product_id, filename, filename_webp, sort_order)
-                 VALUES (?, ?, ?, ?)'
+                'INSERT INTO product_images (product_id, filename, filename_webp, is_main, sort_order)
+                 VALUES (?, ?, ?, ?, ?)'
             )->execute([
                 $productId,
                 $paths['medium'],  // path usado nas listagens
                 $paths['medium'],  // campo webp (já é webp)
+                $isMain,
                 $sort,
             ]);
+            $uploadedCount++;
         }
     }
 

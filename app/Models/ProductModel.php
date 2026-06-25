@@ -223,8 +223,8 @@ class ProductModel extends BaseModel
             );
         }
         $this->query(
-            'INSERT INTO product_images (product_id, filename_webp, is_main, sort_order) VALUES (?, ?, ?, ?)',
-            [$productId, $filenameWebp, (int)$isMain, $sortOrder]
+            'INSERT INTO product_images (product_id, filename, filename_webp, is_main, sort_order) VALUES (?, ?, ?, ?, ?)',
+            [$productId, $filenameWebp, $filenameWebp, (int)$isMain, $sortOrder]
         );
         return $this->lastInsertId();
     }
