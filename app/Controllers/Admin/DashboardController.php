@@ -13,6 +13,9 @@ class DashboardController extends BaseController
     public function index(array $params = []): void
     {
         Auth::requireAdmin();
+        if (!Auth::isAdmin()) {
+            $this->redirect('/admin/pedidos');
+        }
 
         $model   = new OrderModel();
         $summary = $model->getSalesSummary('month');

@@ -12,7 +12,7 @@ class ReviewController extends BaseController
 {
     public function index(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $status = $_GET['status'] ?? 'pending';
         if (!in_array($status, ['pending', 'approved', 'rejected'], true)) {
@@ -52,7 +52,7 @@ class ReviewController extends BaseController
 
     public function approve(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);
@@ -65,7 +65,7 @@ class ReviewController extends BaseController
 
     public function reject(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);
@@ -80,7 +80,7 @@ class ReviewController extends BaseController
 
     public function bulk(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $action = (string)($_POST['bulk_action'] ?? '');

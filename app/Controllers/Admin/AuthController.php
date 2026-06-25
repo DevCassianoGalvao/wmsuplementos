@@ -14,7 +14,7 @@ class AuthController extends BaseController
     public function loginForm(array $params = []): void
     {
         if (Auth::isAdminLogged()) {
-            $this->redirect('/admin/dashboard');
+            $this->redirect(Auth::isAdmin() ? '/admin/dashboard' : '/admin/pedidos');
         }
 
         $this->render('admin/auth/login', [
@@ -52,7 +52,7 @@ class AuthController extends BaseController
         Auth::loginAdmin($admin);
         CSRF::rotate();
 
-        $this->redirect('/admin/dashboard');
+        $this->redirect(Auth::isAdmin() ? '/admin/dashboard' : '/admin/pedidos');
     }
 
     public function logout(array $params = []): void

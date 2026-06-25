@@ -24,7 +24,7 @@ class BrandController extends BaseController
 
     public function index(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $this->render('admin/brands/index', [
             'pageTitle' => 'Marcas | Admin Maia',
@@ -35,7 +35,7 @@ class BrandController extends BaseController
 
     public function create(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $this->render('admin/brands/form', [
             'pageTitle' => 'Nova Marca | Admin Maia',
@@ -46,7 +46,7 @@ class BrandController extends BaseController
 
     public function store(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $data = $this->extractData();
@@ -70,7 +70,7 @@ class BrandController extends BaseController
 
     public function edit(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $brand = $this->model->findById((int)($params['id'] ?? 0));
         if (!$brand) {
@@ -88,7 +88,7 @@ class BrandController extends BaseController
 
     public function update(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);
@@ -120,7 +120,7 @@ class BrandController extends BaseController
 
     public function delete(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);
@@ -139,7 +139,7 @@ class BrandController extends BaseController
 
     public function toggle(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $this->model->toggleActive((int)($params['id'] ?? 0));

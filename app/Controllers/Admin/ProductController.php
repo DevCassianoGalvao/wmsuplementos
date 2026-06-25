@@ -26,7 +26,7 @@ class ProductController extends BaseController
 
     public function index(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $page     = max(1, (int)($_GET['pagina'] ?? 1));
         $filters  = [
@@ -54,7 +54,7 @@ class ProductController extends BaseController
 
     public function create(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $this->render('admin/products/form', [
             'pageTitle'  => 'Novo Produto | Admin Maia',
@@ -67,7 +67,7 @@ class ProductController extends BaseController
 
     public function store(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $data = $this->extractProductData();
@@ -90,7 +90,7 @@ class ProductController extends BaseController
 
     public function edit(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $id      = (int)($params['id'] ?? 0);
         $product = $this->model->findById($id);
@@ -112,7 +112,7 @@ class ProductController extends BaseController
 
     public function update(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id      = (int)($params['id'] ?? 0);
@@ -145,7 +145,7 @@ class ProductController extends BaseController
 
     public function toggle(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);
@@ -157,7 +157,7 @@ class ProductController extends BaseController
 
     public function duplicate(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id    = (int)($params['id'] ?? 0);

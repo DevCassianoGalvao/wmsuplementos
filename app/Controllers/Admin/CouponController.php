@@ -14,7 +14,7 @@ class CouponController extends BaseController
 {
     public function index(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $stmt = db()->query(
             'SELECT * FROM coupons ORDER BY active DESC, created_at DESC'
@@ -30,7 +30,7 @@ class CouponController extends BaseController
 
     public function create(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $this->render('admin/coupons/form', [
             'pageTitle' => 'Novo Cupom | Admin Maia',
@@ -41,7 +41,7 @@ class CouponController extends BaseController
 
     public function store(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $data = $this->extractData();
@@ -68,7 +68,7 @@ class CouponController extends BaseController
 
     public function edit(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $id   = (int)($params['id'] ?? 0);
         $stmt = db()->prepare('SELECT * FROM coupons WHERE id = ?');
@@ -90,7 +90,7 @@ class CouponController extends BaseController
 
     public function update(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id   = (int)($params['id'] ?? 0);
@@ -117,7 +117,7 @@ class CouponController extends BaseController
 
     public function toggle(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);

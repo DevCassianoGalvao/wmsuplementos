@@ -16,19 +16,23 @@
 <div class="admin-layout">
     <aside class="admin-sidebar">
         <div class="sidebar-logo">
-            <a href="/admin/dashboard">
+            <a href="<?= \Maia\Helpers\Auth::isAdmin() ? '/admin/dashboard' : '/admin/pedidos' ?>">
                 <img src="/assets/img/logo.png" alt="Maia Suplementos" height="38" style="height:38px;width:auto;">
             </a>
         </div>
 
         <?php $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/admin', PHP_URL_PATH) ?: '/admin'; ?>
+        <?php $isAdminRole = \Maia\Helpers\Auth::isAdmin(); ?>
         <nav class="sidebar-nav" aria-label="Menu administrativo">
+            <?php if ($isAdminRole): ?>
             <a href="/admin/dashboard" class="nav-item <?= str_starts_with($currentPath, '/admin/dashboard') || $currentPath === '/admin' ? 'active' : '' ?>">
                 Dashboard
             </a>
+            <?php endif; ?>
             <a href="/admin/pedidos" class="nav-item <?= str_starts_with($currentPath, '/admin/pedidos') ? 'active' : '' ?>">
                 Pedidos
             </a>
+            <?php if ($isAdminRole): ?>
             <a href="/admin/produtos" class="nav-item <?= str_starts_with($currentPath, '/admin/produtos') ? 'active' : '' ?>">
                 Produtos
             </a>
@@ -41,9 +45,11 @@
             <a href="/admin/combos" class="nav-item <?= str_starts_with($currentPath, '/admin/combos') ? 'active' : '' ?>">
                 Combos
             </a>
+            <?php endif; ?>
             <a href="/admin/estoque" class="nav-item <?= str_starts_with($currentPath, '/admin/estoque') ? 'active' : '' ?>">
                 Estoque
             </a>
+            <?php if ($isAdminRole): ?>
             <a href="/admin/clientes" class="nav-item <?= str_starts_with($currentPath, '/admin/clientes') ? 'active' : '' ?>">
                 Clientes
             </a>
@@ -65,6 +71,7 @@
             <a href="/admin/utm" class="nav-item <?= str_starts_with($currentPath, '/admin/utm') ? 'active' : '' ?>">
                 UTM Builder
             </a>
+            <?php endif; ?>
             <?php
             $unreadCount = \Maia\Services\NotificationService::countUnread();
             ?>

@@ -1,4 +1,5 @@
-<?php use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
+<?php use Maia\Helpers\Auth; use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
+<?php $canViewFinancials = Auth::isAdmin(); ?>
 
 <div class="page-header">
     <h1>Pedido #<?= (int)$order['id'] ?></h1>
@@ -35,6 +36,7 @@
             <?= nl2br(htmlspecialchars($order['notes'], ENT_QUOTES, 'UTF-8')) ?>
         </div>
         <?php endif; ?>
+        <?php if ($canViewFinancials): ?>
         <div class="summary-lines">
             <div class="summary-line"><span>Subtotal:</span><span>R$ <?= Sanitizer::money((float)$order['subtotal']) ?></span></div>
             <?php if ((float)($order['discount'] ?? 0) > 0): ?>
@@ -42,19 +44,31 @@
             <?php endif; ?>
             <div class="summary-line total"><span>Total:</span><span>R$ <?= Sanitizer::money((float)$order['total']) ?></span></div>
         </div>
+        <?php endif; ?>
     </section>
 
     <section class="detail-card items-card">
         <h2>Itens</h2>
         <table class="admin-table">
-            <thead><tr><th>Produto</th><th>Qtd</th><th>PreÃ§o</th><th>Subtotal</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Qtd</th>
+                    <?php if ($canViewFinancials): ?>
+                    <th>Preço</th>
+                    <th>Subtotal</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
             <tbody>
             <?php foreach ($order['items'] ?? [] as $item): ?>
             <tr>
                 <td><?= htmlspecialchars($item['product_name'], ENT_QUOTES, 'UTF-8') ?></td>
                 <td><?= (int)$item['quantity'] ?></td>
+                <?php if ($canViewFinancials): ?>
                 <td>R$ <?= Sanitizer::money((float)$item['price']) ?></td>
                 <td>R$ <?= Sanitizer::money((float)$item['subtotal']) ?></td>
+                <?php endif; ?>
             </tr>
             <?php endforeach; ?>
             </tbody>

@@ -23,7 +23,7 @@ class CategoryController extends BaseController
 
     public function index(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $this->render('admin/categories/index', [
             'pageTitle'  => 'Categorias | Admin Maia',
@@ -34,7 +34,7 @@ class CategoryController extends BaseController
 
     public function create(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $this->render('admin/categories/form', [
             'pageTitle' => 'Nova Categoria | Admin Maia',
@@ -45,7 +45,7 @@ class CategoryController extends BaseController
 
     public function store(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $data = $this->extractData();
@@ -68,7 +68,7 @@ class CategoryController extends BaseController
 
     public function edit(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $id = (int)($params['id'] ?? 0);
         $category = $this->model->findById($id);
@@ -88,7 +88,7 @@ class CategoryController extends BaseController
 
     public function update(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);
@@ -119,7 +119,7 @@ class CategoryController extends BaseController
 
     public function delete(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);
@@ -140,7 +140,7 @@ class CategoryController extends BaseController
 
     public function toggle(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $this->model->toggleActive((int)($params['id'] ?? 0));

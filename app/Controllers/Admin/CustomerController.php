@@ -15,7 +15,7 @@ class CustomerController extends BaseController
 {
     public function index(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $page    = max(1, (int)($_GET['pagina'] ?? 1));
         $filters = [
@@ -47,7 +47,7 @@ class CustomerController extends BaseController
 
     public function show(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $id   = (int)($params['id'] ?? 0);
         $user = (new UserModel())->findById($id);
@@ -69,7 +69,7 @@ class CustomerController extends BaseController
 
     public function export(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $filters = [
             'search'  => $_GET['busca']     ?? '',
@@ -113,7 +113,7 @@ class CustomerController extends BaseController
 
     public function syncBrevo(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $filters = [
@@ -157,7 +157,7 @@ class CustomerController extends BaseController
 
     public function updateTag(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);

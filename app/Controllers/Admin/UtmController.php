@@ -13,7 +13,7 @@ class UtmController extends BaseController
 {
     public function index(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $page  = max(1, (int)($_GET['pagina'] ?? 1));
         $limit = 25;
@@ -43,7 +43,7 @@ class UtmController extends BaseController
 
     public function store(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $baseUrl  = filter_var(trim($_POST['base_url'] ?? ''), FILTER_VALIDATE_URL);
@@ -90,7 +90,7 @@ class UtmController extends BaseController
 
     public function delete(array $params): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $id = (int)($params['id'] ?? 0);

@@ -21,7 +21,7 @@ class ScriptController extends BaseController
 
     public function index(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $stmt = db()->query('SELECT `key`, `value`, `active` FROM scripts_config ORDER BY id ASC');
         $rows = $stmt->fetchAll();
@@ -41,7 +41,7 @@ class ScriptController extends BaseController
 
     public function update(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
         CSRF::verify();
 
         $updated = 0;

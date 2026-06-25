@@ -1,9 +1,12 @@
-<?php use Maia\Helpers\Sanitizer; ?>
+<?php use Maia\Helpers\Auth; use Maia\Helpers\Sanitizer; ?>
+<?php $canViewFinancials = Auth::isAdmin(); ?>
 
 <div class="page-header">
     <h1>Pedidos</h1>
+    <?php if ($canViewFinancials): ?>
     <a href="/admin/pedidos/exportar?<?= http_build_query(['de' => $filters['date_from'] ?? '', 'ate' => $filters['date_to'] ?? '']) ?>"
        class="btn btn-outline">Exportar CSV</a>
+    <?php endif; ?>
 </div>
 
 <?php if (!empty($flash['success'])): ?>
@@ -36,14 +39,16 @@
             <th>Data</th>
             <th>Cliente</th>
             <th>Pagamento</th>
+            <?php if ($canViewFinancials): ?>
             <th>Total</th>
+            <?php endif; ?>
             <th>Status</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
     <?php if (empty($items)): ?>
-    <tr><td colspan="7" class="empty-state">Nenhum pedido encontrado.</td></tr>
+    <tr><td colspan="<?= $canViewFinancials ? 7 : 6 ?>" class="empty-state">Nenhum pedido encontrado.</td></tr>
     <?php else: ?>
     <?php foreach ($items as $order): ?>
     <tr>
@@ -54,7 +59,9 @@
             <small><?= htmlspecialchars($order['customer_email'], ENT_QUOTES, 'UTF-8') ?></small>
         </td>
         <td><?= htmlspecialchars(ucfirst($order['payment_method'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
+        <?php if ($canViewFinancials): ?>
         <td>R$ <?= Sanitizer::money((float)$order['total']) ?></td>
+        <?php endif; ?>
         <td>
             <span class="badge status-<?= htmlspecialchars($order['status'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                 <?= htmlspecialchars($statuses[$order['status'] ?? ''] ?? $order['status'] ?? '', ENT_QUOTES, 'UTF-8') ?>

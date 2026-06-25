@@ -101,7 +101,7 @@ class OrderController extends BaseController
 
     public function export(array $params = []): void
     {
-        Auth::requireAdmin();
+        Auth::requireAdminRole();
 
         $filters = [
             'status'    => $_GET['status']   ?? '',
