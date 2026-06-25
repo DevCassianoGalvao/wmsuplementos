@@ -237,6 +237,7 @@ $router->get('/admin/pedidos/exportar',  'Admin\OrderController@export');
 // Clientes
 $router->get('/admin/clientes',          'Admin\CustomerController@index');
 $router->get('/admin/clientes/exportar', 'Admin\CustomerController@export');
+$router->get('/admin/clientes/exportar-xlsx', 'Admin\CustomerController@exportXlsx');
 $router->post('/admin/clientes/sync-brevo', 'Admin\CustomerController@syncBrevo');
 $router->post('/admin/clientes/{id}/tag', 'Admin\CustomerController@updateTag');
 $router->post('/admin/clientes/{id}/anonimizar', 'Admin\CustomerController@anonymize');

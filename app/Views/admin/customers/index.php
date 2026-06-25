@@ -8,6 +8,7 @@
             <button type="submit" class="btn btn-outline">Sincronizar Brevo</button>
         </form>
         <a class="btn btn-outline" href="/admin/clientes/exportar?<?= http_build_query($_GET) ?>">Exportar CSV</a>
+        <a class="btn btn-outline" href="/admin/clientes/exportar-xlsx?<?= http_build_query($_GET) ?>">Exportar XLSX</a>
     </div>
 </div>
 
