@@ -30,6 +30,11 @@
             <dt>Status MP:</dt><dd><?= htmlspecialchars($order['payment_status'] ?? '—', ENT_QUOTES, 'UTF-8') ?></dd>
             <dt>ID MP:</dt><dd><small><?= htmlspecialchars($order['payment_id'] ?? '—', ENT_QUOTES, 'UTF-8') ?></small></dd>
         </dl>
+        <?php if (!empty($order['notes'])): ?>
+        <div class="order-notes">
+            <?= nl2br(htmlspecialchars($order['notes'], ENT_QUOTES, 'UTF-8')) ?>
+        </div>
+        <?php endif; ?>
         <div class="summary-lines">
             <div class="summary-line"><span>Subtotal:</span><span>R$ <?= Sanitizer::money((float)$order['subtotal']) ?></span></div>
             <?php if ((float)($order['discount'] ?? 0) > 0): ?>

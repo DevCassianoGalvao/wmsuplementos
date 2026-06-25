@@ -148,6 +148,26 @@ if (phoneInput) {
     });
 }
 
+/* Boleto address fields */
+var boletoAddress = document.querySelector('[data-boleto-address]');
+if (boletoAddress) {
+    var paymentInputs = document.querySelectorAll('input[name="payment_method"]');
+    var addressFields = boletoAddress.querySelectorAll('input');
+    var toggleBoletoAddress = function() {
+        var selected = document.querySelector('input[name="payment_method"]:checked');
+        var isBoleto = selected && selected.value === 'boleto';
+        boletoAddress.hidden = !isBoleto;
+        addressFields.forEach(function(input) {
+            input.required = !!isBoleto;
+        });
+    };
+
+    paymentInputs.forEach(function(input) {
+        input.addEventListener('change', toggleBoletoAddress);
+    });
+    toggleBoletoAddress();
+}
+
 /* LGPD cookie consent */
 var cookieConsent = document.querySelector('[data-cookie-consent]');
 if (cookieConsent) {

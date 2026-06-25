@@ -199,8 +199,8 @@ class OrderModel extends BaseModel
         $this->query(
             'INSERT INTO orders
                 (user_id, customer_name, customer_email, customer_phone, status,
-                 subtotal, discount, total, coupon_id, coupon_code, payment_method)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                 subtotal, discount, total, coupon_id, coupon_code, payment_method, notes)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [
                 !empty($data['user_id'])   ? (int)$data['user_id'] : null,
                 $data['customer_name'],
@@ -213,6 +213,7 @@ class OrderModel extends BaseModel
                 !empty($data['coupon_id']) ? (int)$data['coupon_id'] : null,
                 $data['coupon_code']       ?? null,
                 $data['payment_method']    ?? null,
+                $data['notes']             ?? null,
             ]
         );
 

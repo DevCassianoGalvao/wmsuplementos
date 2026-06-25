@@ -1569,6 +1569,21 @@ main > .section:first-child,
     display: grid;
     gap: 0.75rem;
 }
+.boleto-address {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.025);
+}
+.boleto-address[hidden] {
+    display: none;
+}
+.form-hint {
+    margin: 0 0 0.85rem;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
 .payment-option {
     display: flex;
     align-items: center;

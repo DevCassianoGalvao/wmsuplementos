@@ -57,12 +57,22 @@ class CheckoutController extends BaseController
         $email  = Sanitizer::email($_POST['email']      ?? '');
         $phone  = Sanitizer::onlyDigits($_POST['phone'] ?? '');
         $method = $_POST['payment_method'] ?? '';
+        $address = $this->extractBoletoAddress();
 
         $v = new Validator(['name' => $name, 'email' => $email, 'phone' => $phone, 'payment_method' => $method]);
         $v->required('name')->maxLen('name', 150)
           ->required('email')->email('email')
           ->required('phone')->phone('phone', 'Telefone')
           ->required('payment_method')->in('payment_method', ['pix', 'cartao', 'boleto'], 'Forma de pagamento');
+
+        if ($method === 'boleto') {
+            foreach (['zip_code', 'address', 'address_number', 'neighborhood', 'city', 'state'] as $field) {
+                if (($address[$field] ?? '') === '') {
+                    $this->flash('error', 'Preencha o endereco completo para pagamento por boleto.');
+                    $this->redirect('/finalizar-compra');
+                }
+            }
+        }
 
         if ($v->fails()) {
             $this->flash('error', implode(' ', $v->errors()));
@@ -104,6 +114,7 @@ class CheckoutController extends BaseController
             'coupon_id'      => $coupon['id']   ?? null,
             'coupon_code'    => $coupon['code'] ?? null,
             'payment_method' => $method,
+            'notes'          => $method === 'boleto' ? $this->formatAddressNote($address) : null,
             'items'          => $items,
         ]);
 
@@ -222,6 +233,27 @@ class CheckoutController extends BaseController
         }
 
         return null;
+    }
+
+    private function extractBoletoAddress(): array
+    {
+        return [
+            'zip_code'       => Sanitizer::onlyDigits($_POST['zip_code'] ?? ''),
+            'address'        => Sanitizer::plainText($_POST['address'] ?? ''),
+            'address_number' => Sanitizer::plainText($_POST['address_number'] ?? ''),
+            'neighborhood'   => Sanitizer::plainText($_POST['neighborhood'] ?? ''),
+            'city'           => Sanitizer::plainText($_POST['city'] ?? ''),
+            'state'          => strtoupper(substr(Sanitizer::plainText($_POST['state'] ?? ''), 0, 2)),
+        ];
+    }
+
+    private function formatAddressNote(array $address): string
+    {
+        return 'Endereco boleto: '
+            . $address['address'] . ', ' . $address['address_number']
+            . ' - ' . $address['neighborhood']
+            . ' - ' . $address['city'] . '/' . $address['state']
+            . ' - CEP ' . $address['zip_code'];
     }
 
     private function trackFunnel(string $step, ?int $orderId = null): void

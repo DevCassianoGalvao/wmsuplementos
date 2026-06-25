@@ -952,6 +952,15 @@ button.btn-link:hover {
     font-size: 0.8125rem;
     margin-top: 0.25rem;
 }
+.order-notes {
+    margin: 1rem 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(230,51,41,0.22);
+    border-radius: 10px;
+    background: rgba(230,51,41,0.08);
+    color: #FFFFFF;
+    line-height: 1.5;
+}
 
 @media (max-width: 700px) {
     .combo-item-row {
