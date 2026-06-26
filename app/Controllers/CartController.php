@@ -92,7 +92,7 @@ class CartController extends BaseController
         ]);
 
         $this->jsonOrRedirect(
-            ['ok' => true, 'count' => $this->cart->count(), 'total' => $this->cart->total()],
+            ['ok' => true, 'count' => $this->cart->count(), 'total' => $this->moneyValue($this->cart->total())],
             '/carrinho'
         );
     }
@@ -115,11 +115,11 @@ class CartController extends BaseController
         $this->json([
             'ok'       => true,
             'count'    => $this->cart->count(),
-            'subtotal' => $this->cart->subtotal(),
-            'discount' => $this->cart->discount(),
-            'shipping' => $this->cart->shippingFee(),
-            'free_shipping_remaining' => $this->cart->freeShippingRemaining(),
-            'total'    => $this->cart->total(),
+            'subtotal' => $this->moneyValue($this->cart->subtotal()),
+            'discount' => $this->moneyValue($this->cart->discount()),
+            'shipping' => $this->moneyValue($this->cart->shippingFee()),
+            'free_shipping_remaining' => $this->moneyValue($this->cart->freeShippingRemaining()),
+            'total'    => $this->moneyValue($this->cart->total()),
         ]);
     }
 
@@ -133,11 +133,11 @@ class CartController extends BaseController
         $this->json([
             'ok'       => true,
             'count'    => $this->cart->count(),
-            'subtotal' => $this->cart->subtotal(),
-            'discount' => $this->cart->discount(),
-            'shipping' => $this->cart->shippingFee(),
-            'free_shipping_remaining' => $this->cart->freeShippingRemaining(),
-            'total'    => $this->cart->total(),
+            'subtotal' => $this->moneyValue($this->cart->subtotal()),
+            'discount' => $this->moneyValue($this->cart->discount()),
+            'shipping' => $this->moneyValue($this->cart->shippingFee()),
+            'free_shipping_remaining' => $this->moneyValue($this->cart->freeShippingRemaining()),
+            'total'    => $this->moneyValue($this->cart->total()),
         ]);
     }
 
@@ -150,10 +150,10 @@ class CartController extends BaseController
 
         if ($this->isAjax()) {
             $this->json(array_merge($result, [
-                'discount' => $this->cart->discount(),
-                'shipping' => $this->cart->shippingFee(),
-                'free_shipping_remaining' => $this->cart->freeShippingRemaining(),
-                'total'    => $this->cart->total(),
+                'discount' => $this->moneyValue($this->cart->discount()),
+                'shipping' => $this->moneyValue($this->cart->shippingFee()),
+                'free_shipping_remaining' => $this->moneyValue($this->cart->freeShippingRemaining()),
+                'total'    => $this->moneyValue($this->cart->total()),
             ]));
         }
 
@@ -208,7 +208,7 @@ class CartController extends BaseController
         ]);
 
         $this->jsonOrRedirect(
-            ['ok' => true, 'count' => $this->cart->count(), 'total' => $this->cart->total()],
+            ['ok' => true, 'count' => $this->cart->count(), 'total' => $this->moneyValue($this->cart->total())],
             '/carrinho'
         );
     }
@@ -249,6 +249,11 @@ class CartController extends BaseController
         }
 
         return (new ProductModel())->getCartSuggestions($productIds, 4);
+    }
+
+    private function moneyValue(float $value): float
+    {
+        return round($value, 2);
     }
 
     private function trackFunnel(string $step): void
