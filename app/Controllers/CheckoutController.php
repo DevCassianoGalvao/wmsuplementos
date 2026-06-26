@@ -118,12 +118,18 @@ class CheckoutController extends BaseController
             'items'          => $items,
         ]);
 
+        // Cria preferência no Mercado Pago
+        $mpResult = $this->createMercadoPagoPreference($orderId, $email, $name, $method);
+
+        if (empty($mpResult['init_point'])) {
+            $orderModel->updateStatus($orderId, OrderModel::STATUS_CANCELLED, 'Falha ao iniciar pagamento Mercado Pago.');
+            $this->flash('error', 'Nao foi possivel iniciar o pagamento. Tente novamente em instantes.');
+            $this->redirect('/finalizar-compra');
+        }
+
         // Funil
         $this->trackFunnel('purchase', $orderId);
         $_SESSION['last_order_id'] = $orderId;
-
-        // Cria preferência no Mercado Pago
-        $mpResult = $this->createMercadoPagoPreference($orderId, $email, $name, $method);
 
         // Limpa carrinho após criar pedido com MP
         $this->cart->clear();

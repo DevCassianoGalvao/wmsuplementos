@@ -26,7 +26,7 @@ try {
            FROM orders
           WHERE status = ?
             AND payment_method = 'pix'
-            AND payment_id IS NULL
+            AND (payment_status IS NULL OR payment_status = '' OR payment_status IN ('pending', 'in_process'))
             AND created_at <= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
           LIMIT 50"
     );
