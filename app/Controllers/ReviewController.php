@@ -51,7 +51,7 @@ class ReviewController extends BaseController
         $photo = $review['photo'] ?? null;
 
         $v = new Validator(['rating' => $rating, 'comment' => $comment]);
-        $v->required('rating')->in('rating', ['1','2','3','4','5'], 'Nota')
+        $v->required('rating')->in('rating', [1, 2, 3, 4, 5], 'Nota')
           ->maxLen('comment', 1000, 'Comentário');
 
         if ($v->fails()) {
