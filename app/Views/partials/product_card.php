@@ -45,7 +45,10 @@ $inStock = (int)($product['stock'] ?? 0) > 0;
             <span class="product-card__price-old">R$ <?= Sanitizer::money($orig) ?></span>
             <?php endif; ?>
         </div>
-        <form class="add-to-cart-form product-card__form" action="/carrinho/adicionar" method="post">
+        <form class="add-to-cart-form product-card__form" action="/carrinho/adicionar" method="post"
+              data-product-id="<?= (int)$product['id'] ?>"
+              data-product-name="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
+              data-product-value="<?= htmlspecialchars(number_format($price, 2, '.', ''), ENT_QUOTES, 'UTF-8') ?>">
             <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
             <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
             <input type="hidden" name="quantity" value="1">

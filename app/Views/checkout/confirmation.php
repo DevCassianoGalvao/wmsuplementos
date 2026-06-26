@@ -61,3 +61,20 @@
         </div>
     </div>
 </div>
+<script>
+window.addEventListener('load', function() {
+    if (typeof fbq !== 'function') return;
+    var key = 'maia_purchase_<?= (int)$order['id'] ?>';
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, '1');
+    fbq('track', 'Purchase', <?= json_encode([
+        'content_ids' => array_map(
+            static fn($item) => !empty($item['product_id']) ? (string)$item['product_id'] : 'combo-' . (string)($item['combo_id'] ?? ''),
+            $order['items'] ?? []
+        ),
+        'content_type' => 'product',
+        'value' => (float)$order['total'],
+        'currency' => 'BRL',
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>);
+});
+</script>

@@ -71,6 +71,16 @@ if ('IntersectionObserver' in window) {
 /* ── Cart count update ──────────────────────────────────────── */
 document.querySelectorAll('.add-to-cart-form').forEach(function(form) {
     form.addEventListener('submit', function(e) {
+        if (typeof fbq === 'function' && form.dataset.productId) {
+            fbq('track', 'AddToCart', {
+                content_ids: [form.dataset.productId],
+                content_name: form.dataset.productName || '',
+                content_type: 'product',
+                value: parseFloat(form.dataset.productValue || '0') || 0,
+                currency: 'BRL'
+            });
+        }
+
         var btn = form.querySelector('.add-to-cart-btn');
         if (btn) {
             btn.disabled = true;

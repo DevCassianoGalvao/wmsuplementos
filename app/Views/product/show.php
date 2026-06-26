@@ -104,7 +104,10 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
             <?php endif; ?>
 
             <?php if ((int)$product['stock'] > 0): ?>
-            <form action="/carrinho/adicionar" method="post" class="add-to-cart-form">
+            <form action="/carrinho/adicionar" method="post" class="add-to-cart-form"
+                  data-product-id="<?= (int)$product['id'] ?>"
+                  data-product-name="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
+                  data-product-value="<?= htmlspecialchars(number_format($effectivePrice, 2, '.', ''), ENT_QUOTES, 'UTF-8') ?>">
                 <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
                 <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
                 <div class="product-qty-wrap">
@@ -211,4 +214,16 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
         'reviewCount' => $ratingCount,
     ] : null,
 ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
+</script>
+<script>
+window.addEventListener('load', function() {
+    if (typeof fbq !== 'function') return;
+    fbq('track', 'ViewContent', <?= json_encode([
+        'content_ids' => [(string)$product['id']],
+        'content_name' => $product['name'],
+        'content_type' => 'product',
+        'value' => $effectivePrice,
+        'currency' => 'BRL',
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>);
+});
 </script>
