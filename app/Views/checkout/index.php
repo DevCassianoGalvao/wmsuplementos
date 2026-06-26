@@ -118,6 +118,18 @@
                     <span>- R$ <?= Sanitizer::money((float)$discount) ?></span>
                 </div>
                 <?php endif; ?>
+                <?php if (($shipping ?? 0) > 0 || ($freeShippingRemaining ?? 0) <= 0): ?>
+                <div class="summary-line">
+                    <span>Frete:</span>
+                    <span><?= ((float)($shipping ?? 0) > 0) ? 'R$ ' . Sanitizer::money((float)$shipping) : 'Grátis' ?></span>
+                </div>
+                <?php endif; ?>
+                <?php if (($freeShippingRemaining ?? 0) > 0): ?>
+                <div class="summary-line">
+                    <span>Frete grátis:</span>
+                    <span>Faltam R$ <?= Sanitizer::money((float)$freeShippingRemaining) ?></span>
+                </div>
+                <?php endif; ?>
                 <div class="summary-line total">
                     <span>Total:</span>
                     <span>R$ <?= Sanitizer::money((float)$total) ?></span>

@@ -276,6 +276,7 @@ INSERT INTO settings (`key`, `value`) VALUES
 ('store_whatsapp', '5511999999999'),
 ('store_email',    'contato@maiasuplementos.com.br'),
 ('store_address',  'São Paulo, SP'),
+('shipping_flat_rate', '0.00'),
 ('free_shipping_above', '199.00'),
 ('hero_label', 'Performance & Resultados'),
 ('hero_title_before', 'Suplementos para'),

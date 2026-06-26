@@ -29,6 +29,8 @@ class CartController extends BaseController
             'items'      => $this->cart->getItems(),
             'subtotal'   => $this->cart->subtotal(),
             'discount'   => $this->cart->discount(),
+            'shipping'   => $this->cart->shippingFee(),
+            'freeShippingRemaining' => $this->cart->freeShippingRemaining(),
             'total'      => $this->cart->total(),
             'coupon'     => $this->cart->getAppliedCoupon(),
             'flash'      => $this->getFlash(),
@@ -104,6 +106,8 @@ class CartController extends BaseController
             'count'    => $this->cart->count(),
             'subtotal' => $this->cart->subtotal(),
             'discount' => $this->cart->discount(),
+            'shipping' => $this->cart->shippingFee(),
+            'free_shipping_remaining' => $this->cart->freeShippingRemaining(),
             'total'    => $this->cart->total(),
         ]);
     }
@@ -120,6 +124,8 @@ class CartController extends BaseController
             'count'    => $this->cart->count(),
             'subtotal' => $this->cart->subtotal(),
             'discount' => $this->cart->discount(),
+            'shipping' => $this->cart->shippingFee(),
+            'free_shipping_remaining' => $this->cart->freeShippingRemaining(),
             'total'    => $this->cart->total(),
         ]);
     }
@@ -134,6 +140,8 @@ class CartController extends BaseController
         if ($this->isAjax()) {
             $this->json(array_merge($result, [
                 'discount' => $this->cart->discount(),
+                'shipping' => $this->cart->shippingFee(),
+                'free_shipping_remaining' => $this->cart->freeShippingRemaining(),
                 'total'    => $this->cart->total(),
             ]));
         }

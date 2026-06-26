@@ -31,16 +31,31 @@ class MercadoPagoService
     public function createPreference(array $order, array $items): array
     {
         $mpItems = [];
+        $itemsTotal = 0.0;
         foreach ($items as $item) {
+            $quantity = (int)$item['quantity'];
+            $unitPrice = round((float)$item['price'], 2);
+            $itemsTotal += $unitPrice * $quantity;
             $mpItems[] = [
                 'id'          => !empty($item['product_id'])
                     ? (string)$item['product_id']
                     : 'combo-' . (string)($item['combo_id'] ?? ''),
                 'title'       => $item['product_name'],
-                'quantity'    => (int)$item['quantity'],
-                'unit_price'  => round((float)$item['price'], 2),
+                'quantity'    => $quantity,
+                'unit_price'  => $unitPrice,
                 'currency_id' => 'BRL',
             ];
+        }
+
+        $orderTotal = round((float)($order['total'] ?? $itemsTotal), 2);
+        if ($orderTotal > 0 && abs(round($itemsTotal, 2) - $orderTotal) > 0.01) {
+            $mpItems = [[
+                'id'          => 'order-' . (string)($order['id'] ?? ''),
+                'title'       => 'Pedido #' . (string)($order['id'] ?? '') . ' - Maia Suplementos',
+                'quantity'    => 1,
+                'unit_price'  => $orderTotal,
+                'currency_id' => 'BRL',
+            ]];
         }
 
         $appUrl = getenv('APP_URL') ?: 'https://maiasuplementos.com.br';

@@ -38,6 +38,8 @@ class CheckoutController extends BaseController
             'items'     => $this->cart->getItems(),
             'subtotal'  => $this->cart->subtotal(),
             'discount'  => $this->cart->discount(),
+            'shipping'  => $this->cart->shippingFee(),
+            'freeShippingRemaining' => $this->cart->freeShippingRemaining(),
             'total'     => $this->cart->total(),
             'coupon'    => $this->cart->getAppliedCoupon(),
             'user'      => $this->getLoggedUser(),
@@ -114,7 +116,7 @@ class CheckoutController extends BaseController
             'coupon_id'      => $coupon['id']   ?? null,
             'coupon_code'    => $coupon['code'] ?? null,
             'payment_method' => $method,
-            'notes'          => $method === 'boleto' ? $this->formatAddressNote($address) : null,
+            'notes'          => $this->formatOrderNotes($method, $address),
             'items'          => $items,
         ]);
 
@@ -260,6 +262,22 @@ class CheckoutController extends BaseController
             . ' - ' . $address['neighborhood']
             . ' - ' . $address['city'] . '/' . $address['state']
             . ' - CEP ' . $address['zip_code'];
+    }
+
+    private function formatOrderNotes(string $method, array $address): ?string
+    {
+        $notes = [];
+
+        if ($method === 'boleto') {
+            $notes[] = $this->formatAddressNote($address);
+        }
+
+        $shipping = $this->cart->shippingFee();
+        if ($shipping > 0) {
+            $notes[] = 'Frete: R$ ' . number_format($shipping, 2, ',', '.');
+        }
+
+        return $notes !== [] ? implode("\n", $notes) : null;
     }
 
     private function trackFunnel(string $step, ?int $orderId = null): void

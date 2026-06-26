@@ -93,6 +93,18 @@
                     <span id="cart-discount">- R$ <?= Sanitizer::money((float)$discount) ?></span>
                 </div>
                 <?php endif; ?>
+                <?php if (($shipping ?? 0) > 0 || ($freeShippingRemaining ?? 0) <= 0): ?>
+                <div class="summary-line cart-summary-row">
+                    <span>Frete</span>
+                    <span id="cart-shipping"><?= ((float)($shipping ?? 0) > 0) ? 'R$ ' . Sanitizer::money((float)$shipping) : 'Grátis' ?></span>
+                </div>
+                <?php endif; ?>
+                <?php if (($freeShippingRemaining ?? 0) > 0): ?>
+                <div class="summary-line cart-summary-row" id="cart-free-shipping">
+                    <span>Faltam R$ <?= Sanitizer::money((float)$freeShippingRemaining) ?> para frete grátis</span>
+                    <span></span>
+                </div>
+                <?php endif; ?>
                 <div class="summary-line total cart-summary-total">
                     <span class="label">Total</span>
                     <span class="value" id="cart-total">R$ <?= Sanitizer::money((float)$total) ?></span>

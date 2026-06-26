@@ -42,6 +42,11 @@
             <h2>Operação</h2>
             <div class="form-row">
                 <div class="form-group">
+                    <label for="shipping_flat_rate">Frete fixo</label>
+                    <input type="number" step="0.01" min="0" id="shipping_flat_rate" name="shipping_flat_rate"
+                           value="<?= htmlspecialchars($settings['shipping_flat_rate'] ?? '0.00', ENT_QUOTES, 'UTF-8') ?>">
+                </div>
+                <div class="form-group">
                     <label for="free_shipping_above">Frete grátis acima de</label>
                     <input type="number" step="0.01" min="0" id="free_shipping_above" name="free_shipping_above"
                            value="<?= htmlspecialchars($settings['free_shipping_above'] ?? '0.00', ENT_QUOTES, 'UTF-8') ?>">

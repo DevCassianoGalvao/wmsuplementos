@@ -499,6 +499,7 @@ INSERT IGNORE INTO `settings` (`key`, `value`) VALUES
     ('store_whatsapp',        NULL),
     ('store_email',           NULL),
     ('store_address',         NULL),
+    ('shipping_flat_rate',    '0.00'),
     ('free_shipping_above',   '0.00'),
     ('stock_alert_min',       '5'),
     ('privacy_policy',        NULL),

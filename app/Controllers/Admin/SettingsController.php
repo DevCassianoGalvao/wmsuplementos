@@ -18,6 +18,7 @@ class SettingsController extends BaseController
         'store_email',
         'store_address',
         'store_color_primary',
+        'shipping_flat_rate',
         'free_shipping_above',
         'stock_alert_min',
         'hero_label',
@@ -54,7 +55,7 @@ class SettingsController extends BaseController
             $value = $_POST[$key] ?? '';
             if ($key === 'store_email') {
                 $value = Sanitizer::email($value);
-            } elseif ($key === 'free_shipping_above') {
+            } elseif ($key === 'free_shipping_above' || $key === 'shipping_flat_rate') {
                 $value = number_format((float)str_replace(',', '.', (string)$value), 2, '.', '');
             } elseif ($key === 'stock_alert_min') {
                 $value = (string)max(0, (int)$value);
