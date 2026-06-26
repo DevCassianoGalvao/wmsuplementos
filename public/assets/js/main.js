@@ -112,7 +112,7 @@ document.querySelectorAll('.qty-input').forEach(function(input) {
 
 /* ── Cart quantity controls + remove (AJAX) ─────────────────── */
 (function() {
-    var cartLayout = document.querySelector('.cart-layout');
+    var cartLayout = document.querySelector('.cart-page, .cart-layout');
     if (!cartLayout) return;
 
     function csrfToken() {
