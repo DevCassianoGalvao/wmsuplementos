@@ -2148,6 +2148,8 @@ main > .section:first-child,
 .cart-coupon-row button { white-space: nowrap; padding: 0.5rem 1rem; font-size: var(--text-small); }
 .cart-actions { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
 .cart-page .summary-lines { display: block; }
+.cart-upsell { margin: 1rem 0 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); }
+.cart-upsell .section__header { margin-bottom: 1.25rem; }
 @media (max-width: 900px) {
     .cart-page .cart-summary { position: static; }
 }

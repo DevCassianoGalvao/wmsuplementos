@@ -173,6 +173,36 @@ class ProductModel extends BaseModel
         );
     }
 
+    public function getCartSuggestions(array $excludeProductIds = [], int $limit = 4): array
+    {
+        $excludeProductIds = array_values(array_unique(array_filter(array_map('intval', $excludeProductIds))));
+        $where = ['p.active = 1', 'p.stock > 0'];
+        $params = [];
+
+        if ($excludeProductIds !== []) {
+            $where[] = 'p.id NOT IN (' . implode(',', array_fill(0, count($excludeProductIds), '?')) . ')';
+            foreach ($excludeProductIds as $id) {
+                $params[] = $id;
+            }
+        }
+
+        $params[] = $limit;
+
+        return $this->fetchAll(
+            'SELECT p.*, c.name AS category_name, c.slug AS category_slug,
+                    b.name AS brand_name, b.slug AS brand_slug,
+                    (SELECT filename_webp FROM product_images
+                      WHERE product_id = p.id AND is_main = 1 LIMIT 1) AS main_image
+               FROM products p
+               LEFT JOIN categories c ON c.id = p.category_id
+               LEFT JOIN brands b ON b.id = p.brand_id
+              WHERE ' . implode(' AND ', $where) . '
+              ORDER BY p.featured DESC, p.total_sold DESC, p.created_at DESC
+              LIMIT ?',
+            $params
+        );
+    }
+
     public function getRelated(int $categoryId, int $excludeId, int $limit = 4): array
     {
         return $this->fetchAll(

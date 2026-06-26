@@ -120,5 +120,21 @@
 
     <input type="hidden" id="csrf-token" value="<?= CSRF::token() ?>">
 
+    <?php if (!empty($suggestions)): ?>
+    <section class="cart-upsell">
+        <div class="section__header">
+            <span class="section__label">Complete o pedido</span>
+            <h2 class="section__title">Produtos que combinam com seu carrinho</h2>
+        </div>
+        <div class="products-grid">
+            <?php foreach ($suggestions as $suggestedProduct): ?>
+            <?php $cardProduct = $product ?? null; $product = $suggestedProduct; ?>
+            <?php include __DIR__ . '/../partials/product_card.php'; ?>
+            <?php if ($cardProduct !== null) { $product = $cardProduct; } else { unset($product); } unset($cardProduct); ?>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
+
     <?php endif; ?>
 </div>

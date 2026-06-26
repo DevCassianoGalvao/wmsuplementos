@@ -27,6 +27,7 @@ class CartController extends BaseController
         $this->render('cart/index', [
             'pageTitle'  => 'Carrinho | Maia Suplementos',
             'items'      => $this->cart->getItems(),
+            'suggestions' => $this->cartSuggestions(),
             'subtotal'   => $this->cart->subtotal(),
             'discount'   => $this->cart->discount(),
             'shipping'   => $this->cart->shippingFee(),
@@ -226,6 +227,18 @@ class CartController extends BaseController
 
         $product = (new ProductModel())->findById((int)$item['product_id']);
         return $product && !empty($product['active']) && (int)$product['stock'] >= $quantity;
+    }
+
+    private function cartSuggestions(): array
+    {
+        $productIds = [];
+        foreach ($this->cart->getItems() as $item) {
+            if (!empty($item['product_id'])) {
+                $productIds[] = (int)$item['product_id'];
+            }
+        }
+
+        return (new ProductModel())->getCartSuggestions($productIds, 4);
     }
 
     private function trackFunnel(string $step): void
