@@ -97,13 +97,6 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
             <p class="stock-warning">Apenas <?= (int)$product['stock'] ?> unidade(s) em estoque.</p>
             <?php endif; ?>
 
-            <?php if (!empty($product['description'])): ?>
-            <div class="product-description">
-                <h2>Descrição</h2>
-                <div class="rich-text"><?= nl2br(htmlspecialchars($product['description'], ENT_QUOTES, 'UTF-8')) ?></div>
-            </div>
-            <?php endif; ?>
-
             <?php if ((int)$product['stock'] > 0): ?>
             <form action="/carrinho/adicionar" method="post" class="add-to-cart-form"
                   data-product-id="<?= (int)$product['id'] ?>"
@@ -132,27 +125,6 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
                 <?php endif; ?>
                 <button type="submit" class="btn btn-outline btn-block">Avise-me quando voltar</button>
             </form>
-            <?php endif; ?>
-
-            <?php if (!empty($product['benefits'])): ?>
-            <div class="product-description">
-                <h2>Benefícios</h2>
-                <div class="rich-text"><?= nl2br(htmlspecialchars($product['benefits'], ENT_QUOTES, 'UTF-8')) ?></div>
-            </div>
-            <?php endif; ?>
-
-            <?php if (!empty($nutrition)): ?>
-            <div class="product-description">
-                <h2>Tabela Nutricional</h2>
-                <dl class="nutrition-list">
-                    <?php foreach ($nutrition as $label => $value): ?>
-                    <div>
-                        <dt><?= htmlspecialchars((string)$label, ENT_QUOTES, 'UTF-8') ?></dt>
-                        <dd><?= htmlspecialchars(is_scalar($value) ? (string)$value : json_encode($value, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') ?></dd>
-                    </div>
-                    <?php endforeach; ?>
-                </dl>
-            </div>
             <?php endif; ?>
 
             <?php if (!empty($product['description']) || !empty($product['benefits']) || !empty($nutrition)): ?>

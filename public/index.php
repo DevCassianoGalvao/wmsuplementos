@@ -231,9 +231,9 @@ $router->post('/admin/estoque/ajuste',   'Admin\StockController@adjust');
 
 // Pedidos
 $router->get('/admin/pedidos',           'Admin\OrderController@index');
+$router->get('/admin/pedidos/exportar',  'Admin\OrderController@export');
 $router->get('/admin/pedidos/{id}',      'Admin\OrderController@show');
 $router->post('/admin/pedidos/{id}/status', 'Admin\OrderController@updateStatus');
-$router->get('/admin/pedidos/exportar',  'Admin\OrderController@export');
 
 // Clientes
 $router->get('/admin/clientes',          'Admin\CustomerController@index');

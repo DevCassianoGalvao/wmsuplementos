@@ -2159,7 +2159,6 @@ main > .section:first-child,
 .product-info .product-description { margin-bottom: 1.25rem; }
 .product-info .product-description h2 { font-family: var(--font-display); font-size: var(--text-h3); font-weight: 700; margin-bottom: 0.5rem; color: var(--color-text-primary); }
 .product-info .product-description .rich-text { font-size: var(--text-body); color: var(--color-text-secondary); line-height: 1.7; }
-.product-info > .product-description { display: none; }
 .product-tabs {
     margin-top: 1.5rem;
     border: 1px solid var(--color-border);
