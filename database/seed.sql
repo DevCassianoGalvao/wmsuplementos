@@ -263,6 +263,10 @@ INSERT IGNORE INTO pages (slug, title, content, active) VALUES
 ('faq',
  'Perguntas Frequentes',
  '<h2>Dúvidas frequentes</h2><h3>Os produtos são originais?</h3><p>Sim. Trabalhamos apenas com distribuidores autorizados e todos os produtos possuem nota fiscal.</p><h3>Vocês entregam em todo o Brasil?</h3><p>Sim, entregamos via Correios para todo o território nacional.</p><h3>Posso rastrear meu pedido?</h3><p>Sim. Assim que seu pedido for despachado, você receberá o código de rastreamento por e-mail.</p>',
+ 1),
+('perguntas-frequentes',
+ 'Perguntas Frequentes',
+ '<h2>Perguntas Frequentes</h2><h3>Os produtos são originais e lacrados?</h3><p>Sim. Trabalhamos somente com distribuidores autorizados e todos os produtos são enviados lacrados, com nota fiscal e procedência garantida.</p><h3>Qual o prazo de entrega?</h3><p>Capitais: 2 a 4 dias úteis. Interior: 4 a 8 dias úteis. Norte e Nordeste: 6 a 12 dias úteis. Pedidos aprovados até as 14h em dias úteis são despachados no mesmo dia.</p><h3>Quais as formas de pagamento?</h3><p>Aceitamos PIX (aprovação imediata), cartão de crédito (até 6x sem juros) e boleto bancário.</p><h3>Como funciona a troca ou devolução?</h3><p>Você tem até 7 dias após o recebimento para solicitar troca ou devolução, conforme o Código de Defesa do Consumidor. Consulte a página de <a href="/pagina/trocas-e-devolucoes">Trocas e Devoluções</a>.</p><h3>Posso rastrear meu pedido?</h3><p>Sim. Assim que o pedido for despachado, você recebe o código de rastreamento por e-mail.</p><h3>Como falo com o atendimento?</h3><p>Pelo e-mail contato@maiasuplementos.com.br ou pelo WhatsApp (22) 99869-6430.</p>',
  1);
 
 -- -----------------------------------------------------------------------------

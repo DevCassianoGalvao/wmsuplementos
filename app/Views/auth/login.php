@@ -30,7 +30,7 @@
                            placeholder="Sua senha">
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Entrar</button>
+                <button type="submit" class="btn btn--primary btn-primary btn-lg btn-block" style="background:#E63329;color:#fff;">Entrar</button>
             </form>
 
             <div class="auth-links">

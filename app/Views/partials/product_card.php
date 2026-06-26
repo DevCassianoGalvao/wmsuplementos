@@ -20,9 +20,9 @@ $inStock = (int)($product['stock'] ?? 0) > 0;
                  loading="lazy" width="400" height="400" class="product-card__img">
         </a>
         <?php if (!empty($product['bestseller'])): ?>
-        <span class="product-card__badge badge badge--red">Mais Vendido</span>
+        <span class="product-card__badge badge badge--solid-red" style="background:#E63329;color:#fff;">Mais Vendido</span>
         <?php elseif ($orig > 0): ?>
-        <span class="product-card__badge badge badge--red">Promoção</span>
+        <span class="product-card__badge badge badge--solid-green" style="background:#22C55E;color:#fff;">Promoção</span>
         <?php endif; ?>
         <?php if ((int)($product['stock'] ?? 99) < 5): ?>
         <span class="product-card__stock-indicator"><span class="stock-pulse"></span></span>

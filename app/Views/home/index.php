@@ -47,25 +47,25 @@ $heroSecondaryUrl = $safeHeroUrl((string)($settings['hero_secondary_url'] ?? '/c
             <p class="section__label">Explorar</p>
             <h2 class="section__title">Categorias</h2>
         </div>
-        <div class="category-carousel">
-            <div class="categories-scroll" data-category-carousel>
-                <?php foreach ($categories as $cat): ?>
-                <a href="/categoria/<?= htmlspecialchars($cat['slug'], ENT_QUOTES, 'UTF-8') ?>" class="category-card animate-in">
-                    <div class="category-card__body">
-                        <span class="category-card__name"><?= htmlspecialchars($cat['name'], ENT_QUOTES, 'UTF-8') ?></span>
-                        <span class="category-card__count"><?= (int)($cat['product_count'] ?? 0) ?></span>
-                    </div>
-                </a>
-                <?php endforeach; ?>
+        <div class="categories-carousel" id="categories-carousel">
+            <button class="carousel-btn carousel-btn--prev" id="cat-prev" aria-label="Anterior">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="categories-track-wrap">
+                <div class="categories-track" id="cat-track">
+                    <?php foreach ($categories as $cat): ?>
+                    <a href="/categoria/<?= htmlspecialchars($cat['slug'], ENT_QUOTES, 'UTF-8') ?>" class="category-card animate-in">
+                        <div class="category-card__body">
+                            <span class="category-card__name"><?= htmlspecialchars($cat['name'], ENT_QUOTES, 'UTF-8') ?></span>
+                            <span class="category-card__count"><?= (int)($cat['product_count'] ?? 0) ?></span>
+                        </div>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
             </div>
-            <div class="category-carousel__controls" aria-label="Navegar categorias">
-                <button type="button" class="category-arrow" data-category-prev aria-label="Categorias anteriores">
-                    <span aria-hidden="true">&larr;</span>
-                </button>
-                <button type="button" class="category-arrow" data-category-next aria-label="Proximas categorias">
-                    <span aria-hidden="true">&rarr;</span>
-                </button>
-            </div>
+            <button class="carousel-btn carousel-btn--next" id="cat-next" aria-label="Próxima">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
         </div>
     </div>
 </section>
@@ -117,7 +117,6 @@ $heroSecondaryUrl = $safeHeroUrl((string)($settings['hero_secondary_url'] ?? '/c
             <?php foreach ($combos as $combo): ?>
             <a href="/combo/<?= htmlspecialchars($combo['slug'], ENT_QUOTES, 'UTF-8') ?>" class="combo-card animate-in">
                 <div class="combo-card__body">
-                    <span class="badge badge--red">Kit</span>
                     <h3 class="combo-card__name"><?= htmlspecialchars($combo['name'], ENT_QUOTES, 'UTF-8') ?></h3>
                     <?php if (!empty($combo['description'])): ?>
                     <p class="combo-card__desc"><?= htmlspecialchars(mb_substr($combo['description'], 0, 80), ENT_QUOTES, 'UTF-8') ?>...</p>

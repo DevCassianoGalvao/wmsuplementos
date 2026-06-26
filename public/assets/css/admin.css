@@ -34,7 +34,7 @@
     padding: 1.5rem;
     border-bottom: 1px solid var(--color-border);
 }
-.sidebar-logo img { height: 32px; width: auto; }
+.sidebar-logo img { height: 38px; width: auto; }
 
 .sidebar-nav {
     padding: 0.75rem;
@@ -65,6 +65,9 @@
     color: var(--color-red);
     box-shadow: inset 2px 0 0 0 var(--color-red);
 }
+.nav-item svg { flex-shrink: 0; opacity: 0.7; }
+.nav-item:hover svg, .nav-item.active svg { opacity: 1; }
+.nav-item span { flex: 1 1 auto; }
 .nav-badge {
     margin-left: auto;
     min-width: 18px;
@@ -966,4 +969,42 @@ button.btn-link:hover {
     .combo-item-row {
         grid-template-columns: 1fr;
     }
+}
+
+/* ── Admin login (bare) ─────────────────────────────────────── */
+.admin-login-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0A0A0A;
+    padding: 1.5rem;
+}
+.admin-login-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 2.5rem;
+}
+.admin-login-card h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-h1);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-primary);
+}
+.admin-login-card .subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--text-small);
+    margin-bottom: 2rem;
+}
+.admin-login-card .form-group { margin-bottom: 1.1rem; }
+.admin-login-card label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: var(--text-small);
+    font-weight: 600;
+    color: var(--color-text-secondary);
 }

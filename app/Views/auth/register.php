@@ -49,7 +49,7 @@
                 </label>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Criar Conta</button>
+            <button type="submit" class="btn btn--primary btn-primary btn-lg btn-block" style="background:#E63329;color:#fff;">Criar Conta</button>
         </form>
 
         <div class="auth-links">
