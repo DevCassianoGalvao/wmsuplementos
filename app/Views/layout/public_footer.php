@@ -35,18 +35,19 @@
     <div class="footer-security">
         <div class="container footer-security-inner">
             <span class="security-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E63329" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 SSL Seguro
             </span>
             <span class="security-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E63329" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                 Pagamento Seguro
             </span>
         </div>
     </div>
     <div class="footer-bottom">
-        <div class="container">
-            <span class="text-muted">&copy; <?= date('Y') ?> Maia Suplementos. Todos os direitos reservados.</span>
+        <div class="container footer-bottom-inner">
+            <span class="text-muted">&copy; <?= date('Y') ?> Maia Suplementos. Todos os direitos reservados. | CNPJ 66.596.775/0001-80</span>
+            <a href="https://www.instagram.com/cassianogalvao.web" target="_blank" rel="noopener" class="dev-credit">Desenvolvido por @cassianogalvao.web</a>
         </div>
     </div>
 </footer>
@@ -127,7 +128,7 @@ $breadcrumbSchema = [
     </div>
 </div>
 
-<script src="/assets/js/placeholder-images.js?v=20260625-4" defer></script>
-<script src="/assets/js/main.js?v=20260625-4" defer></script>
+<script src="/assets/js/placeholder-images.js?v=20260625-5" defer></script>
+<script src="/assets/js/main.js?v=20260625-5" defer></script>
 </body>
 </html>

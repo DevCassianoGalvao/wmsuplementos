@@ -57,7 +57,7 @@ class ProductModel extends BaseModel
         $where  = ['1=1'];
         $params = [];
 
-        if (isset($filters['active'])) {
+        if (isset($filters['active']) && $filters['active'] !== '' && $filters['active'] !== null) {
             $where[]  = 'p.active = ?';
             $params[] = (int)$filters['active'];
         }

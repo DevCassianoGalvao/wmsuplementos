@@ -17,25 +17,31 @@
 </section>
 
 <?php if (!empty($categories)): ?>
-<section class="section categories-band">
+<section class="section" style="padding-top:3rem;padding-bottom:2rem;">
     <div class="container">
-        <div class="category-carousel">
-        <div class="categories-scroll" data-category-carousel>
-            <?php foreach ($categories as $category): ?>
-            <a href="/categoria/<?= htmlspecialchars($category['slug'], ENT_QUOTES, 'UTF-8') ?>" class="category-card">
-                <span class="category-card__name"><?= htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8') ?></span>
-                <span class="category-card__count"><?= (int)($category['product_count'] ?? 0) ?></span>
-            </a>
-            <?php endforeach; ?>
+        <div class="section__header">
+            <p class="section__label">Explorar</p>
+            <h2 class="section__title">Categorias</h2>
         </div>
-        <div class="category-carousel__controls" aria-label="Navegar categorias">
-            <button type="button" class="category-arrow" data-category-prev aria-label="Categorias anteriores">
-                <span aria-hidden="true">&larr;</span>
+        <div class="categories-carousel" id="categories-carousel">
+            <button class="carousel-btn carousel-btn--prev" id="cat-prev" aria-label="Anterior">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
             </button>
-            <button type="button" class="category-arrow" data-category-next aria-label="Próximas categorias">
-                <span aria-hidden="true">&rarr;</span>
+            <div class="categories-track-wrap">
+                <div class="categories-track" id="cat-track">
+                    <?php foreach ($categories as $category): ?>
+                    <a href="/categoria/<?= htmlspecialchars($category['slug'], ENT_QUOTES, 'UTF-8') ?>" class="category-card animate-in">
+                        <div class="category-card__body">
+                            <span class="category-card__name"><?= htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8') ?></span>
+                            <span class="category-card__count"><?= (int)($category['product_count'] ?? 0) ?></span>
+                        </div>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <button class="carousel-btn carousel-btn--next" id="cat-next" aria-label="Próxima">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
-        </div>
         </div>
     </div>
 </section>

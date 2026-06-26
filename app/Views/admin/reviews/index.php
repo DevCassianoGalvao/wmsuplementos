@@ -1,7 +1,7 @@
 <?php use Maia\Helpers\CSRF; ?>
 
 <div class="page-header">
-    <h1>Avaliacoes</h1>
+    <h1>Avaliações</h1>
 </div>
 
 <?php if (!empty($flash['success'])): ?>

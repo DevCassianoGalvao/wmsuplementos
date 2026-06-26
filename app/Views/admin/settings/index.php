@@ -2,8 +2,8 @@
 
 <div class="page-header">
     <div>
-        <h1>Configuracoes</h1>
-        <p class="page-subtitle">Dados publicos da loja, regras operacionais e textos legais.</p>
+        <h1>Configurações</h1>
+        <p class="page-subtitle">Dados públicos da loja, regras operacionais e textos legais.</p>
     </div>
 </div>
 
@@ -33,21 +33,21 @@
                        value="<?= htmlspecialchars($settings['store_whatsapp'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
             </div>
             <div class="form-group">
-                <label for="store_address">Endereco</label>
+                <label for="store_address">Endereço</label>
                 <textarea id="store_address" name="store_address" rows="3"><?= htmlspecialchars($settings['store_address'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
         </section>
 
         <section class="form-card">
-            <h2>Operacao</h2>
+            <h2>Operação</h2>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="free_shipping_above">Frete gratis acima de</label>
+                    <label for="free_shipping_above">Frete grátis acima de</label>
                     <input type="number" step="0.01" min="0" id="free_shipping_above" name="free_shipping_above"
                            value="<?= htmlspecialchars($settings['free_shipping_above'] ?? '0.00', ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 <div class="form-group">
-                    <label for="stock_alert_min">Alerta minimo de estoque</label>
+                    <label for="stock_alert_min">Alerta mínimo de estoque</label>
                     <input type="number" min="0" id="stock_alert_min" name="stock_alert_min"
                            value="<?= htmlspecialchars($settings['stock_alert_min'] ?? '5', ENT_QUOTES, 'UTF-8') ?>">
                 </div>
@@ -77,7 +77,7 @@
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="hero_title_before">Titulo antes do destaque</label>
+                <label for="hero_title_before">Título antes do destaque</label>
                 <input type="text" id="hero_title_before" name="hero_title_before"
                        value="<?= htmlspecialchars($settings['hero_title_before'] ?? 'Suplementos para', ENT_QUOTES, 'UTF-8') ?>">
             </div>
@@ -87,18 +87,18 @@
                        value="<?= htmlspecialchars($settings['hero_title_emphasis'] ?? 'performance', ENT_QUOTES, 'UTF-8') ?>">
             </div>
             <div class="form-group">
-                <label for="hero_title_after">Titulo depois do destaque</label>
+                <label for="hero_title_after">Título depois do destaque</label>
                 <input type="text" id="hero_title_after" name="hero_title_after"
                        value="<?= htmlspecialchars($settings['hero_title_after'] ?? 'real.', ENT_QUOTES, 'UTF-8') ?>">
             </div>
         </div>
         <div class="form-group">
-            <label for="hero_subtitle">Subtitulo</label>
+            <label for="hero_subtitle">Subtítulo</label>
             <textarea id="hero_subtitle" name="hero_subtitle" rows="2"><?= htmlspecialchars($settings['hero_subtitle'] ?? 'Produtos selecionados para treino, rotina e evolucao.', ENT_QUOTES, 'UTF-8') ?></textarea>
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="hero_primary_label">Botao principal</label>
+                <label for="hero_primary_label">Botão principal</label>
                 <input type="text" id="hero_primary_label" name="hero_primary_label"
                        value="<?= htmlspecialchars($settings['hero_primary_label'] ?? 'Ver Produtos', ENT_QUOTES, 'UTF-8') ?>">
             </div>
@@ -108,12 +108,12 @@
                        value="<?= htmlspecialchars($settings['hero_primary_url'] ?? '/produtos', ENT_QUOTES, 'UTF-8') ?>">
             </div>
             <div class="form-group">
-                <label for="hero_secondary_label">Botao secundario</label>
+                <label for="hero_secondary_label">Botão secundário</label>
                 <input type="text" id="hero_secondary_label" name="hero_secondary_label"
                        value="<?= htmlspecialchars($settings['hero_secondary_label'] ?? 'Ver Combos', ENT_QUOTES, 'UTF-8') ?>">
             </div>
             <div class="form-group">
-                <label for="hero_secondary_url">URL secundaria</label>
+                <label for="hero_secondary_url">URL secundária</label>
                 <input type="text" id="hero_secondary_url" name="hero_secondary_url"
                        value="<?= htmlspecialchars($settings['hero_secondary_url'] ?? '/combos', ENT_QUOTES, 'UTF-8') ?>">
             </div>
@@ -128,15 +128,15 @@
             Exibir perguntas frequentes na Home
         </label>
         <div class="form-group">
-            <label for="faq_content">Conteudo do FAQ</label>
+            <label for="faq_content">Conteúdo do FAQ</label>
             <textarea id="faq_content" name="faq_content" rows="10"><?= htmlspecialchars($pages['faq']['content'] ?? $settings['faq_content'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
         </div>
     </section>
 
     <section class="form-card">
-        <h2>LGPD e Politica de Privacidade</h2>
+        <h2>LGPD e Política de Privacidade</h2>
         <div class="form-group">
-            <label for="privacy_policy">Conteudo da politica</label>
+            <label for="privacy_policy">Conteúdo da política</label>
             <textarea id="privacy_policy" name="privacy_policy" rows="12"><?= htmlspecialchars($pages['politica-de-privacidade']['content'] ?? $settings['privacy_policy'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
         </div>
     </section>
@@ -144,12 +144,12 @@
     <section class="form-card">
         <h2>Termos de Uso</h2>
         <div class="form-group">
-            <label for="terms_of_use">Conteudo dos termos</label>
+            <label for="terms_of_use">Conteúdo dos termos</label>
             <textarea id="terms_of_use" name="terms_of_use" rows="12"><?= htmlspecialchars($pages['termos-de-uso']['content'] ?? $settings['terms_of_use'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
         </div>
     </section>
 
     <div class="form-actions">
-        <button type="submit" class="btn btn-primary btn-lg">Salvar Configuracoes</button>
+        <button type="submit" class="btn btn-primary btn-lg">Salvar Configurações</button>
     </div>
 </form>

@@ -1,9 +1,9 @@
 <div class="page-header">
     <div>
-        <h1>Usuarios Admin</h1>
+        <h1>Usuários Admin</h1>
         <p class="page-subtitle">Controle quem pode acessar o painel administrativo.</p>
     </div>
-    <a href="/admin/usuarios/novo" class="btn btn-primary">Novo Usuario</a>
+    <a href="/admin/usuarios/novo" class="btn btn-primary">Novo Usuário</a>
 </div>
 
 <?php if (!empty($flash['success'])): ?>

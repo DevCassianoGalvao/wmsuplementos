@@ -152,7 +152,7 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
 
     <?php if (!empty($reviews)): ?>
     <section class="product-reviews">
-        <h2>Avaliacoes dos clientes</h2>
+        <h2>Avaliações dos clientes</h2>
         <?php foreach ($reviews as $review): ?>
         <article class="review-item">
             <div class="stars" aria-label="<?= (int)$review['rating'] ?> de 5">

@@ -1,7 +1,6 @@
 <?php use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
 
-<div class="container cart-page">
-    <h1>Meu Carrinho</h1>
+<div class="container">
 
     <?php if (!empty($flash['error'])): ?>
     <div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
@@ -12,65 +11,67 @@
 
     <?php if (empty($items)): ?>
     <div class="empty-cart">
+        <h1 class="cart-title">Meu Carrinho</h1>
         <p>Seu carrinho est&aacute; vazio.</p>
         <a href="/produtos" class="btn btn-primary">Continuar Comprando</a>
     </div>
     <?php else: ?>
 
-    <div class="cart-layout">
+    <div class="cart-page">
+
         <div class="cart-items">
-            <table class="cart-table">
-                <thead>
-                    <tr>
-                        <th>Produto</th>
-                        <th>Pre&ccedil;o</th>
-                        <th>Quantidade</th>
-                        <th>Subtotal</th>
-                        <th><span class="sr-only">Remover</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($items as $item): ?>
-                <?php $cartKey = (string)($item['cart_key'] ?? $item['product_id'] ?? ''); ?>
-                <?php $isCombo = ($item['type'] ?? '') === 'combo'; ?>
-                <tr class="cart-item" data-cart-key="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
-                    <td class="item-product">
-                        <?php if (!empty($item['image'])): ?>
-                        <img src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>" alt="" width="80" height="80">
-                        <?php endif; ?>
+            <div class="cart-header-row">
+                <h1 class="cart-title">Meu Carrinho</h1>
+                <span class="cart-count-label"><?= count($items) ?> <?= count($items) === 1 ? 'item' : 'itens' ?></span>
+            </div>
+
+            <?php foreach ($items as $item): ?>
+            <?php $cartKey = (string)($item['cart_key'] ?? $item['product_id'] ?? ''); ?>
+            <?php $isCombo = ($item['type'] ?? '') === 'combo'; ?>
+            <?php $unitPrice = (float)$item['price']; ?>
+            <?php $qty = (int)$item['quantity']; ?>
+            <div class="cart-item" data-cart-key="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
+                <div class="cart-item__image">
+                    <?php if (!empty($item['image'])): ?>
+                    <img src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($item['product_name'], ENT_QUOTES, 'UTF-8') ?>">
+                    <?php endif; ?>
+                </div>
+                <div class="cart-item__info">
+                    <?php if (!empty($item['brand_name'])): ?>
+                    <span class="cart-item__brand"><?= htmlspecialchars($item['brand_name'], ENT_QUOTES, 'UTF-8') ?></span>
+                    <?php endif; ?>
+                    <h3 class="cart-item__name">
                         <a href="<?= $isCombo ? '/combo/' : '/produto/' ?><?= htmlspecialchars($item['slug'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                             <?= htmlspecialchars($item['product_name'], ENT_QUOTES, 'UTF-8') ?>
                         </a>
-                    </td>
-                    <td class="item-price">R$ <?= Sanitizer::money((float)$item['price']) ?></td>
-                    <td class="item-qty">
-                        <div class="qty-control">
-                            <button type="button" class="qty-btn qty-minus" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>" aria-label="Diminuir">-</button>
-                            <input type="number" class="qty-input" value="<?= (int)$item['quantity'] ?>"
-                                   min="1" data-price="<?= htmlspecialchars(Sanitizer::money((float)$item['price']), ENT_QUOTES, 'UTF-8') ?>"
-                                   data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
-                            <button type="button" class="qty-btn qty-plus" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>" aria-label="Aumentar">+</button>
-                        </div>
-                    </td>
-                    <td class="item-subtotal" id="subtotal-<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
-                        R$ <?= Sanitizer::money((float)$item['price'] * (int)$item['quantity']) ?>
-                    </td>
-                    <td class="item-remove">
-                        <button type="button" class="remove-btn" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>" aria-label="Remover">&times;</button>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </h3>
+                    <span class="cart-item__price">R$ <?= Sanitizer::money($unitPrice) ?></span>
+                </div>
+                <div class="cart-item__qty">
+                    <button type="button" class="qty-btn qty-minus" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>" aria-label="Diminuir">&minus;</button>
+                    <input type="number" class="qty-input" value="<?= $qty ?>"
+                           min="1" max="99"
+                           data-price="<?= htmlspecialchars(Sanitizer::money($unitPrice), ENT_QUOTES, 'UTF-8') ?>"
+                           data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>" readonly>
+                    <button type="button" class="qty-btn qty-plus" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>" aria-label="Aumentar">+</button>
+                </div>
+                <div class="cart-item__subtotal item-subtotal" id="subtotal-<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
+                    R$ <?= Sanitizer::money($unitPrice * $qty) ?>
+                </div>
+                <button type="button" class="cart-item__remove remove-btn" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>" aria-label="Remover item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                </button>
+            </div>
+            <?php endforeach; ?>
         </div>
 
         <aside class="cart-summary">
-            <h2>Resumo</h2>
+            <h2>Resumo do Pedido</h2>
 
-            <form action="/carrinho/cupom" method="post" class="coupon-form">
+            <form action="/carrinho/cupom" method="post" class="coupon-form cart-coupon">
                 <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
                 <label for="coupon_code">Cupom de desconto</label>
-                <div class="coupon-input-group">
+                <div class="coupon-input-group cart-coupon-row">
                     <input type="text" id="coupon_code" name="coupon_code"
                            value="<?= htmlspecialchars($coupon['code'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                            placeholder="Digite o cupom"
@@ -82,24 +83,26 @@
             </form>
 
             <div class="summary-lines">
-                <div class="summary-line">
-                    <span>Subtotal:</span>
+                <div class="summary-line cart-summary-row">
+                    <span>Subtotal</span>
                     <span id="cart-subtotal">R$ <?= Sanitizer::money((float)$subtotal) ?></span>
                 </div>
                 <?php if ($discount > 0): ?>
-                <div class="summary-line discount">
-                    <span>Desconto:</span>
+                <div class="summary-line discount cart-summary-row">
+                    <span>Desconto</span>
                     <span id="cart-discount">- R$ <?= Sanitizer::money((float)$discount) ?></span>
                 </div>
                 <?php endif; ?>
-                <div class="summary-line total">
-                    <span>Total:</span>
-                    <span id="cart-total">R$ <?= Sanitizer::money((float)$total) ?></span>
+                <div class="summary-line total cart-summary-total">
+                    <span class="label">Total</span>
+                    <span class="value" id="cart-total">R$ <?= Sanitizer::money((float)$total) ?></span>
                 </div>
             </div>
 
-            <a href="/finalizar-compra" class="btn btn-primary btn-lg btn-block">Finalizar Compra</a>
-            <a href="/produtos" class="btn btn-link btn-block">Continuar Comprando</a>
+            <div class="cart-actions">
+                <a href="/finalizar-compra" class="btn btn-primary btn-lg btn-block">Finalizar Compra</a>
+                <a href="/produtos" class="btn btn-link btn-block">Continuar Comprando</a>
+            </div>
         </aside>
     </div>
 

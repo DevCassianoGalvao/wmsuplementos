@@ -76,7 +76,7 @@ $heroSecondaryUrl = $safeHeroUrl((string)($settings['hero_secondary_url'] ?? '/c
 <section class="section">
     <div class="container">
         <div class="section__header">
-            <p class="section__label">Curadoria</p>
+            <p class="section__label">O que você precisa?</p>
             <h2 class="section__title">Produtos em Destaque</h2>
         </div>
         <div class="grid-products">
@@ -117,13 +117,12 @@ $heroSecondaryUrl = $safeHeroUrl((string)($settings['hero_secondary_url'] ?? '/c
             <?php foreach ($combos as $combo): ?>
             <a href="/combo/<?= htmlspecialchars($combo['slug'], ENT_QUOTES, 'UTF-8') ?>" class="combo-card animate-in">
                 <div class="combo-card__body">
-                    <h3 class="combo-card__name"><?= htmlspecialchars($combo['name'], ENT_QUOTES, 'UTF-8') ?></h3>
+                    <span class="badge badge--red"><?= (int)($combo['item_count'] ?? 0) ?> itens</span>
+                    <h2 class="combo-card__name"><?= htmlspecialchars($combo['name'], ENT_QUOTES, 'UTF-8') ?></h2>
                     <?php if (!empty($combo['description'])): ?>
-                    <p class="combo-card__desc"><?= htmlspecialchars(mb_substr($combo['description'], 0, 80), ENT_QUOTES, 'UTF-8') ?>...</p>
+                    <p class="combo-card__desc"><?= htmlspecialchars(mb_substr($combo['description'], 0, 120), ENT_QUOTES, 'UTF-8') ?>...</p>
                     <?php endif; ?>
-                    <div class="combo-card__price">
-                        R$ <?= Sanitizer::money((float)($combo['total_price'] ?? $combo['price'] ?? 0)) ?>
-                    </div>
+                    <div class="combo-card__price">R$ <?= Sanitizer::money((float)($combo['total_price'] ?? $combo['price'] ?? 0)) ?></div>
                 </div>
             </a>
             <?php endforeach; ?>
