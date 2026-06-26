@@ -32,6 +32,11 @@ class BrandModel extends BaseModel
         return $this->fetch('SELECT * FROM brands WHERE id = ?', [$id]);
     }
 
+    public function findBySlug(string $slug): ?array
+    {
+        return $this->fetch('SELECT * FROM brands WHERE slug = ? AND active = 1 LIMIT 1', [$slug]);
+    }
+
     public function create(array $data): int
     {
         $this->query(

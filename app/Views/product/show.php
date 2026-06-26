@@ -77,7 +77,7 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
                 <?php for ($i = 1; $i <= 5; $i++): ?>
                 <span class="star <?= $i <= round($ratingValue) ? 'filled' : '' ?>">&#9733;</span>
                 <?php endfor; ?>
-                <span class="rating-count">(<?= $ratingCount ?> avaliacoes)</span>
+                <span class="rating-count">(<?= $ratingCount ?> avaliações)</span>
             </div>
 
             <div class="product-price">
@@ -96,18 +96,28 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
             <p class="stock-warning">Apenas <?= (int)$product['stock'] ?> unidade(s) em estoque.</p>
             <?php endif; ?>
 
+            <?php if (!empty($product['description'])): ?>
+            <div class="product-description">
+                <h2>Descrição</h2>
+                <div class="rich-text"><?= nl2br(htmlspecialchars($product['description'], ENT_QUOTES, 'UTF-8')) ?></div>
+            </div>
+            <?php endif; ?>
+
             <?php if ((int)$product['stock'] > 0): ?>
             <form action="/carrinho/adicionar" method="post" class="add-to-cart-form">
                 <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
                 <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
-                <div class="qty-input">
-                    <label for="qty">Quantidade:</label>
-                    <input type="number" id="qty" name="quantity" value="1" min="1" max="<?= (int)$product['stock'] ?>">
+                <div class="product-qty-wrap">
+                    <div class="cart-item__qty">
+                        <button type="button" class="qty-btn qty-minus-prod" aria-label="Diminuir">−</button>
+                        <input type="number" id="qty" name="quantity" value="1" min="1" max="<?= (int)$product['stock'] ?>" class="qty-input qty-input-prod" readonly>
+                        <button type="button" class="qty-btn qty-plus-prod" aria-label="Aumentar">+</button>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg btn-block">Adicionar ao Carrinho</button>
             </form>
             <?php else: ?>
-            <p class="out-of-stock-msg">Produto temporariamente indisponivel</p>
+            <p class="out-of-stock-msg">Produto temporariamente indisponível</p>
             <form action="/produto/<?= htmlspecialchars($product['slug'], ENT_QUOTES, 'UTF-8') ?>/avisar" method="post" class="stock-notify-form">
                 <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
                 <?php if (!\Maia\Helpers\Auth::isUserLogged()): ?>
@@ -120,16 +130,9 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
             </form>
             <?php endif; ?>
 
-            <?php if (!empty($product['description'])): ?>
-            <div class="product-description">
-                <h2>Descricao</h2>
-                <div class="rich-text"><?= nl2br(htmlspecialchars($product['description'], ENT_QUOTES, 'UTF-8')) ?></div>
-            </div>
-            <?php endif; ?>
-
             <?php if (!empty($product['benefits'])): ?>
             <div class="product-description">
-                <h2>Beneficios</h2>
+                <h2>Benefícios</h2>
                 <div class="rich-text"><?= nl2br(htmlspecialchars($product['benefits'], ENT_QUOTES, 'UTF-8')) ?></div>
             </div>
             <?php endif; ?>

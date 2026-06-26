@@ -77,7 +77,7 @@
                            placeholder="Digite o cupom"
                            <?= $coupon ? 'readonly' : '' ?>>
                     <?php if (!$coupon): ?>
-                    <button type="submit" class="btn btn-outline">Aplicar</button>
+                    <button type="submit" class="btn btn--ghost">Aplicar</button>
                     <?php endif; ?>
                 </div>
             </form>
@@ -100,8 +100,8 @@
             </div>
 
             <div class="cart-actions">
-                <a href="/finalizar-compra" class="btn btn-primary btn-lg btn-block">Finalizar Compra</a>
-                <a href="/produtos" class="btn btn-link btn-block">Continuar Comprando</a>
+                <a href="/finalizar-compra" class="btn btn--primary btn--block">Finalizar Compra</a>
+                <a href="/produtos" class="btn btn--ghost btn--block">Continuar Comprando</a>
             </div>
         </aside>
     </div>

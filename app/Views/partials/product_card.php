@@ -30,7 +30,11 @@ $inStock = (int)($product['stock'] ?? 0) > 0;
     </div>
     <div class="product-card__body">
         <?php if (!empty($product['brand_name'])): ?>
+        <?php if (!empty($product['brand_slug'])): ?>
+        <a href="/marca/<?= htmlspecialchars($product['brand_slug'], ENT_QUOTES, 'UTF-8') ?>" class="product-card__brand"><?= htmlspecialchars($product['brand_name'], ENT_QUOTES, 'UTF-8') ?></a>
+        <?php else: ?>
         <span class="product-card__brand"><?= htmlspecialchars($product['brand_name'], ENT_QUOTES, 'UTF-8') ?></span>
+        <?php endif; ?>
         <?php endif; ?>
         <a href="/produto/<?= htmlspecialchars($product['slug'], ENT_QUOTES, 'UTF-8') ?>" class="product-card__name-link">
             <h3 class="product-card__name"><?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?></h3>

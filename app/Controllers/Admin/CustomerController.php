@@ -197,6 +197,123 @@ class CustomerController extends BaseController
         $this->redirect('/admin/clientes?' . http_build_query($_GET));
     }
 
+    public function create(array $params = []): void
+    {
+        Auth::requireAdminRole();
+        $this->render('admin/customers/form', [
+            'pageTitle' => 'Novo Cliente | Admin Maia',
+            'customer'  => null,
+            'flash'     => $this->getFlash(),
+        ], 'admin');
+    }
+
+    public function store(array $params = []): void
+    {
+        Auth::requireAdminRole();
+        CSRF::verify();
+
+        $name  = trim((string)($_POST['name']  ?? ''));
+        $email = trim((string)($_POST['email'] ?? ''));
+        $phone = trim((string)($_POST['phone'] ?? ''));
+        $password = (string)($_POST['password'] ?? '');
+
+        if ($name === '' || $email === '' || $password === '') {
+            $this->flash('error', 'Nome, e-mail e senha são obrigatórios.');
+            $this->redirect('/admin/clientes/novo');
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->flash('error', 'E-mail inválido.');
+            $this->redirect('/admin/clientes/novo');
+        }
+
+        if (strlen($password) < 8) {
+            $this->flash('error', 'Senha deve ter ao menos 8 caracteres.');
+            $this->redirect('/admin/clientes/novo');
+        }
+
+        $model = new UserModel();
+        if ($model->findByEmail($email)) {
+            $this->flash('error', 'E-mail já cadastrado.');
+            $this->redirect('/admin/clientes/novo');
+        }
+
+        $id = $model->create([
+            'name'     => $name,
+            'email'    => $email,
+            'phone'    => $phone,
+            'password' => $password,
+        ]);
+
+        $this->flash('success', 'Cliente criado com sucesso.');
+        $this->redirect('/admin/clientes/' . $id);
+    }
+
+    public function edit(array $params): void
+    {
+        Auth::requireAdminRole();
+
+        $id       = (int)($params['id'] ?? 0);
+        $customer = (new UserModel())->findById($id);
+
+        if (!$customer) {
+            http_response_code(404);
+            $this->render('errors/404');
+            return;
+        }
+
+        $this->render('admin/customers/form', [
+            'pageTitle' => 'Editar Cliente | Admin Maia',
+            'customer'  => $customer,
+            'flash'     => $this->getFlash(),
+        ], 'admin');
+    }
+
+    public function update(array $params): void
+    {
+        Auth::requireAdminRole();
+        CSRF::verify();
+
+        $id       = (int)($params['id'] ?? 0);
+        $customer = (new UserModel())->findById($id);
+
+        if (!$customer) {
+            $this->flash('error', 'Cliente não encontrado.');
+            $this->redirect('/admin/clientes');
+        }
+
+        $name  = trim((string)($_POST['name']  ?? ''));
+        $email = trim((string)($_POST['email'] ?? ''));
+        $phone = trim((string)($_POST['phone'] ?? ''));
+        $password = (string)($_POST['password'] ?? '');
+
+        if ($name === '' || $email === '') {
+            $this->flash('error', 'Nome e e-mail são obrigatórios.');
+            $this->redirect('/admin/clientes/' . $id . '/editar');
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->flash('error', 'E-mail inválido.');
+            $this->redirect('/admin/clientes/' . $id . '/editar');
+        }
+
+        $model = new UserModel();
+        $data = ['name' => $name, 'email' => $email, 'phone' => $phone];
+
+        if ($password !== '') {
+            if (strlen($password) < 8) {
+                $this->flash('error', 'Nova senha deve ter ao menos 8 caracteres.');
+                $this->redirect('/admin/clientes/' . $id . '/editar');
+            }
+            $data['password_hash'] = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+        }
+
+        $model->update($id, $data);
+
+        $this->flash('success', 'Cliente atualizado.');
+        $this->redirect('/admin/clientes/' . $id);
+    }
+
     public function anonymize(array $params): void
     {
         Auth::requireAdminRole();

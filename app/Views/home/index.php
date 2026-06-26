@@ -26,7 +26,7 @@ $heroSecondaryUrl = $safeHeroUrl((string)($settings['hero_secondary_url'] ?? '/c
                 <em><?= htmlspecialchars($settings['hero_title_emphasis'] ?? 'performance', ENT_QUOTES, 'UTF-8') ?></em>
                 <?= htmlspecialchars($settings['hero_title_after'] ?? 'real.', ENT_QUOTES, 'UTF-8') ?>
             </h1>
-            <p class="hero__subtitle animate-in"><?= htmlspecialchars($settings['hero_subtitle'] ?? 'Produtos selecionados para treino, rotina e evolucao.', ENT_QUOTES, 'UTF-8') ?></p>
+            <p class="hero__subtitle animate-in"><?= htmlspecialchars($settings['hero_subtitle'] ?? 'Produtos selecionados para treino, rotina e evolução.', ENT_QUOTES, 'UTF-8') ?></p>
             <div class="hero__actions animate-in">
                 <a href="<?= htmlspecialchars($heroPrimaryUrl, ENT_QUOTES, 'UTF-8') ?>" class="btn btn--primary">
                     <?= htmlspecialchars($settings['hero_primary_label'] ?? 'Ver Produtos', ENT_QUOTES, 'UTF-8') ?>
@@ -137,7 +137,7 @@ $heroSecondaryUrl = $safeHeroUrl((string)($settings['hero_secondary_url'] ?? '/c
     <div class="container">
         <div class="section__header">
             <p class="section__label">Clientes</p>
-            <h2 class="section__title">O que dizem sobre nos</h2>
+            <h2 class="section__title">O que dizem sobre nós</h2>
         </div>
         <div class="reviews-grid">
             <?php foreach ($reviews as $review): ?>

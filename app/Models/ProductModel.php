@@ -12,7 +12,7 @@ class ProductModel extends BaseModel
     {
         $product = $this->fetch(
             'SELECT p.*, c.name AS category_name, c.slug AS category_slug,
-                    b.name AS brand_name
+                    b.name AS brand_name, b.slug AS brand_slug
                FROM products p
                LEFT JOIN categories c ON c.id = p.category_id
                LEFT JOIN brands     b ON b.id = p.brand_id
@@ -31,7 +31,7 @@ class ProductModel extends BaseModel
     {
         $product = $this->fetch(
             'SELECT p.*, c.name AS category_name, c.slug AS category_slug,
-                    b.name AS brand_name
+                    b.name AS brand_name, b.slug AS brand_slug
                FROM products p
                LEFT JOIN categories c ON c.id = p.category_id
                LEFT JOIN brands     b ON b.id = p.brand_id
@@ -130,7 +130,7 @@ class ProductModel extends BaseModel
         $params[]         = $offset;
 
         $rows = $this->fetchAll(
-            "SELECT p.*, c.name AS category_name, b.name AS brand_name,
+            "SELECT p.*, c.name AS category_name, b.name AS brand_name, b.slug AS brand_slug,
                     (SELECT filename_webp FROM product_images
                       WHERE product_id = p.id AND is_main = 1 LIMIT 1) AS main_image
                FROM products p

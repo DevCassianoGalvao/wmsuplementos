@@ -39,7 +39,7 @@
                 <td><?= htmlspecialchars($prod['category_name'] ?? '—', ENT_QUOTES, 'UTF-8') ?></td>
                 <td><strong><?= (int)$prod['stock'] ?></strong></td>
                 <td><?= (int)$prod['stock_alert'] ?></td>
-                <td>
+                <td class="stock-adjust-cell">
                     <form action="/admin/estoque/ajuste" method="post" class="inline-adjust-form">
                         <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
                         <input type="hidden" name="product_id" value="<?= (int)$prod['id'] ?>">
@@ -48,9 +48,11 @@
                             <option value="saida">Saída</option>
                             <option value="ajuste">Ajuste</option>
                         </select>
-                        <input type="number" name="quantity" min="1" value="1" style="width:60px">
-                        <input type="text" name="reason" placeholder="Motivo" style="width:100px">
-                        <button type="submit" class="btn btn-sm btn-outline">OK</button>
+                        <div class="input-row">
+                            <input type="number" name="quantity" min="1" value="1">
+                            <input type="text" name="reason" placeholder="Motivo" style="width:100px">
+                            <button type="submit" class="btn btn-sm btn-outline">OK</button>
+                        </div>
                     </form>
                 </td>
             </tr>

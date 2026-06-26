@@ -124,6 +124,25 @@ class UserModel extends BaseModel
         return $this->lastInsertId();
     }
 
+    /** Atualização genérica de colunas permitidas (CRUD admin). */
+    public function update(int $id, array $data): void
+    {
+        $sets   = [];
+        $params = [];
+        $allowed = ['name', 'email', 'phone', 'password_hash', 'tag'];
+        foreach ($allowed as $col) {
+            if (array_key_exists($col, $data)) {
+                $sets[]   = "`{$col}` = ?";
+                $params[] = $data[$col];
+            }
+        }
+        if (empty($sets)) {
+            return;
+        }
+        $params[] = $id;
+        $this->query('UPDATE users SET ' . implode(', ', $sets) . ' WHERE id = ?', $params);
+    }
+
     public function updateProfile(int $id, array $data): bool
     {
         $this->query(

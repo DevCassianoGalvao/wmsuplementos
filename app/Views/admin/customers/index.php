@@ -3,6 +3,7 @@
 <div class="page-header">
     <h1>Clientes</h1>
     <div class="page-actions">
+        <a href="/admin/clientes/novo" class="btn btn--primary">+ Novo Cliente</a>
         <form method="post" action="/admin/clientes/sync-brevo?<?= http_build_query($_GET) ?>">
             <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
             <button type="submit" class="btn btn-outline">Sincronizar Brevo</button>
@@ -68,7 +69,10 @@
         <td><?= (int)($c['total_orders'] ?? 0) ?></td>
         <td>R$ <?= Sanitizer::money((float)($c['total_spent'] ?? 0)) ?></td>
         <td><?= htmlspecialchars(substr($c['created_at'] ?? '', 0, 10), ENT_QUOTES, 'UTF-8') ?></td>
-        <td><a href="/admin/clientes/<?= (int)($c['id'] ?? 0) ?>">Ver</a></td>
+        <td>
+            <a href="/admin/clientes/<?= (int)($c['id'] ?? 0) ?>">Ver</a>
+            <a href="/admin/clientes/<?= (int)($c['id'] ?? 0) ?>/editar" class="btn btn--ghost btn--sm">Editar</a>
+        </td>
     </tr>
     <?php endforeach; ?>
     <?php endif; ?>

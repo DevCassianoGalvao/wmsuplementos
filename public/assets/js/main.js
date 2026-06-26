@@ -318,3 +318,20 @@ if (cookieConsent) {
         });
     });
 }
+
+/* ── Product page qty controls ── */
+(function() {
+    var form = document.querySelector('.add-to-cart-form');
+    if (!form) return;
+    var input = form.querySelector('.qty-input-prod');
+    if (!input) return;
+    form.querySelector('.qty-minus-prod').addEventListener('click', function() {
+        var v = parseInt(input.value) || 1;
+        if (v > 1) input.value = v - 1;
+    });
+    form.querySelector('.qty-plus-prod').addEventListener('click', function() {
+        var v = parseInt(input.value) || 1;
+        var max = parseInt(input.getAttribute('max')) || 99;
+        if (v < max) input.value = v + 1;
+    });
+})();
