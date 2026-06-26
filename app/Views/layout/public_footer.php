@@ -146,6 +146,6 @@ $breadcrumbSchema = [
 </div>
 
 <script src="/assets/js/placeholder-images.js?v=20260625-6" defer></script>
-<script src="/assets/js/main.js?v=20260626-1" defer></script>
+<script src="/assets/js/main.js?v=20260626-2" defer></script>
 </body>
 </html>
