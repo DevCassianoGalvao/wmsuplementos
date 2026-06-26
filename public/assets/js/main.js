@@ -358,3 +358,21 @@ if (cookieConsent) {
         if (v < max) input.value = v + 1;
     });
 })();
+
+/* Product detail tabs */
+document.querySelectorAll('[data-tabs]').forEach(function(tabs) {
+    var buttons = tabs.querySelectorAll('[data-tab-target]');
+    var panels = tabs.querySelectorAll('[data-tab-panel]');
+
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var target = button.dataset.tabTarget;
+            buttons.forEach(function(btn) {
+                btn.classList.toggle('is-active', btn === button);
+            });
+            panels.forEach(function(panel) {
+                panel.classList.toggle('is-active', panel.dataset.tabPanel === target);
+            });
+        });
+    });
+});

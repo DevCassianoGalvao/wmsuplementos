@@ -64,6 +64,7 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
             <?php else: ?>
             <div class="product-gallery__placeholder" aria-hidden="true"></div>
             <?php endif; ?>
+
         </div>
 
         <div class="product-info">
@@ -151,6 +152,47 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
                     </div>
                     <?php endforeach; ?>
                 </dl>
+            </div>
+            <?php endif; ?>
+
+            <?php if (!empty($product['description']) || !empty($product['benefits']) || !empty($nutrition)): ?>
+            <div class="product-tabs" data-tabs>
+                <div class="product-tabs__nav" role="tablist" aria-label="Detalhes do produto">
+                    <?php if (!empty($product['description'])): ?>
+                    <button type="button" class="product-tabs__btn is-active" data-tab-target="description" role="tab">Descricao</button>
+                    <?php endif; ?>
+                    <?php if (!empty($product['benefits'])): ?>
+                    <button type="button" class="product-tabs__btn <?= empty($product['description']) ? 'is-active' : '' ?>" data-tab-target="benefits" role="tab">Beneficios</button>
+                    <?php endif; ?>
+                    <?php if (!empty($nutrition)): ?>
+                    <button type="button" class="product-tabs__btn <?= empty($product['description']) && empty($product['benefits']) ? 'is-active' : '' ?>" data-tab-target="nutrition" role="tab">Tabela Nutricional</button>
+                    <?php endif; ?>
+                </div>
+
+                <?php if (!empty($product['description'])): ?>
+                <div class="product-tabs__panel is-active" data-tab-panel="description" role="tabpanel">
+                    <div class="rich-text"><?= nl2br(htmlspecialchars($product['description'], ENT_QUOTES, 'UTF-8')) ?></div>
+                </div>
+                <?php endif; ?>
+
+                <?php if (!empty($product['benefits'])): ?>
+                <div class="product-tabs__panel <?= empty($product['description']) ? 'is-active' : '' ?>" data-tab-panel="benefits" role="tabpanel">
+                    <div class="rich-text"><?= nl2br(htmlspecialchars($product['benefits'], ENT_QUOTES, 'UTF-8')) ?></div>
+                </div>
+                <?php endif; ?>
+
+                <?php if (!empty($nutrition)): ?>
+                <div class="product-tabs__panel <?= empty($product['description']) && empty($product['benefits']) ? 'is-active' : '' ?>" data-tab-panel="nutrition" role="tabpanel">
+                    <dl class="nutrition-list">
+                        <?php foreach ($nutrition as $label => $value): ?>
+                        <div>
+                            <dt><?= htmlspecialchars((string)$label, ENT_QUOTES, 'UTF-8') ?></dt>
+                            <dd><?= htmlspecialchars(is_scalar($value) ? (string)$value : json_encode($value, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') ?></dd>
+                        </div>
+                        <?php endforeach; ?>
+                    </dl>
+                </div>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
         </div>
