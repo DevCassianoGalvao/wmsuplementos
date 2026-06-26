@@ -21,6 +21,16 @@ class CartController extends BaseController
 
     public function index(array $params = []): void
     {
+        $recoverId = trim((string)($_GET['recover'] ?? ''));
+        if ($recoverId !== '') {
+            if ($this->cart->restoreFromDb($recoverId)) {
+                $this->flash('success', 'Carrinho recuperado com sucesso.');
+            } else {
+                $this->flash('error', 'Nao foi possivel recuperar este carrinho.');
+            }
+            $this->redirect('/carrinho');
+        }
+
         // Funil
         $this->trackFunnel('add_to_cart');
 
