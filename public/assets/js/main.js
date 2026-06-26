@@ -1,6 +1,12 @@
 /* Maia Suplementos — main.js */
 'use strict';
 
+function appUrl(path) {
+    var baseMeta = document.querySelector('meta[name="app-base"]');
+    var base = baseMeta && baseMeta.content ? baseMeta.content.replace(/\/$/, '') : '';
+    return base + '/' + String(path || '').replace(/^\//, '');
+}
+
 /* ── Category carousel (home) ───────────────────────────────── */
 (function() {
     var track = document.getElementById('cat-track');
@@ -144,7 +150,7 @@ document.querySelectorAll('.qty-input').forEach(function(input) {
         body.set('csrf_token', csrfToken());
         body.set('cart_key', cartKey);
         body.set('quantity', qty);
-        var url = qty <= 0 ? '/carrinho/remover' : '/carrinho/atualizar';
+        var url = appUrl(qty <= 0 ? '/carrinho/remover' : '/carrinho/atualizar');
 
         fetch(url, {
             method: 'POST',

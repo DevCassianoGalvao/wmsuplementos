@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle ?? 'Maia Suplementos', ENT_QUOTES, 'UTF-8') ?></title>
+    <meta name="app-base" content="<?= htmlspecialchars(defined('APP_BASE') ? APP_BASE : '', ENT_QUOTES, 'UTF-8') ?>">
     <?php if (!empty($metaDesc)): ?>
     <meta name="description" content="<?= htmlspecialchars($metaDesc, ENT_QUOTES, 'UTF-8') ?>">
     <?php endif; ?>
