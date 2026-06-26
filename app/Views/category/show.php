@@ -38,8 +38,8 @@
                 </div>
             </fieldset>
 
-            <button type="submit" class="btn btn-primary btn-block">Aplicar Filtros</button>
-            <a href="/categoria/<?= htmlspecialchars($category['slug'], ENT_QUOTES, 'UTF-8') ?>" class="btn btn-link btn-block">Limpar</a>
+            <button type="submit" class="btn btn--primary btn-primary btn-block" style="background:#E63329;color:#fff;">Aplicar Filtros</button>
+            <a href="/categoria/<?= htmlspecialchars($category['slug'], ENT_QUOTES, 'UTF-8') ?>" class="btn btn--ghost btn-block">Limpar</a>
         </form>
     </aside>
 

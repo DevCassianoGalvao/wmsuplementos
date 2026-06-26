@@ -36,7 +36,7 @@
                 <tr class="cart-item" data-cart-key="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
                     <td class="item-product">
                         <?php if (!empty($item['image'])): ?>
-                        <img src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>" alt="" width="60" height="60">
+                        <img src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>" alt="" width="80" height="80">
                         <?php endif; ?>
                         <a href="<?= $isCombo ? '/combo/' : '/produto/' ?><?= htmlspecialchars($item['slug'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                             <?= htmlspecialchars($item['product_name'], ENT_QUOTES, 'UTF-8') ?>
@@ -45,10 +45,11 @@
                     <td class="item-price">R$ <?= Sanitizer::money((float)$item['price']) ?></td>
                     <td class="item-qty">
                         <div class="qty-control">
-                            <button type="button" class="qty-btn qty-minus" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">-</button>
+                            <button type="button" class="qty-btn qty-minus" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>" aria-label="Diminuir">-</button>
                             <input type="number" class="qty-input" value="<?= (int)$item['quantity'] ?>"
-                                   min="1" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
-                            <button type="button" class="qty-btn qty-plus" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">+</button>
+                                   min="1" data-price="<?= htmlspecialchars(Sanitizer::money((float)$item['price']), ENT_QUOTES, 'UTF-8') ?>"
+                                   data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
+                            <button type="button" class="qty-btn qty-plus" data-id="<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>" aria-label="Aumentar">+</button>
                         </div>
                     </td>
                     <td class="item-subtotal" id="subtotal-<?= htmlspecialchars($cartKey, ENT_QUOTES, 'UTF-8') ?>">
