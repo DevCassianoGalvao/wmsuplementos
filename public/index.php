@@ -34,6 +34,7 @@ define('ROOT_PATH', dirname(__DIR__));
 $debug = filter_var(getenv('APP_DEBUG') ?: '0', FILTER_VALIDATE_BOOLEAN);
 ini_set('display_errors', $debug ? '1' : '0');
 ini_set('display_startup_errors', $debug ? '1' : '0');
+ini_set('serialize_precision', '-1');
 error_reporting(E_ALL);
 
 ini_set('log_errors', '1');
