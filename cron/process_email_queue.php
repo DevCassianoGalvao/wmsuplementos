@@ -11,6 +11,8 @@ declare(strict_types=1);
 define('ROOT_PATH', dirname(__DIR__));
 define('CRON_CONTEXT', true);
 
+require ROOT_PATH . '/config/env.php';
+load_env(ROOT_PATH);
 require ROOT_PATH . '/app/autoload.php';
 require ROOT_PATH . '/config/database.php';
 
