@@ -264,8 +264,8 @@ class BrevoService
             return false;
         }
 
-        $from    = $smtp['from_email'] ?? '';
-        $fromName= $smtp['from_name']  ?? 'Maia Suplementos';
+        $from    = $smtp['from_email'] ?? ($this->config['brevo']['sender_email'] ?? '');
+        $fromName= $smtp['from_name']  ?? ($this->config['brevo']['sender_name'] ?? 'Maia Suplementos');
         $host    = $smtp['host'];
         $port    = (int)($smtp['port'] ?? 587);
         $user    = $smtp['username'] ?? '';
