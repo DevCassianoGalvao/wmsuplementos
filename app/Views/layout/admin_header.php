@@ -21,7 +21,16 @@
             </a>
         </div>
 
-        <?php $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/admin', PHP_URL_PATH) ?: '/admin'; ?>
+        <?php
+        $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/admin', PHP_URL_PATH) ?: '/admin';
+        $basePath = defined('APP_BASE') ? APP_BASE : '';
+        if ($basePath !== '' && str_starts_with($currentPath, $basePath . '/')) {
+            $currentPath = substr($currentPath, strlen($basePath));
+        }
+        if ($currentPath === '') {
+            $currentPath = '/admin';
+        }
+        ?>
         <?php $isAdminRole = \Maia\Helpers\Auth::isAdmin(); ?>
         <nav class="sidebar-nav" aria-label="Menu administrativo">
             <?php if ($isAdminRole): ?>
