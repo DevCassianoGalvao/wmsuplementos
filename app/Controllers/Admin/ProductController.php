@@ -101,6 +101,8 @@ class ProductController extends BaseController
             return;
         }
 
+        $this->repairProductImagePermissions($product);
+
         $this->render('admin/products/form', [
             'pageTitle'  => 'Editar: ' . $product['name'] . ' | Admin Maia',
             'product'    => $product,
@@ -306,6 +308,13 @@ class ProductController extends BaseController
                 $sort,
             ]);
             $uploadedCount++;
+        }
+    }
+
+    private function repairProductImagePermissions(array $product): void
+    {
+        foreach (($product['images'] ?? []) as $image) {
+            ImageService::repairPublicPermissions((string)($image['filename_webp'] ?? $image['filename'] ?? ''));
         }
     }
 

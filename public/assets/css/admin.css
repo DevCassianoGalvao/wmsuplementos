@@ -1054,6 +1054,109 @@ button.btn-link:hover {
 .stock-adjust-cell { padding: 0.5rem 0; }
 .stock-adjust-cell select { margin-bottom: 0.375rem; }
 .stock-adjust-cell .input-row { display: flex; gap: 0.5rem; align-items: center; }
+
+/* ── Admin forms: prevent glued cards, overflow, native file weirdness ── */
+.form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.form-card {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.form-grid .form-card + .form-card {
+    margin-top: 0;
+}
+
+.form-card h2 {
+    margin: 0 0 1rem;
+}
+
+.form-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    max-width: 100%;
+}
+
+.form-group input[type="file"] {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.65rem;
+    background: #181818 !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+}
+
+.form-group input[type="file"]::file-selector-button {
+    margin-right: 0.75rem;
+    border: 0;
+    border-radius: 7px;
+    background: #E63329;
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    padding: 0.55rem 0.85rem;
+    cursor: pointer;
+}
+
+.current-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0 0 1rem;
+}
+
+.thumb-item {
+    width: 86px;
+    height: 86px;
+    padding: 3px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 10px;
+    background: #181818;
+}
+
+.thumb-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+@media (min-width: 1200px) {
+    .form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 780px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
 .stock-adjust-cell .input-row input[type="number"] { width: 72px; }
 
 /* ── Scripts cards spacing ─────────────────────────────────── */

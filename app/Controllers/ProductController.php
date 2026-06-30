@@ -10,6 +10,7 @@ use Maia\Helpers\Auth;
 use Maia\Helpers\CSRF;
 use Maia\Helpers\Sanitizer;
 use Maia\Helpers\Validator;
+use Maia\Services\ImageService;
 
 class ProductController extends BaseController
 {
@@ -50,6 +51,10 @@ class ProductController extends BaseController
         }
 
         // Avaliações aprovadas
+        foreach (($product['images'] ?? []) as $image) {
+            ImageService::repairPublicPermissions((string)($image['filename_webp'] ?? $image['filename'] ?? ''));
+        }
+
         $stmt = db()->prepare(
             'SELECT r.*, u.name AS user_name
                FROM reviews r

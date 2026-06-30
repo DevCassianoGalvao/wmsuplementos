@@ -76,8 +76,9 @@ class ImageService
         foreach (array_merge(['original'], array_keys(self::SIZES)) as $size) {
             $dir = $uploadsBase . '/' . $size;
             if (!is_dir($dir)) {
-                mkdir($dir, 0750, true);
+                mkdir($dir, 0755, true);
             }
+            @chmod($dir, 0755);
         }
 
         // Salva original (mantido para eventual reprocessamento)
@@ -85,6 +86,7 @@ class ImageService
         if (!move_uploaded_file($tmpPath, $originalPath)) {
             throw new \RuntimeException('Falha ao mover arquivo enviado.');
         }
+        @chmod($originalPath, 0644);
 
         // Cria GdImage a partir do original
         $src = self::createFromFile($originalPath, $mime);
@@ -188,6 +190,47 @@ class ImageService
     {
         imagewebp($img, $path, $quality);
         // Otimiza permissões
-        @chmod($path, 0640);
+        @chmod($path, 0644);
+    }
+
+    public static function repairPublicPermissions(string $dbPath): void
+    {
+        if ($dbPath === '' || !str_starts_with($dbPath, '/uploads/')) {
+            return;
+        }
+
+        $parts = explode('/', ltrim($dbPath, '/'));
+        if (count($parts) < 4) {
+            return;
+        }
+
+        $subdir = $parts[1];
+        $filename = $parts[3];
+        $base = defined('ROOT_PATH')
+            ? ROOT_PATH . '/public/uploads/' . $subdir
+            : __DIR__ . '/../../public/uploads/' . $subdir;
+
+        foreach (array_merge(['original'], array_keys(self::SIZES)) as $dirName) {
+            $dir = $base . '/' . $dirName;
+            if (is_dir($dir)) {
+                @chmod($dir, 0755);
+            }
+        }
+
+        foreach (array_keys(self::SIZES) as $size) {
+            $file = $base . '/' . $size . '/' . $filename;
+            if (is_file($file)) {
+                @chmod($file, 0644);
+            }
+        }
+
+        $hash = pathinfo($filename, PATHINFO_FILENAME);
+        foreach (self::ALLOWED_MIME as $ext) {
+            $original = $base . '/original/' . $hash . '.' . $ext;
+            if (is_file($original)) {
+                @chmod($original, 0644);
+                break;
+            }
+        }
     }
 }
