@@ -6,6 +6,7 @@ namespace Maia\Controllers;
 
 use Maia\Models\ProductModel;
 use Maia\Models\CategoryModel;
+use Maia\Models\ComboModel;
 use Maia\Helpers\Cache;
 
 class HomeController extends BaseController
@@ -23,7 +24,7 @@ class HomeController extends BaseController
             'categories'  => Cache::remember('home_categories', 300, fn() => $categories->getActiveWithProducts()),
             'featured'    => Cache::remember('home_featured', 300, fn() => $products->getFeatured(8)),
             'bestsellers' => Cache::remember('home_bestsellers', 300, fn() => $products->getBestsellers(8)),
-            'combos'      => Cache::remember('home_combos', 300, fn() => $this->getActiveCombos()),
+            'combos'      => Cache::remember('home_combos_v2', 300, fn() => $this->getActiveCombos()),
             'reviews'     => Cache::remember('home_reviews', 600, fn() => $this->getApprovedReviews(6)),
             'faq'         => Cache::remember('home_faq', 600, fn() => $this->getFaqPage()),
             'settings'    => $settings,
@@ -33,12 +34,7 @@ class HomeController extends BaseController
 
     private function getActiveCombos(): array
     {
-        return db()->query(
-            'SELECT c.*, c.price AS total_price
-               FROM combos c
-              WHERE c.active = 1
-              ORDER BY c.id DESC'
-        )->fetchAll();
+        return (new ComboModel())->getActive();
     }
 
     private function getApprovedReviews(int $limit): array
