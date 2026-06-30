@@ -86,9 +86,17 @@ class ImageService
         }
 
         // Salva original (mantido para eventual reprocessamento)
-        $originalPath = $uploadsBase . '/original/' . $hash . '.' . $ext;
+        $originalDir  = $uploadsBase . '/original';
+        if (!is_dir($originalDir) || !is_writable($originalDir)) {
+            throw new \RuntimeException(
+                "Diretório original sem permissão de escrita: $originalDir. Execute via SSH: chmod 755 $originalDir"
+            );
+        }
+        $originalPath = $originalDir . '/' . $hash . '.' . $ext;
         if (!move_uploaded_file($tmpPath, $originalPath)) {
-            throw new \RuntimeException('Falha ao mover arquivo enviado.');
+            throw new \RuntimeException(
+                "Falha ao mover arquivo enviado para: $originalPath (verifique permissões)"
+            );
         }
         @chmod($originalPath, 0644);
 
@@ -192,8 +200,19 @@ class ImageService
 
     private static function saveWebP(\GdImage $img, string $path, int $quality = self::WEBP_QUALITY): void
     {
-        imagewebp($img, $path, $quality);
-        // Otimiza permissões
+        $dir = dirname($path);
+        if (!is_dir($dir) || !is_writable($dir)) {
+            throw new \RuntimeException(
+                "Diretório sem permissão de escrita: $dir. Execute via SSH: chmod 755 " . $dir
+            );
+        }
+
+        if (!imagewebp($img, $path, $quality)) {
+            throw new \RuntimeException(
+                "imagewebp() falhou ao salvar em: $path (verifique permissões e espaço em disco)"
+            );
+        }
+
         @chmod($path, 0644);
     }
 

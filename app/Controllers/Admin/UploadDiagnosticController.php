@@ -39,6 +39,7 @@ class UploadDiagnosticController extends BaseController
                 'path'     => $path,
                 'exists'   => is_dir($path),
                 'writable' => is_writable($path),
+                'write_test' => self::testWrite($path),
                 'files'    => is_dir($path) ? count(glob($path . '/*.{jpg,jpeg,png,webp,gif}', GLOB_BRACE) ?: []) : 0,
             ];
         }
@@ -77,5 +78,14 @@ class UploadDiagnosticController extends BaseController
             'dirs'      => $dirs,
             'recent'    => $recent,
         ], 'admin');
+    }
+
+    private static function testWrite(string $dir): string
+    {
+        if (!is_dir($dir)) return 'dir_missing';
+        $tmp = $dir . '/.write_test_' . mt_rand() . '.tmp';
+        $ok  = @file_put_contents($tmp, 'test') !== false;
+        if ($ok) @unlink($tmp);
+        return $ok ? 'ok' : 'fail';
     }
 }

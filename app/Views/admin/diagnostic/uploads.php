@@ -43,7 +43,8 @@
                 <tr>
                     <th>Tamanho</th>
                     <th>Existe</th>
-                    <th>Gravável</th>
+                    <th>is_writable</th>
+                    <th>Teste real</th>
                     <th>Arquivos</th>
                     <th>Caminho</th>
                 </tr>
@@ -54,6 +55,12 @@
                 <td style="font-weight:600;"><?= htmlspecialchars($size, ENT_QUOTES, 'UTF-8') ?></td>
                 <td><?= $d['exists'] ? '<span class="badge badge--success">Sim</span>' : '<span class="badge badge--danger">Não</span>' ?></td>
                 <td><?= $d['writable'] ? '<span class="badge badge--success">Sim</span>' : ($d['exists'] ? '<span class="badge badge--danger">Não</span>' : '<span class="badge badge--muted">—</span>') ?></td>
+                <td><?php
+                    $wt = $d['write_test'] ?? 'dir_missing';
+                    if ($wt === 'ok') echo '<span class="badge badge--success">OK</span>';
+                    elseif ($wt === 'fail') echo '<span class="badge badge--danger">FALHOU</span>';
+                    else echo '<span class="badge badge--muted">—</span>';
+                ?></td>
                 <td><?= (int)$d['files'] ?></td>
                 <td style="font-size:0.75rem;color:var(--color-text-secondary);word-break:break-all;"><?= htmlspecialchars($d['path'], ENT_QUOTES, 'UTF-8') ?></td>
             </tr>
@@ -61,7 +68,7 @@
             </tbody>
         </table>
     </div>
-    <?php $anyNotWritable = array_filter($dirs, fn($d) => $d['exists'] && !$d['writable']); ?>
+    <?php $anyNotWritable = array_filter($dirs, fn($d) => $d['exists'] && ($d['write_test'] ?? '') !== 'ok'); ?>
     <?php if (!empty($anyNotWritable)): ?>
     <p style="color:var(--color-red);margin-top:1rem;font-weight:600;">
         ⚠ Diretórios existem mas não têm permissão de escrita. Execute via SSH: <code>chmod -R 755 public/uploads/</code>
