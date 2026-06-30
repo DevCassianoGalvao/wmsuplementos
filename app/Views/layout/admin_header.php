@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/design-system.css?v=20260625-6">
-    <link rel="stylesheet" href="/assets/css/admin.css?v=20260630-6">
+    <link rel="stylesheet" href="/assets/css/admin.css?v=20260630-7">
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="admin-body">
@@ -61,6 +61,11 @@
             </a>
 
             <?php if ($isAdminRole): ?>
+            <a href="/admin/clientes" class="nav-item <?= str_starts_with($currentPath, '/admin/clientes') ? 'active' : '' ?>">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Clientes</span>
+            </a>
+
             <div class="nav-group <?= $productsGroupActive ? 'is-active is-open' : '' ?>">
                 <button type="button" class="nav-group__label" aria-expanded="<?= $productsGroupActive ? 'true' : 'false' ?>">
                     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 16-9 5-9-5V8l9-5 9 5z"/><path d="M3.3 7.7 12 13l8.7-5.3"/><path d="M12 13v8"/></svg>
@@ -78,11 +83,6 @@
             <?php endif; ?>
 
             <?php if ($isAdminRole): ?>
-            <a href="/admin/clientes" class="nav-item <?= str_starts_with($currentPath, '/admin/clientes') ? 'active' : '' ?>">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                <span>Clientes</span>
-            </a>
-
             <div class="nav-group <?= $marketingGroupActive ? 'is-active is-open' : '' ?>">
                 <button type="button" class="nav-group__label" aria-expanded="<?= $marketingGroupActive ? 'true' : 'false' ?>">
                     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>

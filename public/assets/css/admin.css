@@ -1393,6 +1393,9 @@ button.btn-link:hover {
     letter-spacing: 0;
     text-transform: none;
     transition: all 0.15s ease;
+    gap: 0.75rem;
+    justify-content: flex-start;
+    text-align: left;
 }
 
 .nav-group__label:hover {
@@ -1411,6 +1414,14 @@ button.btn-link:hover {
     height: 16px;
     color: currentColor;
     opacity: 0.85;
+}
+
+.nav-group__label span:first-of-type {
+    flex: 0 1 auto;
+}
+
+.nav-group__chevron {
+    margin-left: auto;
 }
 
 .nav-group__items {
