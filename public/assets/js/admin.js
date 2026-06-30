@@ -15,6 +15,16 @@ if (toggleBtn && sidebar) {
     });
 }
 
+document.querySelectorAll('.nav-group__label').forEach(function(button) {
+    button.addEventListener('click', function() {
+        var group = button.closest('.nav-group');
+        if (!group) return;
+
+        group.classList.toggle('is-open');
+        button.setAttribute('aria-expanded', group.classList.contains('is-open') ? 'true' : 'false');
+    });
+});
+
 var addComboItem = document.querySelector('[data-add-combo-item]');
 var comboEditor = document.getElementById('combo-items-editor');
 var comboTemplate = document.getElementById('combo-item-template');

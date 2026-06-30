@@ -1295,14 +1295,18 @@ button.btn-link:hover {
     display: flex;
     align-items: center;
     gap: 0.65rem;
+    width: 100%;
     min-height: 38px;
     padding: 0.55rem 0.65rem;
+    border: 0;
+    background: transparent;
     color: #FFFFFF;
     font-family: var(--font-body);
     font-size: 0.78rem;
     font-weight: 800;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
 .nav-group__label svg {
@@ -1317,9 +1321,28 @@ button.btn-link:hover {
 }
 
 .nav-group__items {
-    display: grid;
+    display: none;
     gap: 0.1rem;
     padding: 0 0.2rem 0.2rem 1.65rem;
+}
+
+.nav-group.is-open .nav-group__items {
+    display: grid;
+}
+
+.nav-group__chevron {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    opacity: 0.55;
+    transform: rotate(45deg);
+    transition: transform 0.15s ease;
+}
+
+.nav-group.is-open .nav-group__chevron {
+    transform: rotate(225deg);
 }
 
 .nav-subitem {

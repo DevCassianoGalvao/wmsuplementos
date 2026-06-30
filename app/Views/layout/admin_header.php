@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/design-system.css?v=20260625-6">
-    <link rel="stylesheet" href="/assets/css/admin.css?v=20260630-4">
+    <link rel="stylesheet" href="/assets/css/admin.css?v=20260630-5">
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="admin-body">
@@ -60,11 +60,12 @@
             </a>
 
             <?php if ($isAdminRole): ?>
-            <div class="nav-group <?= $productsGroupActive ? 'is-active' : '' ?>">
-                <div class="nav-group__label">
+            <div class="nav-group <?= $productsGroupActive ? 'is-active is-open' : '' ?>">
+                <button type="button" class="nav-group__label" aria-expanded="<?= $productsGroupActive ? 'true' : 'false' ?>">
                     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 16-9 5-9-5V8l9-5 9 5z"/><path d="M3.3 7.7 12 13l8.7-5.3"/><path d="M12 13v8"/></svg>
                     <span>Produtos</span>
-                </div>
+                    <span class="nav-group__chevron" aria-hidden="true"></span>
+                </button>
                 <div class="nav-group__items">
                     <a href="/admin/produtos" class="nav-subitem <?= str_starts_with($currentPath, '/admin/produtos') ? 'active' : '' ?>">Todos os produtos</a>
                     <a href="/admin/categorias" class="nav-subitem <?= str_starts_with($currentPath, '/admin/categorias') ? 'active' : '' ?>">Categorias</a>
@@ -85,25 +86,27 @@
                 <span>Clientes</span>
             </a>
 
-            <div class="nav-group <?= $marketingGroupActive ? 'is-active' : '' ?>">
-                <div class="nav-group__label">
+            <div class="nav-group <?= $marketingGroupActive ? 'is-active is-open' : '' ?>">
+                <button type="button" class="nav-group__label" aria-expanded="<?= $marketingGroupActive ? 'true' : 'false' ?>">
                     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
                     <span>Marketing</span>
-                </div>
+                    <span class="nav-group__chevron" aria-hidden="true"></span>
+                </button>
                 <div class="nav-group__items">
                     <a href="/admin/cupons" class="nav-subitem <?= str_starts_with($currentPath, '/admin/cupons') ? 'active' : '' ?>">Cupons</a>
                     <a href="/admin/avaliacoes" class="nav-subitem <?= str_starts_with($currentPath, '/admin/avaliacoes') ? 'active' : '' ?>">Avaliacoes</a>
                 </div>
             </div>
 
-            <div class="nav-group <?= $settingsGroupActive ? 'is-active' : '' ?>">
-                <div class="nav-group__label">
+            <div class="nav-group <?= $settingsGroupActive ? 'is-active is-open' : '' ?>">
+                <button type="button" class="nav-group__label" aria-expanded="<?= $settingsGroupActive ? 'true' : 'false' ?>">
                     <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                     <span>Configuracoes</span>
                     <?php if ($unreadCount > 0): ?>
                     <span class="nav-badge"><?= $unreadCount ?></span>
                     <?php endif; ?>
-                </div>
+                    <span class="nav-group__chevron" aria-hidden="true"></span>
+                </button>
                 <div class="nav-group__items">
                     <a href="/admin/configuracoes" class="nav-subitem <?= str_starts_with($currentPath, '/admin/configuracoes') ? 'active' : '' ?>">Geral</a>
                     <a href="/admin/scripts" class="nav-subitem <?= str_starts_with($currentPath, '/admin/scripts') ? 'active' : '' ?>">Scripts</a>
