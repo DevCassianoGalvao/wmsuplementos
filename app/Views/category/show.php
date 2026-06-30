@@ -20,7 +20,8 @@
                 <label class="filter-label">
                     <input type="checkbox" name="marca[]"
                            value="<?= (int)$brand['id'] ?>"
-                           <?= in_array((string)$brand['id'], array_map('strval', (array)($_GET['marca'] ?? [])), true) ? 'checked' : '' ?>>
+                           <?= in_array((string)$brand['id'], array_map('strval', (array)($_GET['marca'] ?? [])), true) ? 'checked' : '' ?>
+                           onchange="document.getElementById('filter-form').submit()">
                     <?= htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8') ?>
                 </label>
                 <?php endforeach; ?>
@@ -39,7 +40,7 @@
             </fieldset>
 
             <button type="submit" class="btn btn--primary btn-primary btn-block" style="background:#E63329;color:#fff;">Aplicar Filtros</button>
-            <a href="/categoria/<?= htmlspecialchars($category['slug'], ENT_QUOTES, 'UTF-8') ?>" class="btn btn--ghost btn-block">Limpar</a>
+            <a href="/categoria/<?= htmlspecialchars($category['slug'], ENT_QUOTES, 'UTF-8') ?>" class="btn btn--ghost btn-block" style="margin-top:0.5rem;">Limpar</a>
         </form>
     </aside>
 
@@ -47,7 +48,7 @@
         <header class="category-header">
             <h1><?= htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8') ?></h1>
             <div class="category-controls">
-                <span><?= (int)$total ?> produto<?= $total !== 1 ? 's' : '' ?></span>
+                <span style="white-space:nowrap;flex-shrink:0;"><?= (int)$total ?> produto<?= $total !== 1 ? 's' : '' ?></span>
                 <select name="ordem" form="filter-form" onchange="document.getElementById('filter-form').submit()">
                     <option value="relevancia" <?= ($_GET['ordem'] ?? '') === 'relevancia' ? 'selected' : '' ?>>Relevância</option>
                     <option value="preco_asc" <?= ($_GET['ordem'] ?? '') === 'preco_asc' ? 'selected' : '' ?>>Menor Preço</option>
