@@ -1435,3 +1435,155 @@ button.btn-link:hover {
     border-radius: 7px;
     font-size: 0.84rem;
 }
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVIDADE — Bloco Final Consolidado
+   Breakpoints: 1100 | 900 | 640 | 480
+   (sobrescreve regras anteriores via cascade)
+   ══════════════════════════════════════════════════════ */
+
+/* Correção: JS usa sidebar.classList.toggle('open'),
+   não '.admin-layout.sidebar-open'. Selector correto: */
+.admin-sidebar.open {
+    transform: translateX(0) !important;
+}
+
+/* ── Tablet landscape (≤1100px) ──────────────────────── */
+@media (max-width: 1100px) {
+    .kpi-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .filter-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+    .funnel-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* ── Tablet portrait / iPad mini (≤900px) ────────────── */
+@media (max-width: 900px) {
+    /* Layout: sidebar vai para modo overlay */
+    .admin-layout {
+        grid-template-columns: 1fr;
+    }
+    .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 260px;
+        height: 100dvh;
+        z-index: 300;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 4px 0 32px rgba(0, 0, 0, 0.6);
+    }
+    /* Overlay escuro atrás da sidebar */
+    .admin-sidebar.open ~ .admin-main::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 250;
+        pointer-events: auto;
+    }
+    /* Mostra botão de toggle */
+    .sidebar-toggle {
+        display: inline-flex;
+    }
+    /* KPI: 2 colunas */
+    .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* Dashboard e funnel: 1 coluna */
+    .dashboard-row {
+        grid-template-columns: 1fr;
+    }
+    .funnel-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* Forms: 1 coluna */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    /* Page header: stack */
+    .page-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+    /* Tabelas: scroll horizontal */
+    .admin-table,
+    .data-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    /* Padding content */
+    .admin-content {
+        padding: 1.25rem;
+    }
+    /* Filter bar: 1 coluna */
+    .filter-bar {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Phone (≤640px) ──────────────────────────────────── */
+@media (max-width: 640px) {
+    .admin-content {
+        padding: 1rem;
+    }
+    .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* Ações: botões full-width empilhados */
+    .page-actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+    .page-actions .btn,
+    .page-actions a.btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+    /* Filtros */
+    .filter-bar {
+        grid-template-columns: 1fr;
+    }
+    .funnel-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* Form actions */
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    /* Topbar */
+    .admin-topbar {
+        padding: 0 1rem;
+    }
+    /* Sidebar mais estreita em telefones bem pequenos */
+    .admin-sidebar {
+        width: 240px;
+    }
+}
+
+/* ── Small phone (≤480px) ────────────────────────────── */
+@media (max-width: 480px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+    .funnel-grid {
+        grid-template-columns: 1fr;
+    }
+    .kpi-card {
+        min-height: unset;
+    }
+}

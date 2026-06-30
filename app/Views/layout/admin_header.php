@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/design-system.css?v=20260625-6">
-    <link rel="stylesheet" href="/assets/css/admin.css?v=20260630-8">
+    <link rel="stylesheet" href="/assets/css/admin.css?v=20260630-9">
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="admin-body">
@@ -110,7 +110,7 @@
                     <a href="/admin/utm" class="nav-subitem <?= str_starts_with($currentPath, '/admin/utm') ? 'active' : '' ?>">UTM Builder</a>
                     <a href="/admin/notificacoes" class="nav-subitem <?= str_starts_with($currentPath, '/admin/notificacoes') ? 'active' : '' ?>">Notificações</a>
                     <a href="/admin/usuarios" class="nav-subitem <?= str_starts_with($currentPath, '/admin/usuarios') ? 'active' : '' ?>">Usuários</a>
-                    <a href="/admin/diagnostico-uploads" class="nav-subitem <?= str_starts_with($currentPath, '/admin/diagnostico-uploads') ? 'active' : '' ?>">Diagnóstico Imagens</a>
+                    <?php /* <a href="/admin/diagnostico-uploads" class="nav-subitem <?= str_starts_with($currentPath, '/admin/diagnostico-uploads') ? 'active' : '' ?>">Diagnóstico Imagens</a> */ ?>
                 </div>
             </div>
             <?php endif; ?>
