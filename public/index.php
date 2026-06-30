@@ -5,6 +5,40 @@ declare(strict_types=1);
 // ─── Raiz do projeto (um nível acima de public/) ─────────────────────────────
 define('ROOT_PATH', dirname(__DIR__));
 
+// ─── Serve uploads estáticos via PHP (bypass da chain de rewrite do LiteSpeed) ─
+// O LiteSpeed não serve arquivos de public/uploads/ quando passa pelo rewrite
+// duplo (root .htaccess → public .htaccess). Este bloco intercepta antes do
+// roteador e envia o arquivo com headers corretos.
+(static function (): void {
+    $uri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '/';
+    // Tira prefixo de subdiretório (/maiasuplementos) se presente
+    $base = dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '/'));
+    if ($base !== '/' && $base !== '.') {
+        $uri = str_starts_with($uri, $base . '/') ? substr($uri, strlen($base)) : $uri;
+    }
+    // Aceita apenas /uploads/{caminho}.{extensão}
+    if (!preg_match('#^/uploads/[a-zA-Z0-9_/.-]+\.(?:webp|jpe?g|png|gif)$#i', $uri)) {
+        return;
+    }
+    $file = ROOT_PATH . '/public' . $uri;
+    if (!is_file($file)) {
+        return; // deixa o roteador gerar 404 normal
+    }
+    $ext  = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+    $mime = match ($ext) {
+        'webp'        => 'image/webp',
+        'jpg', 'jpeg' => 'image/jpeg',
+        'png'         => 'image/png',
+        'gif'         => 'image/gif',
+        default       => 'application/octet-stream',
+    };
+    header('Content-Type: ' . $mime);
+    header('Cache-Control: public, max-age=31536000, immutable');
+    header('X-Content-Type-Options: nosniff');
+    readfile($file);
+    exit;
+})();
+
 // ─── Carrega variáveis de ambiente do .env ────────────────────────────────────
 (function (): void {
     $envFile = ROOT_PATH . '/.env';
