@@ -14,7 +14,7 @@ const CATEGORY_PLACEHOLDER = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    const productImages = document.querySelectorAll('.product-card__image-wrap img, .product-img');
+    const productImages = document.querySelectorAll('.product-card__image-wrap img, .product-img, .product-gallery img');
 
     productImages.forEach(function(img) {
         function applyPlaceholder() {
@@ -33,10 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
             applyPlaceholder();
         }
 
-        img.addEventListener('error', function() {
-            if (this.src !== CATEGORY_PLACEHOLDER.default) {
-                this.src = CATEGORY_PLACEHOLDER.default;
-            }
-        });
+        img.addEventListener('error', applyPlaceholder);
     });
 });

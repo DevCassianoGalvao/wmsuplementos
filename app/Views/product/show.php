@@ -40,7 +40,7 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
         </ol>
     </nav>
 
-    <div class="product-detail">
+    <div class="product-detail" data-category="<?= htmlspecialchars($product['category_slug'] ?? $product['category_name'] ?? 'default', ENT_QUOTES, 'UTF-8') ?>">
         <div class="product-gallery">
             <?php if (!empty($images)): ?>
             <div class="gallery-main">

@@ -28,3 +28,6 @@ jobs:
             **/Thumbs.db
             AGENTS.md
             .env.example
+            public/uploads/**
+            public/assets/uploads/**
+            logs/**
