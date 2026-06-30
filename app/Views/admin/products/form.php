@@ -132,7 +132,9 @@
                 <div class="thumb-item <?= $imageExists ? '' : 'is-missing' ?>">
                     <?php if ($imageExists): ?>
                     <img src="<?= htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>"
-                         alt="" width="80" height="80" loading="lazy">
+                         alt="" width="80" height="80" loading="lazy"
+                         onerror="this.hidden=true;this.nextElementSibling.hidden=false;this.closest('.thumb-item').classList.add('is-missing');">
+                    <span class="thumb-missing" hidden>Arquivo ausente</span>
                     <?php else: ?>
                     <span class="thumb-missing">Arquivo ausente</span>
                     <?php endif; ?>

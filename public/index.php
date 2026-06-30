@@ -128,7 +128,7 @@ if ($_basePath !== '') {
         }
         // Reescreve href="/", src="/", action="/" — mas não href="//cdn" (protocol-relative)
         return preg_replace(
-            '/\b(href|src|action)=(["\'])\/(?!\/)/',
+            '/\b(href|src|action|formaction)=(["\'])\/(?!\/)/',
             '$1=$2' . APP_BASE . '/',
             $html
         ) ?? $html;

@@ -1243,6 +1243,10 @@ button.btn-link:hover {
     line-height: 1.15;
 }
 
+.thumb-missing[hidden] {
+    display: none;
+}
+
 .thumb-badge {
     position: absolute;
     top: 0.45rem;
