@@ -312,6 +312,13 @@ main { display: block; }
     aspect-ratio: 1 / 1;
     object-fit: cover;
     background: var(--color-bg-elevated);
+    color: transparent; /* esconde alt text quando imagem falha */
+    font-size: 0;
+}
+.gallery-main img,
+.gallery-thumbs img {
+    color: transparent;
+    font-size: 0;
 }
 .price-original, .product-card__price-old {
     font-size: var(--text-small);
