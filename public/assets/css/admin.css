@@ -1368,3 +1368,58 @@ button.btn-link:hover {
     color: #FF4A40;
     box-shadow: inset 3px 0 0 #E63329;
 }
+
+/* Sidebar groups as compact nav items */
+.nav-group {
+    margin: 0 0 2px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+.nav-group.is-active {
+    border-color: transparent;
+    background: transparent;
+}
+
+.nav-group__label {
+    min-height: 0;
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    color: #A0A0A0;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    transition: all 0.15s ease;
+}
+
+.nav-group__label:hover {
+    background: rgba(255,255,255,0.05);
+    color: #FFFFFF;
+}
+
+.nav-group.is-active > .nav-group__label {
+    background: rgba(230,51,41,0.12);
+    color: #E63329;
+    box-shadow: inset 3px 0 0 #E63329;
+}
+
+.nav-group__label svg {
+    width: 16px;
+    height: 16px;
+    color: currentColor;
+    opacity: 0.85;
+}
+
+.nav-group__items {
+    padding: 0.35rem 0 0.35rem 2.25rem;
+}
+
+.nav-subitem {
+    min-height: 32px;
+    padding: 0.42rem 0.75rem;
+    border-radius: 7px;
+    font-size: 0.84rem;
+}

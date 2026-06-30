@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/design-system.css?v=20260625-6">
-    <link rel="stylesheet" href="/assets/css/admin.css?v=20260630-5">
+    <link rel="stylesheet" href="/assets/css/admin.css?v=20260630-6">
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="admin-body">
@@ -36,7 +36,8 @@
         $productsGroupActive = str_starts_with($currentPath, '/admin/produtos')
             || str_starts_with($currentPath, '/admin/categorias')
             || str_starts_with($currentPath, '/admin/marcas')
-            || str_starts_with($currentPath, '/admin/combos');
+            || str_starts_with($currentPath, '/admin/combos')
+            || str_starts_with($currentPath, '/admin/estoque');
         $marketingGroupActive = str_starts_with($currentPath, '/admin/cupons')
             || str_starts_with($currentPath, '/admin/avaliacoes');
         $settingsGroupActive = str_starts_with($currentPath, '/admin/configuracoes')
@@ -71,14 +72,10 @@
                     <a href="/admin/categorias" class="nav-subitem <?= str_starts_with($currentPath, '/admin/categorias') ? 'active' : '' ?>">Categorias</a>
                     <a href="/admin/marcas" class="nav-subitem <?= str_starts_with($currentPath, '/admin/marcas') ? 'active' : '' ?>">Marcas</a>
                     <a href="/admin/combos" class="nav-subitem <?= str_starts_with($currentPath, '/admin/combos') ? 'active' : '' ?>">Combos</a>
+                    <a href="/admin/estoque" class="nav-subitem <?= str_starts_with($currentPath, '/admin/estoque') ? 'active' : '' ?>">Estoque</a>
                 </div>
             </div>
             <?php endif; ?>
-
-            <a href="/admin/estoque" class="nav-item <?= str_starts_with($currentPath, '/admin/estoque') ? 'active' : '' ?>">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
-                <span>Estoque</span>
-            </a>
 
             <?php if ($isAdminRole): ?>
             <a href="/admin/clientes" class="nav-item <?= str_starts_with($currentPath, '/admin/clientes') ? 'active' : '' ?>">
