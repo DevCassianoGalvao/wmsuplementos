@@ -196,6 +196,7 @@ $router->get('/admin/produtos/novo',     'Admin\ProductController@create');
 $router->post('/admin/produtos',         'Admin\ProductController@store');
 $router->get('/admin/produtos/{id}',     'Admin\ProductController@edit');
 $router->post('/admin/produtos/{id}',    'Admin\ProductController@update');
+$router->post('/admin/produtos/{id}/imagens/{imageId}/excluir', 'Admin\ProductController@deleteImage');
 $router->post('/admin/produtos/{id}/toggle', 'Admin\ProductController@toggle');
 $router->post('/admin/produtos/{id}/duplicar', 'Admin\ProductController@duplicate');
 

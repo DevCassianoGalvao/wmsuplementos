@@ -15,7 +15,7 @@
 <form action="<?= $action ?>" method="post" enctype="multipart/form-data" novalidate>
     <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
 
-    <div class="form-grid">
+    <div class="form-grid product-form-grid">
         <section class="form-card">
             <h2>Dados Principais</h2>
 
@@ -127,9 +127,26 @@
             <?php if (!empty($product['images'])): ?>
             <div class="current-images">
                 <?php foreach ($product['images'] as $img): ?>
-                <div class="thumb-item">
-                    <img src="<?= htmlspecialchars($img['filename_webp'] ?? $img['filename'], ENT_QUOTES, 'UTF-8') ?>"
-                         alt="" width="80" height="80">
+                <?php $imagePath = (string)($img['filename_webp'] ?? $img['filename'] ?? ''); ?>
+                <?php $imageExists = (bool)($img['_file_exists'] ?? true); ?>
+                <div class="thumb-item <?= $imageExists ? '' : 'is-missing' ?>">
+                    <?php if ($imageExists): ?>
+                    <img src="<?= htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>"
+                         alt="" width="80" height="80" loading="lazy">
+                    <?php else: ?>
+                    <span class="thumb-missing">Arquivo ausente</span>
+                    <?php endif; ?>
+                    <?php if (!empty($img['is_main'])): ?>
+                    <span class="thumb-badge">Principal</span>
+                    <?php endif; ?>
+                    <button type="submit"
+                            class="thumb-remove"
+                            formaction="/admin/produtos/<?= (int)$product['id'] ?>/imagens/<?= (int)$img['id'] ?>/excluir"
+                            formmethod="post"
+                            formnovalidate
+                            onclick="return confirm('Remover esta imagem do produto?')">
+                        Remover
+                    </button>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -139,9 +156,15 @@
                 <input type="file" id="images" name="images[]" multiple accept="image/jpeg,image/png,image/webp">
                 <div id="image-preview" class="image-preview" aria-live="polite"></div>
             </div>
+            <?php if ($isEdit): ?>
+            <label class="form-check-inline">
+                <input type="checkbox" name="new_image_as_main" value="1" checked>
+                Usar a primeira nova imagem como foto principal
+            </label>
+            <?php endif; ?>
         </section>
 
-        <section class="form-card">
+        <section class="form-card product-seo-card">
             <h2>SEO</h2>
             <div class="form-group">
                 <label for="seo_title">Meta Title</label>

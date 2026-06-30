@@ -269,6 +269,32 @@ class ProductModel extends BaseModel
         return $img['filename_webp'];
     }
 
+    public function deleteProductImage(int $productId, int $imageId): ?array
+    {
+        $img = $this->fetch(
+            'SELECT * FROM product_images WHERE id = ? AND product_id = ?',
+            [$imageId, $productId]
+        );
+        if (!$img) {
+            return null;
+        }
+
+        $wasMain = (int)($img['is_main'] ?? 0) === 1;
+        $this->query('DELETE FROM product_images WHERE id = ? AND product_id = ?', [$imageId, $productId]);
+
+        if ($wasMain) {
+            $nextId = $this->fetchColumn(
+                'SELECT id FROM product_images WHERE product_id = ? ORDER BY sort_order ASC, id ASC LIMIT 1',
+                [$productId]
+            );
+            if ($nextId) {
+                $this->query('UPDATE product_images SET is_main = 1 WHERE id = ?', [(int)$nextId]);
+            }
+        }
+
+        return $img;
+    }
+
     // ─── Escrita ──────────────────────────────────────────────────────────────
 
     public function create(array $data): int
@@ -411,9 +437,13 @@ class ProductModel extends BaseModel
         [$limit, $offset] = $this->limitOffset($page, $perPage);
         $like = '%' . $query . '%';
         return $this->fetchAll(
-            'SELECT p.id, p.name, p.slug, p.price, p.price_sale, p.stock,
-                    b.name AS brand_name
+            'SELECT p.id, p.name, p.slug, p.price, p.price_sale, p.stock, p.bestseller,
+                    c.name AS category_name, c.slug AS category_slug,
+                    b.name AS brand_name, b.slug AS brand_slug,
+                    (SELECT filename_webp FROM product_images
+                      WHERE product_id = p.id AND is_main = 1 LIMIT 1) AS main_image
                FROM products p
+               LEFT JOIN categories c ON c.id = p.category_id
                LEFT JOIN brands b ON b.id = p.brand_id
               WHERE p.active = 1
                 AND (p.name LIKE ? OR p.description LIKE ? OR b.name LIKE ?)

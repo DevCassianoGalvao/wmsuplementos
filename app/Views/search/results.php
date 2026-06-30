@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container search-page">
     <h1>Busca: "<?= htmlspecialchars($query, ENT_QUOTES, 'UTF-8') ?>"</h1>
 
     <?php if (mb_strlen($query) < 2): ?>

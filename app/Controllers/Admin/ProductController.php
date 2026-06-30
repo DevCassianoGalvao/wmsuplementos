@@ -102,6 +102,7 @@ class ProductController extends BaseController
         }
 
         $this->repairProductImagePermissions($product);
+        $product['images'] = $this->prepareProductImages($product['images'] ?? []);
 
         $this->render('admin/products/form', [
             'pageTitle'  => 'Editar: ' . $product['name'] . ' | Admin Maia',
@@ -135,14 +136,33 @@ class ProductController extends BaseController
         }
 
         $this->model->update($id, $data);
-        $this->handleImageUpload($id);
+        $this->handleImageUpload($id, isset($_POST['new_image_as_main']));
 
-        Cache::forget('product_' . $id);
-        Cache::flush('category_');
-        Cache::flush('home_');
+        $this->flushProductCaches($id);
 
         $this->flash('success', 'Produto atualizado.');
         $this->redirect('/admin/produtos/' . $id);
+    }
+
+    public function deleteImage(array $params): void
+    {
+        Auth::requireAdminRole();
+        CSRF::verify();
+
+        $productId = (int)($params['id'] ?? 0);
+        $imageId = (int)($params['imageId'] ?? 0);
+        $image = $this->model->deleteProductImage($productId, $imageId);
+
+        if (!$image) {
+            $this->flash('error', 'Imagem nao encontrada para este produto.');
+            $this->redirect('/admin/produtos/' . $productId);
+        }
+
+        ImageService::deleteAll((string)($image['filename_webp'] ?? $image['filename'] ?? ''));
+        $this->flushProductCaches($productId);
+
+        $this->flash('success', 'Imagem removida.');
+        $this->redirect('/admin/produtos/' . $productId);
     }
 
     public function toggle(array $params): void
@@ -242,7 +262,7 @@ class ProductController extends BaseController
         return $v;
     }
 
-    private function handleImageUpload(int $productId): void
+    private function handleImageUpload(int $productId, bool $makeFirstUploadMain = false): void
     {
         if (empty($_FILES['images']['name'][0])) {
             return;
@@ -260,6 +280,7 @@ class ProductController extends BaseController
         }
 
         $uploadedCount = 0;
+        $hasPublicMain = $this->hasPublicMainImage($productId);
 
         foreach ($_FILES['images']['tmp_name'] as $i => $tmpName) {
             if ($uploadedCount >= $remainingSlots) {
@@ -295,7 +316,10 @@ class ProductController extends BaseController
             );
             $sortStmt->execute([$productId]);
             $sort = (int)$sortStmt->fetchColumn();
-            $isMain = ($existingCount === 0 && $uploadedCount === 0) ? 1 : 0;
+            $isMain = $uploadedCount === 0 && ($makeFirstUploadMain || $existingCount === 0 || !$hasPublicMain);
+            if ($isMain) {
+                db()->prepare('UPDATE product_images SET is_main = 0 WHERE product_id = ?')->execute([$productId]);
+            }
 
             db()->prepare(
                 'INSERT INTO product_images (product_id, filename, filename_webp, is_main, sort_order)
@@ -308,6 +332,8 @@ class ProductController extends BaseController
                 $sort,
             ]);
             $uploadedCount++;
+            $existingCount++;
+            $hasPublicMain = true;
         }
     }
 
@@ -316,6 +342,35 @@ class ProductController extends BaseController
         foreach (($product['images'] ?? []) as $image) {
             ImageService::repairPublicPermissions((string)($image['filename_webp'] ?? $image['filename'] ?? ''));
         }
+    }
+
+    private function prepareProductImages(array $images): array
+    {
+        foreach ($images as &$image) {
+            $path = (string)($image['filename_webp'] ?? $image['filename'] ?? '');
+            $image['_file_exists'] = ImageService::publicFileExists($path);
+        }
+        unset($image);
+
+        return $images;
+    }
+
+    private function hasPublicMainImage(int $productId): bool
+    {
+        foreach ($this->model->getImages($productId) as $image) {
+            if ((int)($image['is_main'] ?? 0) !== 1) {
+                continue;
+            }
+            return ImageService::publicFileExists((string)($image['filename_webp'] ?? $image['filename'] ?? ''));
+        }
+        return false;
+    }
+
+    private function flushProductCaches(int $productId): void
+    {
+        Cache::forget('product_' . $productId);
+        Cache::flush('category_');
+        Cache::flush('home_');
     }
 
     private function getBrands(): array

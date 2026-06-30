@@ -233,4 +233,22 @@ class ImageService
             }
         }
     }
+
+    public static function publicFileExists(string $dbPath): bool
+    {
+        $file = self::resolvePublicFile($dbPath);
+        return $file !== null && is_file($file);
+    }
+
+    private static function resolvePublicFile(string $dbPath): ?string
+    {
+        if ($dbPath === '' || !str_starts_with($dbPath, '/uploads/')) {
+            return null;
+        }
+
+        $relative = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, ltrim($dbPath, '/'));
+        return defined('ROOT_PATH')
+            ? ROOT_PATH . '/public/' . $relative
+            : __DIR__ . '/../../public/' . $relative;
+    }
 }
