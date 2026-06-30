@@ -79,12 +79,16 @@ class ProductController extends BaseController
         }
 
         $id = $this->model->create($data);
-        $this->handleImageUpload($id);
+        $imgErrors = $this->handleImageUpload($id);
 
         Cache::flush('category_');
         Cache::flush('home_');
 
-        $this->flash('success', 'Produto criado com sucesso.');
+        if ($imgErrors !== []) {
+            $this->flash('error', 'Produto criado, mas ocorreram erros nas imagens:<br>' . implode('<br>', array_map('htmlspecialchars', $imgErrors)));
+        } else {
+            $this->flash('success', 'Produto criado com sucesso.');
+        }
         $this->redirect('/admin/produtos/' . $id);
     }
 
@@ -136,11 +140,15 @@ class ProductController extends BaseController
         }
 
         $this->model->update($id, $data);
-        $this->handleImageUpload($id, isset($_POST['new_image_as_main']));
+        $imgErrors = $this->handleImageUpload($id, isset($_POST['new_image_as_main']));
 
         $this->flushProductCaches($id);
 
-        $this->flash('success', 'Produto atualizado.');
+        if ($imgErrors !== []) {
+            $this->flash('error', 'Produto atualizado, mas ocorreram erros nas imagens:<br>' . implode('<br>', array_map('htmlspecialchars', $imgErrors)));
+        } else {
+            $this->flash('success', 'Produto atualizado.');
+        }
         $this->redirect('/admin/produtos/' . $id);
     }
 
@@ -262,10 +270,11 @@ class ProductController extends BaseController
         return $v;
     }
 
-    private function handleImageUpload(int $productId, bool $makeFirstUploadMain = false): void
+    /** @return string[] lista de erros de upload (vazia = tudo OK) */
+    private function handleImageUpload(int $productId, bool $makeFirstUploadMain = false): array
     {
         if (empty($_FILES['images']['name'][0])) {
-            return;
+            return [];
         }
 
         $config  = require ROOT_PATH . '/config/app.php';
@@ -276,10 +285,11 @@ class ProductController extends BaseController
         $remainingSlots = max(0, 10 - $existingCount);
 
         if ($remainingSlots === 0) {
-            return;
+            return ['Limite de 10 imagens por produto atingido.'];
         }
 
         $uploadedCount = 0;
+        $errors = [];
         $hasPublicMain = $this->hasPublicMainImage($productId);
 
         foreach ($_FILES['images']['tmp_name'] as $i => $tmpName) {
@@ -291,26 +301,29 @@ class ProductController extends BaseController
                 continue;
             }
 
+            $fileName = (string)($_FILES['images']['name'][$i] ?? 'arquivo');
+
             if (($_FILES['images']['size'][$i] ?? 0) > $maxSize) {
+                $errors[] = "\"$fileName\" excede o tamanho máximo de " . round($maxSize / 1048576, 1) . ' MB.';
                 continue;
             }
 
-            // Reconstrói entrada de $_FILES individual para ImageService
             $fileEntry = [
                 'error'    => $_FILES['images']['error'][$i],
                 'tmp_name' => $tmpName,
                 'size'     => $_FILES['images']['size'][$i],
-                'name'     => $_FILES['images']['name'][$i],
+                'name'     => $fileName,
             ];
 
             try {
                 $paths = ImageService::processUpload($fileEntry, 'products');
             } catch (\RuntimeException $e) {
-                error_log('[ProductController] Imagem inválida: ' . $e->getMessage());
+                $msg = $e->getMessage();
+                error_log('[ProductController] Upload falhou para produto ' . $productId . ': ' . $msg);
+                $errors[] = "\"$fileName\": $msg";
                 continue;
             }
 
-            // sort_order: prepared statement (não concatenação)
             $sortStmt = db()->prepare(
                 'SELECT COALESCE(MAX(sort_order), 0) + 1 FROM product_images WHERE product_id = ?'
             );
@@ -326,8 +339,8 @@ class ProductController extends BaseController
                  VALUES (?, ?, ?, ?, ?)'
             )->execute([
                 $productId,
-                $paths['medium'],  // path usado nas listagens
-                $paths['medium'],  // campo webp (já é webp)
+                $paths['medium'],
+                $paths['medium'],
                 $isMain,
                 $sort,
             ]);
@@ -335,6 +348,8 @@ class ProductController extends BaseController
             $existingCount++;
             $hasPublicMain = true;
         }
+
+        return $errors;
     }
 
     private function repairProductImagePermissions(array $product): void

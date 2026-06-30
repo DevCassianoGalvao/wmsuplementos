@@ -76,7 +76,11 @@ class ImageService
         foreach (array_merge(['original'], array_keys(self::SIZES)) as $size) {
             $dir = $uploadsBase . '/' . $size;
             if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
+                if (!mkdir($dir, 0755, true)) {
+                    throw new \RuntimeException(
+                        "Não foi possível criar diretório de upload: $dir. Verifique as permissões do servidor."
+                    );
+                }
             }
             @chmod($dir, 0755);
         }

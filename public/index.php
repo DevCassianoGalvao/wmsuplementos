@@ -289,5 +289,8 @@ $router->get('/admin/notificacoes',                    'Admin\NotificationContro
 $router->post('/admin/notificacoes/{id}/ler',          'Admin\NotificationController@markRead');
 $router->post('/admin/notificacoes/marcar-todas',      'Admin\NotificationController@markAllRead');
 
+// Diagnóstico de uploads
+$router->get('/admin/diagnostico-uploads',             'Admin\UploadDiagnosticController@index');
+
 // ─── Despacha ────────────────────────────────────────────────────────────────
 $router->dispatch();

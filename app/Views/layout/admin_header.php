@@ -110,6 +110,7 @@
                     <a href="/admin/utm" class="nav-subitem <?= str_starts_with($currentPath, '/admin/utm') ? 'active' : '' ?>">UTM Builder</a>
                     <a href="/admin/notificacoes" class="nav-subitem <?= str_starts_with($currentPath, '/admin/notificacoes') ? 'active' : '' ?>">Notificacoes</a>
                     <a href="/admin/usuarios" class="nav-subitem <?= str_starts_with($currentPath, '/admin/usuarios') ? 'active' : '' ?>">Usuarios</a>
+                    <a href="/admin/diagnostico-uploads" class="nav-subitem <?= str_starts_with($currentPath, '/admin/diagnostico-uploads') ? 'active' : '' ?>">Diagnóstico Imagens</a>
                 </div>
             </div>
             <?php endif; ?>

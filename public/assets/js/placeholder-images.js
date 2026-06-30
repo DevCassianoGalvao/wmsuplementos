@@ -1,38 +1,34 @@
-/* Maia Suplementos - temporary product placeholders by category */
+/* Maia Suplementos - placeholder para imagens ausentes */
 'use strict';
 
-const CATEGORY_PLACEHOLDER = {
-    'proteinas': 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&q=80',
-    'creatina': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80',
-    'pre-treino': 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=400&q=80',
-    'aminoacidos': 'https://images.unsplash.com/photo-1579722820308-d74e571900a9?w=400&q=80',
-    'vitaminas': 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80',
-    'hipercaloricos': 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=80',
-    'termogenicos': 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&q=80',
-    'barras': 'https://images.unsplash.com/photo-1622484212850-c0ce8d21a1fc?w=400&q=80',
-    'default': 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&q=80'
-};
+(function() {
+    var PLACEHOLDER_SVG = 'data:image/svg+xml,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">' +
+        '<rect width="400" height="400" fill="#1a1a1a"/>' +
+        '<rect x="140" y="140" width="120" height="80" rx="8" fill="none" stroke="#444" stroke-width="3"/>' +
+        '<circle cx="200" cy="168" r="12" fill="#444"/>' +
+        '<path d="M145 220 l35-40 25 28 20-22 35 34" fill="none" stroke="#444" stroke-width="3" stroke-linejoin="round"/>' +
+        '</svg>'
+    );
 
-document.addEventListener('DOMContentLoaded', function() {
-    const productImages = document.querySelectorAll('.product-card__image-wrap img, .product-img, .product-gallery img');
+    function applyPlaceholder(img) {
+        var cur = img.getAttribute('src') || '';
+        if (!cur || cur === PLACEHOLDER_SVG || cur.indexOf('data:') === 0) return;
+        img.src = PLACEHOLDER_SVG;
+        img.alt = img.alt || 'Imagem indisponível';
+    }
 
-    productImages.forEach(function(img) {
-        function applyPlaceholder() {
-            const card = img.closest('[data-category]');
-            const category = card ? card.dataset.category.toLowerCase().replace(/\s/g, '-') : 'default';
-            const key = Object.keys(CATEGORY_PLACEHOLDER).find(function(item) {
-                return category.includes(item);
-            }) || 'default';
+    document.addEventListener('DOMContentLoaded', function() {
+        var imgs = document.querySelectorAll(
+            '.product-card__image-wrap img, .product-img, .product-gallery img, .gallery-main img, .gallery-thumbs img'
+        );
 
-            img.src = CATEGORY_PLACEHOLDER[key];
-            img.alt = img.alt || 'Produto ' + category;
-        }
-
-        const src = img.getAttribute('src') || '';
-        if (!src || src.includes('placeholder')) {
-            applyPlaceholder();
-        }
-
-        img.addEventListener('error', applyPlaceholder);
+        imgs.forEach(function(img) {
+            var src = img.getAttribute('src') || '';
+            if (!src || src.includes('placeholder')) {
+                applyPlaceholder(img);
+            }
+            img.addEventListener('error', function() { applyPlaceholder(img); });
+        });
     });
-});
+})();

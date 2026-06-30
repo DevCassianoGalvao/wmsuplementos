@@ -128,15 +128,14 @@
             <div class="current-images">
                 <?php foreach ($product['images'] as $img): ?>
                 <?php $imagePath = (string)($img['filename_webp'] ?? $img['filename'] ?? ''); ?>
-                <?php $imageExists = (bool)($img['_file_exists'] ?? true); ?>
-                <div class="thumb-item <?= $imageExists ? '' : 'is-missing' ?>">
-                    <?php if ($imageExists): ?>
+                <div class="thumb-item">
+                    <?php if ($imagePath !== ''): ?>
                     <img src="<?= htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>"
                          alt="" width="80" height="80" loading="lazy"
                          onerror="this.hidden=true;this.nextElementSibling.hidden=false;this.closest('.thumb-item').classList.add('is-missing');">
-                    <span class="thumb-missing" hidden>Arquivo ausente</span>
+                    <span class="thumb-missing" hidden>Arquivo ausente<br><small><?= htmlspecialchars(basename($imagePath), ENT_QUOTES, 'UTF-8') ?></small></span>
                     <?php else: ?>
-                    <span class="thumb-missing">Arquivo ausente</span>
+                    <span class="thumb-missing">Sem caminho</span>
                     <?php endif; ?>
                     <?php if (!empty($img['is_main'])): ?>
                     <span class="thumb-badge">Principal</span>
