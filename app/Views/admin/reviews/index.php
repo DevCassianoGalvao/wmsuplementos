@@ -24,7 +24,7 @@
     <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
     <div class="bulk-actions">
         <select name="bulk_action" required>
-            <option value="">Acao em lote</option>
+            <option value="">Ação em lote</option>
             <option value="approve">Aprovar selecionadas</option>
             <option value="reject">Rejeitar selecionadas</option>
         </select>
@@ -44,7 +44,7 @@
             <th>Foto</th>
             <?php if ($status === 'rejected'): ?><th>Motivo</th><?php endif; ?>
             <th>Data</th>
-            <?php if ($status === 'pending'): ?><th>Acoes</th><?php endif; ?>
+            <?php if ($status === 'pending'): ?><th>Ações</th><?php endif; ?>
         </tr>
     </thead>
     <tbody>

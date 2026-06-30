@@ -18,7 +18,7 @@
             <th>Perfil</th>
             <th>Status</th>
             <th>Ultimo login</th>
-            <th>Acoes</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>

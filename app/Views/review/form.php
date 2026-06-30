@@ -38,7 +38,7 @@
                 <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp">
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Enviar Avaliacao</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Enviar Avaliação</button>
         </form>
     </div>
 </div>

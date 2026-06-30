@@ -1144,6 +1144,9 @@ main { display: block; }
 }
 
 /* Senior UX pass: public polish */
+.section {
+    padding: 4rem 0;
+}
 main > .section:first-child,
 .listing-hero + .section {
     border-top: 1px solid rgba(255,255,255,0.04);
@@ -1429,6 +1432,7 @@ main > .section:first-child,
 .combo-card__body {
     display: flex;
     flex-direction: column;
+    gap: 0.75rem;
     width: 100%;
 }
 .combo-card__desc {
@@ -1999,6 +2003,7 @@ main > .section:first-child,
 .page-layout .price-range input { width: 100%; }
 .category-content .products-grid {
     grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 2rem;
 }
 .category-header {
     display: flex;

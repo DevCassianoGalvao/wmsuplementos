@@ -30,7 +30,7 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
     </div>
     <?php endif; ?>
 
-    <nav class="breadcrumb" aria-label="Navegacao">
+    <nav class="breadcrumb" aria-label="Navegação">
         <ol>
             <li><a href="/">Home</a></li>
             <?php if (!empty($product['category_slug'])): ?>
@@ -74,7 +74,7 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
 
             <h1 class="product-name"><?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?></h1>
 
-            <div class="product-rating" aria-label="Avaliacao: <?= number_format($ratingValue, 1) ?> de 5">
+            <div class="product-rating" aria-label="Avaliação: <?= number_format($ratingValue, 1) ?> de 5">
                 <?php for ($i = 1; $i <= 5; $i++): ?>
                 <span class="star <?= $i <= round($ratingValue) ? 'filled' : '' ?>">&#9733;</span>
                 <?php endfor; ?>
@@ -131,7 +131,7 @@ $ratingCount = (int)($product['review_count'] ?? $reviewCount ?? 0);
             <div class="product-tabs" data-tabs>
                 <div class="product-tabs__nav" role="tablist" aria-label="Detalhes do produto">
                     <?php if (!empty($product['description'])): ?>
-                    <button type="button" class="product-tabs__btn is-active" data-tab-target="description" role="tab">Descricao</button>
+                    <button type="button" class="product-tabs__btn is-active" data-tab-target="description" role="tab">Descrição</button>
                     <?php endif; ?>
                     <?php if (!empty($product['benefits'])): ?>
                     <button type="button" class="product-tabs__btn <?= empty($product['description']) ? 'is-active' : '' ?>" data-tab-target="benefits" role="tab">Beneficios</button>

@@ -33,13 +33,13 @@
             </div>
 
             <div class="form-group">
-                <label for="description">Descricao</label>
+                <label for="description">Descrição</label>
                 <textarea id="description" name="description" rows="5"><?= htmlspecialchars($combo['description'] ?? $_POST['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="price">Preco do combo (R$) *</label>
+                    <label for="price">Preço do combo (R$) *</label>
                     <input type="text" id="price" name="price" required inputmode="decimal"
                            value="<?= htmlspecialchars($combo['price'] ?? $_POST['price'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                 </div>

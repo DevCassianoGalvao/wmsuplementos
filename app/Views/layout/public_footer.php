@@ -136,11 +136,11 @@ $breadcrumbSchema = [
 <div class="cookie-consent" data-cookie-consent hidden>
     <div>
         <strong>Privacidade</strong>
-        <p>Usamos cookies essenciais e metricas para melhorar navegacao e campanhas. Voce pode aceitar ou manter apenas o necessario.</p>
+        <p>Usamos cookies essenciais e métricas para melhorar navegação e campanhas. Você pode aceitar ou manter apenas o necessário.</p>
     </div>
     <div class="cookie-consent__actions">
-        <a href="/politica-de-privacidade" class="btn btn-link">Politica</a>
-        <button type="button" class="btn btn-outline" data-cookie-choice="necessary">Somente necessario</button>
+        <a href="/politica-de-privacidade" class="btn btn-link">Política</a>
+        <button type="button" class="btn btn-outline" data-cookie-choice="necessary">Somente necessário</button>
         <button type="button" class="btn btn-primary" data-cookie-choice="accepted">Aceitar</button>
     </div>
 </div>

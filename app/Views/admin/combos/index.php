@@ -18,9 +18,9 @@
             <th>Combo</th>
             <th>Slug</th>
             <th>Itens</th>
-            <th>Preco</th>
+            <th>Preço</th>
             <th>Status</th>
-            <th>Acoes</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>

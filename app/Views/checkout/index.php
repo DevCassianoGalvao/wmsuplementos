@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="boleto-address" data-boleto-address hidden>
-                    <p class="form-hint">Endereco exigido apenas para emissao do boleto.</p>
+                    <p class="form-hint">Endereço exigido apenas para emissão do boleto.</p>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="zip_code">CEP</label>
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="address">Endereco</label>
+                        <label for="address">Endereço</label>
                         <input type="text" id="address" name="address" autocomplete="address-line1"
                                value="<?= htmlspecialchars($_POST['address'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                     </div>

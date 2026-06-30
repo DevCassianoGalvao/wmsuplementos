@@ -19,7 +19,7 @@
             <th>Slug</th>
             <th>Produtos</th>
             <th>Status</th>
-            <th>Acoes</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>

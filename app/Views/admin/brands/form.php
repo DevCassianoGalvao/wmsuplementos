@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group">
-            <label for="description">Descricao</label>
+            <label for="description">Descrição</label>
             <textarea id="description" name="description" rows="5"><?= htmlspecialchars($brand['description'] ?? $_POST['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
         </div>
 
