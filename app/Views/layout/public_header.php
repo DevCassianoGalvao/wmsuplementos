@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/design-system.css?v=20260625-6">
     <link rel="stylesheet" href="/assets/css/animations.css?v=20260625-6">
-    <link rel="stylesheet" href="/assets/css/main.css?v=20260630-6">
+    <link rel="stylesheet" href="/assets/css/main.css?v=20260630-7">
     <?= \Maia\Helpers\ScriptInjector::head() ?>
 </head>
 <body>
