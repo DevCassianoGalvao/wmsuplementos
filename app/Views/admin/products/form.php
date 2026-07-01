@@ -185,7 +185,7 @@
     </div>
 
         <?php if ($isEdit): ?>
-        <section class="form-card">
+        <section class="form-card" style="margin-top:1.5rem">
             <h2>Produtos Relacionados</h2>
             <p class="form-hint">Esses produtos aparecem na página do produto. Se nenhum for selecionado, o sistema mostra automaticamente da mesma categoria.</p>
 
@@ -206,8 +206,6 @@
         </section>
         <?php endif; ?>
 
-    </div>
-
     <div class="form-actions">
         <button type="submit" class="btn btn-primary btn-lg">Salvar Produto</button>
         <a href="/admin/produtos" class="btn btn-link">Cancelar</a>
@@ -218,6 +216,7 @@
 <script>
 (function() {
     const productId = <?= (int)$product['id'] ?>;
+    const appBase = '<?= defined('APP_BASE') ? APP_BASE : '' ?>';
     const input = document.getElementById('relatedSearchInput');
     const dropdown = document.getElementById('relatedSearchResults');
     const tagList = document.getElementById('relatedSelectedList');
@@ -250,7 +249,7 @@
         const q = this.value.trim();
         if (q.length < 2) { dropdown.hidden = true; return; }
         debounce = setTimeout(() => {
-            fetch('/admin/produtos/buscar?q=' + encodeURIComponent(q) + '&exclude=' + productId)
+            fetch(appBase + '/admin/produtos/buscar?q=' + encodeURIComponent(q) + '&exclude=' + productId)
                 .then(r => r.json())
                 .then(rows => {
                     if (!rows.length) { dropdown.hidden = true; return; }
