@@ -2257,6 +2257,136 @@ main > .section:first-child,
 .brand-logo { height: 60px; width: auto; object-fit: contain; }
 .brand-title { font-family: var(--font-display); font-size: var(--text-h1); font-weight: 700; }
 
+/* Campaign popup */
+.campaign-popup[hidden] { display: none; }
+.campaign-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 9990;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease;
+}
+.campaign-popup.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+.campaign-popup__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(8px);
+}
+.campaign-popup__dialog {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 520px);
+    max-height: min(88vh, 720px);
+    overflow: hidden;
+    background: #111;
+    border: 1px solid rgba(230,51,41,0.34);
+    border-radius: 18px;
+    box-shadow: 0 28px 90px rgba(0,0,0,0.55), 0 0 60px rgba(230,51,41,0.16);
+    transform: translateY(14px) scale(0.98);
+    transition: transform 0.18s ease;
+}
+.campaign-popup.is-visible .campaign-popup__dialog {
+    transform: translateY(0) scale(1);
+}
+.campaign-popup__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 999px;
+    background: rgba(0,0,0,0.68);
+    color: #fff;
+    cursor: pointer;
+}
+.campaign-popup__image,
+.campaign-popup__image-link,
+.campaign-popup__image-link img {
+    display: block;
+    width: 100%;
+}
+.campaign-popup__image,
+.campaign-popup__image-link img {
+    height: auto;
+    max-height: 82vh;
+    object-fit: contain;
+}
+.campaign-popup__content {
+    padding: 2rem;
+    text-align: center;
+}
+.campaign-popup__logo {
+    height: 48px;
+    width: auto;
+    margin: 0 auto 1rem;
+}
+.campaign-popup__eyebrow {
+    display: inline-flex;
+    margin-bottom: 0.75rem;
+    color: var(--color-red);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+.campaign-popup__content h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.6rem);
+    line-height: 1.05;
+    color: #fff;
+}
+.campaign-popup__content p {
+    margin: 0.9rem 0 0;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+}
+.campaign-popup__coupon {
+    margin: 1.25rem auto 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 360px;
+}
+.campaign-popup__coupon span,
+.campaign-popup__coupon button {
+    border-radius: 10px;
+    font-weight: 800;
+}
+.campaign-popup__coupon span {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    background: rgba(230,51,41,0.12);
+    border: 1px dashed rgba(230,51,41,0.55);
+    color: #fff;
+    letter-spacing: 0.08em;
+}
+.campaign-popup__coupon button {
+    padding: 0.85rem 1rem;
+    border: 0;
+    background: var(--color-red);
+    color: #fff;
+    cursor: pointer;
+}
+.campaign-popup__cta {
+    margin-top: 1.25rem;
+}
+
 /* ══════════════════════════════════════════════════════
    RESPONSIVIDADE — Bloco Final Consolidado (site público)
    Breakpoints: 1024 | 768 | 640 | 480

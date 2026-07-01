@@ -306,6 +306,13 @@ $router->post('/admin/scripts',          'Admin\ScriptController@update');
 // Configuracoes
 $router->get('/admin/configuracoes',     'Admin\SettingsController@index');
 $router->post('/admin/configuracoes',    'Admin\SettingsController@update');
+$router->get('/admin/configuracoes/popups',        'Admin\PopupCampaignController@index');
+$router->get('/admin/configuracoes/popups/novo',   'Admin\PopupCampaignController@create');
+$router->post('/admin/configuracoes/popups',       'Admin\PopupCampaignController@store');
+$router->get('/admin/configuracoes/popups/{id}',   'Admin\PopupCampaignController@edit');
+$router->post('/admin/configuracoes/popups/{id}',  'Admin\PopupCampaignController@update');
+$router->post('/admin/configuracoes/popups/{id}/toggle',  'Admin\PopupCampaignController@toggle');
+$router->post('/admin/configuracoes/popups/{id}/excluir', 'Admin\PopupCampaignController@delete');
 
 // Usuarios admin
 $router->get('/admin/usuarios',          'Admin\AdminUserController@index');

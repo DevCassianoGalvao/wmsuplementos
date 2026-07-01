@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS `popup_campaigns` (
+    `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `title`       VARCHAR(160) NOT NULL,
+    `slug`        VARCHAR(180) NOT NULL,
+    `mode`        ENUM('image','message') NOT NULL DEFAULT 'message',
+    `image`       VARCHAR(255) DEFAULT NULL,
+    `target_url`  VARCHAR(500) DEFAULT NULL,
+    `message`     TEXT DEFAULT NULL,
+    `coupon_code` VARCHAR(80) DEFAULT NULL,
+    `cta_label`   VARCHAR(80) DEFAULT NULL,
+    `active`      TINYINT(1) NOT NULL DEFAULT 0,
+    `start_at`    DATETIME DEFAULT NULL,
+    `end_at`      DATETIME DEFAULT NULL,
+    `show_once`   TINYINT(1) NOT NULL DEFAULT 1,
+    `created_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_popup_campaigns_slug` (`slug`),
+    KEY `idx_popup_campaigns_active_dates` (`active`, `start_at`, `end_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

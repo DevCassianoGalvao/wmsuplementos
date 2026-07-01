@@ -1,4 +1,7 @@
-<?php use Maia\Helpers\Settings; ?>
+<?php
+use Maia\Helpers\Settings;
+use Maia\Models\PopupCampaignModel;
+?>
 </main>
 
 <?php $footerEmail   = Settings::get('email_atendimento', Settings::get('store_email')); ?>
@@ -78,6 +81,63 @@
 </a>
 
 <?php
+$popupCampaign = (new PopupCampaignModel())->getActiveForPublic();
+?>
+<?php if ($popupCampaign): ?>
+<?php
+$popupMode = (string)($popupCampaign['mode'] ?? 'message');
+$popupUrl = (string)($popupCampaign['target_url'] ?? '');
+$popupExternal = $popupUrl !== '' && preg_match('#^https?://#i', $popupUrl);
+$popupTitle = (string)($popupCampaign['title'] ?? '');
+$popupMessage = (string)($popupCampaign['message'] ?? '');
+$popupCoupon = (string)($popupCampaign['coupon_code'] ?? '');
+$popupCta = (string)($popupCampaign['cta_label'] ?: 'Ver oferta');
+?>
+<div class="campaign-popup"
+     data-campaign-popup
+     data-campaign-id="<?= (int)$popupCampaign['id'] ?>"
+     data-show-once="<?= !empty($popupCampaign['show_once']) ? '1' : '0' ?>"
+     hidden>
+    <div class="campaign-popup__backdrop" data-popup-close></div>
+    <div class="campaign-popup__dialog campaign-popup__dialog--<?= htmlspecialchars($popupMode, ENT_QUOTES, 'UTF-8') ?>" role="dialog" aria-modal="true" aria-labelledby="campaign-popup-title">
+        <button type="button" class="campaign-popup__close" data-popup-close aria-label="Fechar popup">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
+        <?php if ($popupMode === 'image' && !empty($popupCampaign['image'])): ?>
+            <?php if ($popupUrl !== ''): ?>
+            <a class="campaign-popup__image-link" href="<?= htmlspecialchars($popupUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $popupExternal ? 'target="_blank" rel="noopener"' : '' ?>>
+                <img src="<?= htmlspecialchars($popupCampaign['image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($popupTitle, ENT_QUOTES, 'UTF-8') ?>">
+            </a>
+            <?php else: ?>
+            <img class="campaign-popup__image" src="<?= htmlspecialchars($popupCampaign['image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($popupTitle, ENT_QUOTES, 'UTF-8') ?>">
+            <?php endif; ?>
+        <?php else: ?>
+            <div class="campaign-popup__content">
+                <img src="/assets/img/logo.png" alt="Maia Suplementos" class="campaign-popup__logo">
+                <span class="campaign-popup__eyebrow">Promocao</span>
+                <h2 id="campaign-popup-title"><?= htmlspecialchars($popupTitle, ENT_QUOTES, 'UTF-8') ?></h2>
+                <?php if ($popupMessage !== ''): ?>
+                <p><?= nl2br(htmlspecialchars($popupMessage, ENT_QUOTES, 'UTF-8')) ?></p>
+                <?php endif; ?>
+                <?php if ($popupCoupon !== ''): ?>
+                <div class="campaign-popup__coupon">
+                    <span><?= htmlspecialchars($popupCoupon, ENT_QUOTES, 'UTF-8') ?></span>
+                    <button type="button" data-copy-coupon="<?= htmlspecialchars($popupCoupon, ENT_QUOTES, 'UTF-8') ?>">Copiar cupom</button>
+                </div>
+                <?php endif; ?>
+                <?php if ($popupUrl !== ''): ?>
+                <a class="btn btn-primary campaign-popup__cta" href="<?= htmlspecialchars($popupUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $popupExternal ? 'target="_blank" rel="noopener"' : '' ?>>
+                    <?= htmlspecialchars($popupCta, ENT_QUOTES, 'UTF-8') ?>
+                </a>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>
+
+<?php
 $appUrl = rtrim((string)(getenv('APP_URL') ?: 'https://maiasuplementos.com.br'), '/');
 $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $basePath = defined('APP_BASE') ? APP_BASE : '';
@@ -146,6 +206,6 @@ $breadcrumbSchema = [
 </div>
 
 <script src="/assets/js/placeholder-images.js?v=20260630-3" defer></script>
-<script src="/assets/js/main.js?v=20260626-2" defer></script>
+<script src="/assets/js/main.js?v=20260630-8" defer></script>
 </body>
 </html>

@@ -11,6 +11,14 @@
 <div class="alert alert-success"><?= htmlspecialchars($flash['success'], ENT_QUOTES, 'UTF-8') ?></div>
 <?php endif; ?>
 
+<section class="form-card settings-shortcut">
+    <div>
+        <h2>Popups e campanhas</h2>
+        <p class="page-subtitle">Crie avisos, promocoes com cupom ou banners clicaveis para a loja.</p>
+    </div>
+    <a href="/admin/configuracoes/popups" class="btn btn-primary">Gerenciar popups</a>
+</section>
+
 <form action="/admin/configuracoes" method="post" class="admin-form" novalidate>
     <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
 

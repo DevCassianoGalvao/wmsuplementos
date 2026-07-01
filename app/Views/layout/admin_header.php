@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/design-system.css?v=20260625-6">
-    <link rel="stylesheet" href="/assets/css/admin.css?v=20260630-12">
+    <link rel="stylesheet" href="/assets/css/admin.css?v=20260630-13">
     <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="admin-body">
@@ -105,7 +105,8 @@
                     <span class="nav-group__chevron" aria-hidden="true"></span>
                 </button>
                 <div class="nav-group__items">
-                    <a href="/admin/configuracoes" class="nav-subitem <?= str_starts_with($currentPath, '/admin/configuracoes') ? 'active' : '' ?>">Geral</a>
+                    <a href="/admin/configuracoes" class="nav-subitem <?= $currentPath === '/admin/configuracoes' ? 'active' : '' ?>">Geral</a>
+                    <a href="/admin/configuracoes/popups" class="nav-subitem <?= str_starts_with($currentPath, '/admin/configuracoes/popups') ? 'active' : '' ?>">Popups</a>
                     <a href="/admin/scripts" class="nav-subitem <?= str_starts_with($currentPath, '/admin/scripts') ? 'active' : '' ?>">Scripts</a>
                     <a href="/admin/utm" class="nav-subitem <?= str_starts_with($currentPath, '/admin/utm') ? 'active' : '' ?>">UTM Builder</a>
                     <a href="/admin/notificacoes" class="nav-subitem <?= str_starts_with($currentPath, '/admin/notificacoes') ? 'active' : '' ?>">Notificações</a>

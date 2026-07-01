@@ -382,3 +382,68 @@ document.querySelectorAll('[data-tabs]').forEach(function(tabs) {
         });
     });
 });
+
+/* Campaign popup */
+(function() {
+    var popup = document.querySelector('[data-campaign-popup]');
+    if (!popup) return;
+
+    var id = popup.getAttribute('data-campaign-id') || 'default';
+    var showOnce = popup.getAttribute('data-show-once') === '1';
+    var key = 'maia_popup_closed_' + id;
+
+    if (showOnce && localStorage.getItem(key)) {
+        popup.remove();
+        return;
+    }
+
+    function closePopup() {
+        if (showOnce) {
+            localStorage.setItem(key, '1');
+        }
+        popup.classList.remove('is-visible');
+        setTimeout(function() {
+            popup.hidden = true;
+        }, 180);
+    }
+
+    setTimeout(function() {
+        popup.hidden = false;
+        requestAnimationFrame(function() {
+            popup.classList.add('is-visible');
+        });
+    }, 650);
+
+    popup.querySelectorAll('[data-popup-close]').forEach(function(button) {
+        button.addEventListener('click', closePopup);
+    });
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && !popup.hidden) {
+            closePopup();
+        }
+    });
+
+    popup.querySelectorAll('[data-copy-coupon]').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var code = button.getAttribute('data-copy-coupon') || '';
+            var done = function() {
+                var old = button.textContent;
+                button.textContent = 'Copiado';
+                setTimeout(function() { button.textContent = old; }, 1600);
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(code).then(done).catch(function() {});
+                return;
+            }
+
+            var tmp = document.createElement('textarea');
+            tmp.value = code;
+            document.body.appendChild(tmp);
+            tmp.select();
+            try { document.execCommand('copy'); done(); } catch (e) {}
+            tmp.remove();
+        });
+    });
+})();
