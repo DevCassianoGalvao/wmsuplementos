@@ -123,80 +123,166 @@
 </div>
 
 <section class="dashboard-card">
-    <h2>Vendas Diárias (últimos 30 dias)</h2>
-    <canvas id="salesChart" height="80" aria-label="Gráfico de vendas diárias"></canvas>
+    <div class="chart-header">
+        <h2 id="chartTitle">Vendas Diárias (30 dias)</h2>
+        <div class="chart-periods" role="group" aria-label="Período do gráfico">
+            <button class="chart-period-btn" data-days="7">7d</button>
+            <button class="chart-period-btn" data-days="15">15d</button>
+            <button class="chart-period-btn chart-period-btn--active" data-days="30">30d</button>
+            <button class="chart-period-btn" data-days="60">60d</button>
+            <button class="chart-period-btn" data-days="90">90d</button>
+        </div>
+    </div>
+    <div class="chart-wrap">
+        <canvas id="salesChart" aria-label="Gráfico de vendas diárias"></canvas>
+        <div id="chartTooltip" class="chart-tooltip" hidden></div>
+    </div>
 </section>
 
 <script>
 (function() {
-    const daily = <?= json_encode($daily, JSON_UNESCAPED_UNICODE) ?>;
-    const ctx = document.getElementById('salesChart');
-    if (!ctx) return;
+    const allDaily = <?= json_encode($daily, JSON_UNESCAPED_UNICODE) ?>;
+    let activeDays = 30;
+    let chartPts = [];
 
-    const canvas = ctx;
-    const parentWidth = canvas.parentElement ? canvas.parentElement.clientWidth : 800;
-    const dpr = window.devicePixelRatio || 1;
-    const width = Math.max(parentWidth, 320);
-    const height = 260;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
-
-    const chart = canvas.getContext('2d');
-    chart.scale(dpr, dpr);
-    chart.clearRect(0, 0, width, height);
-
-    const padding = { top: 24, right: 18, bottom: 34, left: 48 };
-    const values = daily.map(d => Number.parseFloat(d.revenue) || 0);
-    const max = Math.max(...values, 1);
-    const plotW = width - padding.left - padding.right;
-    const plotH = height - padding.top - padding.bottom;
-
-    chart.strokeStyle = 'rgba(255,255,255,0.08)';
-    chart.lineWidth = 1;
-    chart.font = '12px Space Grotesk, sans-serif';
-    chart.fillStyle = 'rgba(255,255,255,0.45)';
-
-    for (let i = 0; i <= 4; i++) {
-        const y = padding.top + (plotH / 4) * i;
-        chart.beginPath();
-        chart.moveTo(padding.left, y);
-        chart.lineTo(width - padding.right, y);
-        chart.stroke();
-        const label = Math.round(max - (max / 4) * i);
-        chart.fillText('R$ ' + label, 8, y + 4);
+    function buildDataset(days) {
+        const out = [];
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        for (let i = days - 1; i >= 0; i--) {
+            const d = new Date(now);
+            d.setDate(d.getDate() - i);
+            const ds = d.toISOString().slice(0, 10);
+            const found = allDaily.find(r => r.date === ds);
+            out.push({ date: ds, revenue: found ? parseFloat(found.revenue) : 0, orders: found ? parseInt(found.orders) : 0 });
+        }
+        return out;
     }
 
-    const points = values.map((value, index) => {
-        const x = padding.left + (values.length <= 1 ? 0 : (plotW / (values.length - 1)) * index);
-        const y = padding.top + plotH - (value / max) * plotH;
-        return { x, y };
+    function fmtDate(ds) { return ds.slice(8, 10) + '/' + ds.slice(5, 7); }
+    function fmtMoney(n) { return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+    function drawChart(data) {
+        const canvas = document.getElementById('salesChart');
+        if (!canvas) return [];
+        const wrap = canvas.parentElement;
+        const dpr = window.devicePixelRatio || 1;
+        const width = Math.max(wrap.clientWidth || 300, 200);
+        const height = 240;
+
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, width, height);
+
+        const n = data.length;
+        if (n === 0) return [];
+
+        const values = data.map(d => d.revenue);
+        const maxVal = Math.max(...values, 1);
+        const maxLabels = Math.max(2, Math.floor(width / 48));
+        const labelStep = Math.max(1, Math.ceil(n / maxLabels));
+
+        const pad = { top: 20, right: 12, bottom: 38, left: 58 };
+        const plotW = width - pad.left - pad.right;
+        const plotH = height - pad.top - pad.bottom;
+
+        ctx.font = '11px Space Grotesk, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillStyle = 'rgba(255,255,255,0.35)';
+        ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 4; i++) {
+            const y = pad.top + (plotH / 4) * i;
+            ctx.beginPath();
+            ctx.moveTo(pad.left, y);
+            ctx.lineTo(width - pad.right, y);
+            ctx.stroke();
+            const val = Math.round(maxVal * (1 - i / 4));
+            ctx.fillText('R$' + val, pad.left - 4, y + 4);
+        }
+
+        const pts = data.map((d, i) => ({
+            x: pad.left + (n <= 1 ? plotW / 2 : (plotW / (n - 1)) * i),
+            y: pad.top + plotH - (maxVal > 0 ? (d.revenue / maxVal) * plotH : 0),
+            revenue: d.revenue,
+            orders: d.orders,
+            date: d.date
+        }));
+
+        const grad = ctx.createLinearGradient(0, pad.top, 0, height - pad.bottom);
+        grad.addColorStop(0, 'rgba(230,51,41,0.22)');
+        grad.addColorStop(1, 'rgba(230,51,41,0)');
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, height - pad.bottom);
+        pts.forEach(pt => ctx.lineTo(pt.x, pt.y));
+        ctx.lineTo(pts[pts.length - 1].x, height - pad.bottom);
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        ctx.beginPath();
+        pts.forEach((pt, i) => i === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y));
+        ctx.strokeStyle = '#E63329';
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.stroke();
+
+        ctx.font = '10px Space Grotesk, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        pts.forEach((pt, i) => {
+            if (i % labelStep === 0 || i === n - 1) {
+                ctx.fillText(fmtDate(pt.date), pt.x, height - pad.bottom + 14);
+            }
+        });
+
+        return pts;
+    }
+
+    const canvas = document.getElementById('salesChart');
+    const tooltip = document.getElementById('chartTooltip');
+
+    if (canvas && tooltip) {
+        canvas.addEventListener('mousemove', function(e) {
+            if (!chartPts.length) return;
+            const rect = this.getBoundingClientRect();
+            const mx = e.clientX - rect.left;
+            let closest = chartPts[0];
+            let minD = Math.abs(chartPts[0].x - mx);
+            chartPts.forEach(pt => { const d = Math.abs(pt.x - mx); if (d < minD) { minD = d; closest = pt; } });
+            if (minD > 40) { tooltip.hidden = true; return; }
+            tooltip.innerHTML = '<span class="tt-date">' + fmtDate(closest.date) + '</span>'
+                + '<span class="tt-revenue">' + fmtMoney(closest.revenue) + '</span>'
+                + '<span class="tt-orders">' + closest.orders + ' pedido' + (closest.orders !== 1 ? 's' : '') + '</span>';
+            const tipLeft = closest.x + (closest.x > rect.width * 0.65 ? -148 : 12);
+            tooltip.style.left = tipLeft + 'px';
+            tooltip.style.top = Math.max(4, closest.y - 44) + 'px';
+            tooltip.hidden = false;
+        });
+        canvas.addEventListener('mouseleave', () => { tooltip.hidden = true; });
+    }
+
+    document.querySelectorAll('.chart-period-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            activeDays = parseInt(this.dataset.days);
+            document.querySelectorAll('.chart-period-btn').forEach(b => b.classList.remove('chart-period-btn--active'));
+            this.classList.add('chart-period-btn--active');
+            document.getElementById('chartTitle').textContent = 'Vendas Diárias (' + activeDays + ' dias)';
+            chartPts = drawChart(buildDataset(activeDays));
+        });
     });
 
-    if (points.length > 0) {
-        const gradient = chart.createLinearGradient(0, padding.top, 0, height - padding.bottom);
-        gradient.addColorStop(0, 'rgba(230,51,41,0.28)');
-        gradient.addColorStop(1, 'rgba(230,51,41,0)');
-
-        chart.beginPath();
-        chart.moveTo(points[0].x, height - padding.bottom);
-        points.forEach(point => chart.lineTo(point.x, point.y));
-        chart.lineTo(points[points.length - 1].x, height - padding.bottom);
-        chart.closePath();
-        chart.fillStyle = gradient;
-        chart.fill();
-
-        chart.beginPath();
-        points.forEach((point, index) => {
-            if (index === 0) chart.moveTo(point.x, point.y);
-            else chart.lineTo(point.x, point.y);
-        });
-        chart.strokeStyle = '#E63329';
-        chart.lineWidth = 3;
-        chart.lineJoin = 'round';
-        chart.lineCap = 'round';
-        chart.stroke();
+    const wrap = canvas ? canvas.parentElement : null;
+    if (wrap && window.ResizeObserver) {
+        new ResizeObserver(() => { chartPts = drawChart(buildDataset(activeDays)); }).observe(wrap);
     }
+
+    chartPts = drawChart(buildDataset(activeDays));
 })();
 </script>

@@ -226,6 +226,7 @@ $router->get('/admin/dashboard',         'Admin\DashboardController@index');
 
 // Produtos
 $router->get('/admin/produtos',          'Admin\ProductController@index');
+$router->get('/admin/produtos/buscar',   'Admin\ProductController@searchApi');
 $router->get('/admin/produtos/novo',     'Admin\ProductController@create');
 $router->post('/admin/produtos',         'Admin\ProductController@store');
 $router->get('/admin/produtos/{id}',     'Admin\ProductController@edit');

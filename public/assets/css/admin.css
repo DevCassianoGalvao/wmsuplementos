@@ -1589,6 +1589,169 @@ button.btn-link:hover {
 }
 
 /* ═══════════════════════════════════════════════════════
+   DASHBOARD CHART
+   ═══════════════════════════════════════════════════════ */
+
+.chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+.chart-header h2 { margin-bottom: 0; }
+
+.chart-periods {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+.chart-period-btn {
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-label);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-strong);
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition);
+}
+.chart-period-btn:hover {
+    background: var(--color-bg-subtle);
+    color: var(--color-text-primary);
+}
+.chart-period-btn--active {
+    background: var(--color-red-muted);
+    color: var(--color-red);
+    border-color: transparent;
+}
+
+.chart-wrap {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+#salesChart {
+    display: block;
+    max-width: 100%;
+}
+
+.chart-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius);
+    padding: 0.5rem 0.75rem;
+    min-width: 130px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    z-index: 10;
+}
+.chart-tooltip[hidden] { display: none; }
+.tt-date {
+    font-size: var(--text-label);
+    color: var(--color-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.tt-revenue {
+    font-size: var(--text-body);
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+.tt-orders {
+    font-size: var(--text-small);
+    color: var(--color-text-secondary);
+}
+
+/* ═══════════════════════════════════════════════════════
+   RELATED PRODUCTS (admin form)
+   ═══════════════════════════════════════════════════════ */
+
+.form-hint {
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+.related-search-wrap {
+    position: relative;
+    margin-bottom: 1rem;
+}
+.related-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius);
+    overflow: hidden;
+    z-index: 50;
+    max-height: 240px;
+    overflow-y: auto;
+}
+.related-result-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.625rem 1rem;
+    font-size: var(--text-small);
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition);
+}
+.related-result-item:hover {
+    background: var(--color-bg-subtle);
+    color: var(--color-text-primary);
+}
+.related-result-item.is-selected {
+    color: var(--color-text-muted);
+    cursor: default;
+}
+
+.related-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-height: 2rem;
+}
+.related-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.3rem 0.625rem;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    font-size: var(--text-small);
+    color: var(--color-text-secondary);
+}
+.related-tag-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--color-text-muted);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: color var(--transition);
+}
+.related-tag-remove:hover { color: var(--color-red); }
+
+/* ═══════════════════════════════════════════════════════
    NOTIFICATIONS PAGE
    ═══════════════════════════════════════════════════════ */
 

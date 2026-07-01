@@ -75,7 +75,8 @@ class ProductController extends BaseController
             'ogImage'    => $product['og_image']        ?: '',
             'ogType'     => 'product',
             'product'    => $product,
-            'related'    => $model->getRelated((int)$product['category_id'], (int)$product['id']),
+            'related'    => $model->getAdminRelated((int)$product['id'])
+                           ?: $model->getRelated((int)$product['category_id'], (int)$product['id']),
             'reviews'    => $reviews,
             'avgRating'  => $model->getAverageRating((int)$product['id']),
             'reviewCount'=> $model->countReviews((int)$product['id']),

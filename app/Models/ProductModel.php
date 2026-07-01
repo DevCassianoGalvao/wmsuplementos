@@ -496,4 +496,52 @@ class ProductModel extends BaseModel
     {
         $this->query('UPDATE products SET active = NOT active WHERE id = ?', [$id]);
     }
+
+    // ─── Produtos Relacionados (seleção manual) ───────────────────────────────
+
+    public function getAdminRelated(int $productId): array
+    {
+        return $this->fetchAll(
+            'SELECT p.id, p.name, p.slug, p.price, p.price_sale, p.stock,
+                    (SELECT filename_webp FROM product_images
+                      WHERE product_id = p.id AND is_main = 1 LIMIT 1) AS main_image
+               FROM product_related pr
+               JOIN products p ON p.id = pr.related_id
+              WHERE pr.product_id = ?
+              ORDER BY pr.sort_order ASC, p.name ASC',
+            [$productId]
+        );
+    }
+
+    public function setAdminRelated(int $productId, array $relatedIds): void
+    {
+        $this->query('DELETE FROM product_related WHERE product_id = ?', [$productId]);
+        if (empty($relatedIds)) {
+            return;
+        }
+        $stmt = db()->prepare(
+            'INSERT IGNORE INTO product_related (product_id, related_id, sort_order) VALUES (?, ?, ?)'
+        );
+        foreach (array_values($relatedIds) as $i => $relId) {
+            $relId = (int)$relId;
+            if ($relId > 0 && $relId !== $productId) {
+                $stmt->execute([$productId, $relId, $i]);
+            }
+        }
+    }
+
+    public function searchForRelated(string $q, int $exclude, int $limit = 12): array
+    {
+        $like = '%' . $q . '%';
+        return $this->fetchAll(
+            'SELECT id, name, sku,
+                    (SELECT filename_webp FROM product_images
+                      WHERE product_id = p.id AND is_main = 1 LIMIT 1) AS main_image
+               FROM products p
+              WHERE active = 1 AND id != ? AND (name LIKE ? OR sku LIKE ?)
+              ORDER BY name ASC
+              LIMIT ?',
+            [$exclude, $like, $like, $limit]
+        );
+    }
 }

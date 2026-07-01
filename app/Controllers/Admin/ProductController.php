@@ -109,11 +109,12 @@ class ProductController extends BaseController
         $product['images'] = $this->prepareProductImages($product['images'] ?? []);
 
         $this->render('admin/products/form', [
-            'pageTitle'  => 'Editar: ' . $product['name'] . ' | Admin Maia',
-            'product'    => $product,
-            'categories' => (new CategoryModel())->getAll(),
-            'brands'     => $this->getBrands(),
-            'flash'      => $this->getFlash(),
+            'pageTitle'    => 'Editar: ' . $product['name'] . ' | Admin Maia',
+            'product'      => $product,
+            'categories'   => (new CategoryModel())->getAll(),
+            'brands'       => $this->getBrands(),
+            'adminRelated' => $this->model->getAdminRelated($id),
+            'flash'        => $this->getFlash(),
         ], 'admin');
     }
 
@@ -141,6 +142,9 @@ class ProductController extends BaseController
 
         $this->model->update($id, $data);
         $imgErrors = $this->handleImageUpload($id, isset($_POST['new_image_as_main']));
+
+        $relatedIds = array_filter(array_map('intval', (array)($_POST['related_ids'] ?? [])));
+        $this->model->setAdminRelated($id, array_values($relatedIds));
 
         $this->flushProductCaches($id);
 
@@ -386,6 +390,23 @@ class ProductController extends BaseController
         Cache::forget('product_' . $productId);
         Cache::flush('category_');
         Cache::flush('home_');
+    }
+
+    public function searchApi(array $params = []): void
+    {
+        Auth::requireAdminRole();
+        $q       = trim($_GET['q'] ?? '');
+        $exclude = (int)($_GET['exclude'] ?? 0);
+
+        header('Content-Type: application/json; charset=UTF-8');
+
+        if (strlen($q) < 2) {
+            echo '[]';
+            return;
+        }
+
+        $rows = $this->model->searchForRelated($q, $exclude, 12);
+        echo json_encode($rows, JSON_UNESCAPED_UNICODE);
     }
 
     private function getBrands(): array

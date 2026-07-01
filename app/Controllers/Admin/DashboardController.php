@@ -19,7 +19,7 @@ class DashboardController extends BaseController
 
         $model   = new OrderModel();
         $summary = $model->getSalesSummary('month');
-        $daily   = $model->getDailySales(30);
+        $daily   = $model->getDailySales(90);
         $top     = $model->getTopProducts((int)date('m'), (int)date('Y'));
 
         // Contagens rápidas

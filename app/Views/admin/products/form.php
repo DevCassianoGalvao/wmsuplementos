@@ -184,8 +184,99 @@
         </section>
     </div>
 
+        <?php if ($isEdit): ?>
+        <section class="form-card">
+            <h2>Produtos Relacionados</h2>
+            <p class="form-hint">Esses produtos aparecem na página do produto. Se nenhum for selecionado, o sistema mostra automaticamente da mesma categoria.</p>
+
+            <div class="related-search-wrap">
+                <input type="text" id="relatedSearchInput" class="form-control" placeholder="Buscar produto por nome ou SKU..." autocomplete="off">
+                <div id="relatedSearchResults" class="related-dropdown" hidden></div>
+            </div>
+
+            <div id="relatedSelectedList" class="related-tags">
+                <?php foreach ($adminRelated ?? [] as $rel): ?>
+                <span class="related-tag" data-id="<?= (int)$rel['id'] ?>">
+                    <?= htmlspecialchars($rel['name'], ENT_QUOTES, 'UTF-8') ?>
+                    <button type="button" class="related-tag-remove" aria-label="Remover">×</button>
+                    <input type="hidden" name="related_ids[]" value="<?= (int)$rel['id'] ?>">
+                </span>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
+    </div>
+
     <div class="form-actions">
         <button type="submit" class="btn btn-primary btn-lg">Salvar Produto</button>
         <a href="/admin/produtos" class="btn btn-link">Cancelar</a>
     </div>
 </form>
+
+<?php if ($isEdit): ?>
+<script>
+(function() {
+    const productId = <?= (int)$product['id'] ?>;
+    const input = document.getElementById('relatedSearchInput');
+    const dropdown = document.getElementById('relatedSearchResults');
+    const tagList = document.getElementById('relatedSelectedList');
+
+    function selectedIds() {
+        return Array.from(tagList.querySelectorAll('input[name="related_ids[]"]')).map(i => parseInt(i.value));
+    }
+
+    function addTag(id, name) {
+        if (selectedIds().includes(id)) return;
+        const span = document.createElement('span');
+        span.className = 'related-tag';
+        span.dataset.id = id;
+        span.innerHTML = '<span class="related-tag-name"></span>'
+            + '<button type="button" class="related-tag-remove" aria-label="Remover">×</button>'
+            + '<input type="hidden" name="related_ids[]" value="' + id + '">';
+        span.querySelector('.related-tag-name').textContent = name;
+        span.querySelector('.related-tag-remove').addEventListener('click', () => span.remove());
+        tagList.appendChild(span);
+    }
+
+    // Bind existing remove buttons
+    tagList.querySelectorAll('.related-tag-remove').forEach(btn => {
+        btn.addEventListener('click', () => btn.closest('.related-tag').remove());
+    });
+
+    let debounce;
+    input.addEventListener('input', function() {
+        clearTimeout(debounce);
+        const q = this.value.trim();
+        if (q.length < 2) { dropdown.hidden = true; return; }
+        debounce = setTimeout(() => {
+            fetch('/admin/produtos/buscar?q=' + encodeURIComponent(q) + '&exclude=' + productId)
+                .then(r => r.json())
+                .then(rows => {
+                    if (!rows.length) { dropdown.hidden = true; return; }
+                    dropdown.innerHTML = '';
+                    const active = selectedIds();
+                    rows.forEach(row => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'related-result-item' + (active.includes(row.id) ? ' is-selected' : '');
+                        btn.textContent = row.name + (row.sku ? ' — ' + row.sku : '');
+                        btn.addEventListener('click', () => {
+                            addTag(row.id, row.name);
+                            input.value = '';
+                            dropdown.hidden = true;
+                        });
+                        dropdown.appendChild(btn);
+                    });
+                    dropdown.hidden = false;
+                })
+                .catch(() => { dropdown.hidden = true; });
+        }, 280);
+    });
+
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.related-search-wrap')) dropdown.hidden = true;
+    });
+})();
+</script>
+<?php endif; ?>
