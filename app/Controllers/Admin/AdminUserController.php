@@ -23,7 +23,7 @@ class AdminUserController extends BaseController
         )->fetchAll();
 
         $this->render('admin/users/index', [
-            'pageTitle' => 'Usuarios Admin | Admin Maia',
+            'pageTitle' => 'Usuários Admin | Admin Maia',
             'users'     => $users,
             'flash'     => $this->getFlash(),
         ], 'admin');
@@ -34,7 +34,7 @@ class AdminUserController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/users/form', [
-            'pageTitle' => 'Novo Usuario | Admin Maia',
+            'pageTitle' => 'Novo Usuário | Admin Maia',
             'user'      => null,
             'flash'     => $this->getFlash(),
         ], 'admin');
@@ -81,7 +81,7 @@ class AdminUserController extends BaseController
         }
 
         $this->render('admin/users/form', [
-            'pageTitle' => 'Editar Usuario | Admin Maia',
+            'pageTitle' => 'Editar Usuário | Admin Maia',
             'user'      => $user,
             'flash'     => $this->getFlash(),
         ], 'admin');
