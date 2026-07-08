@@ -66,10 +66,15 @@ class SettingsController extends BaseController
                 $value = Sanitizer::plainText((string)$value);
             }
 
+            $storedValue = $value !== '' ? $value : null;
+            if ($key === 'hero_image') {
+                $storedValue = $value;
+            }
+
             db()->prepare(
                 'INSERT INTO settings (`key`, `value`) VALUES (?, ?)
                  ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)'
-            )->execute([$key, $value !== '' ? $value : null]);
+            )->execute([$key, $storedValue]);
         }
 
         $this->updateLegalPage('politica-de-privacidade', 'Politica de Privacidade', $_POST['privacy_policy'] ?? '');

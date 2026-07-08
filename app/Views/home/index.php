@@ -6,9 +6,9 @@
 
 <!-- HERO -->
 <?php
-$heroImage = $settings['hero_image'] ?? '/assets/img/hero-supplement.webp';
-if (!preg_match('#^(https?://|/)#', $heroImage)) {
-    $heroImage = '/assets/img/hero-supplement.webp';
+$heroImage = trim((string)($settings['hero_image'] ?? ''));
+if ($heroImage !== '' && !preg_match('#^(https?://|/)#', $heroImage)) {
+    $heroImage = '';
 }
 $safeHeroUrl = static function (string $url, string $fallback): string {
     return preg_match('#^(https?://|/)#', $url) ? $url : $fallback;
@@ -16,7 +16,7 @@ $safeHeroUrl = static function (string $url, string $fallback): string {
 $heroPrimaryUrl = $safeHeroUrl((string)($settings['hero_primary_url'] ?? '/produtos'), '/produtos');
 $heroSecondaryUrl = $safeHeroUrl((string)($settings['hero_secondary_url'] ?? '/combos'), '/combos');
 ?>
-<section class="hero" style="--hero-image: url('<?= htmlspecialchars($heroImage, ENT_QUOTES, 'UTF-8') ?>');">
+<section class="hero"<?= $heroImage !== '' ? ' style="--hero-image: url(\'' . htmlspecialchars($heroImage, ENT_QUOTES, 'UTF-8') . '\');"' : '' ?>>
     <div class="hero__bg-grid"></div>
     <div class="container">
         <div class="hero__content">

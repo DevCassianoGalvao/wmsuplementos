@@ -90,7 +90,7 @@
                 <label for="hero_image">Imagem de fundo</label>
                 <input type="text" id="hero_image" name="hero_image"
                        placeholder="/assets/img/hero-supplement.webp"
-                       value="<?= htmlspecialchars($settings['hero_image'] ?? '/assets/img/hero-supplement.webp', ENT_QUOTES, 'UTF-8') ?>">
+                       value="<?= htmlspecialchars((string)($settings['hero_image'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
             </div>
         </div>
         <div class="form-row">
