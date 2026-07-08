@@ -181,19 +181,6 @@ document.querySelectorAll('.qty-input').forEach(function(input) {
             var setText = function(id, txt) { var el = document.getElementById(id); if (el) el.textContent = txt; };
             if (typeof d.subtotal !== 'undefined') setText('cart-subtotal', 'R$ ' + money(d.subtotal));
             if (typeof d.discount !== 'undefined') setText('cart-discount', '- R$ ' + money(d.discount));
-            if (typeof d.shipping !== 'undefined') setText('cart-shipping', d.shipping > 0 ? 'R$ ' + money(d.shipping) : 'Grátis');
-            if (typeof d.free_shipping_remaining !== 'undefined') {
-                var freeShippingEl = document.getElementById('cart-free-shipping');
-                if (freeShippingEl) {
-                    if (d.free_shipping_remaining > 0) {
-                        freeShippingEl.hidden = false;
-                        var first = freeShippingEl.querySelector('span');
-                        if (first) first.textContent = 'Faltam R$ ' + money(d.free_shipping_remaining) + ' para frete grátis';
-                    } else {
-                        freeShippingEl.hidden = true;
-                    }
-                }
-            }
             if (typeof d.total    !== 'undefined') setText('cart-total', 'R$ ' + money(d.total));
             var countEl = document.getElementById('cart-count');
             if (countEl && typeof d.count !== 'undefined') countEl.textContent = d.count;

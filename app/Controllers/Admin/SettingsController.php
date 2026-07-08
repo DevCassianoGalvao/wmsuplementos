@@ -33,6 +33,10 @@ class SettingsController extends BaseController
         'hero_secondary_label',
         'hero_secondary_url',
         'home_faq_enabled',
+        'card_interest_monthly',
+        'header_nav_links',
+        'footer_nav_links',
+        'footer_info_links',
     ];
 
     public function index(array $params = []): void
@@ -58,10 +62,14 @@ class SettingsController extends BaseController
                 $value = Sanitizer::email($value);
             } elseif ($key === 'free_shipping_above' || $key === 'shipping_flat_rate') {
                 $value = number_format((float)str_replace(',', '.', (string)$value), 2, '.', '');
+            } elseif ($key === 'card_interest_monthly') {
+                $value = number_format(max(0, (float)str_replace(',', '.', (string)$value)), 2, '.', '');
             } elseif ($key === 'stock_alert_min') {
                 $value = (string)max(0, (int)$value);
             } elseif ($key === 'home_faq_enabled') {
                 $value = isset($_POST[$key]) ? '1' : '0';
+            } elseif (in_array($key, ['header_nav_links', 'footer_nav_links', 'footer_info_links'], true)) {
+                $value = $this->sanitizeLinkList((string)$value);
             } else {
                 $value = Sanitizer::plainText((string)$value);
             }
@@ -80,6 +88,10 @@ class SettingsController extends BaseController
         $this->updateLegalPage('politica-de-privacidade', 'Politica de Privacidade', $_POST['privacy_policy'] ?? '');
         $this->updateLegalPage('termos-de-uso', 'Termos de Uso', $_POST['terms_of_use'] ?? '');
         $this->updateLegalPage('faq', 'Perguntas Frequentes', $_POST['faq_content'] ?? '');
+        $this->updateLegalPage('sobre', 'Sobre a WM Suplementos', $_POST['about_content'] ?? '');
+        $this->updateLegalPage('como-comprar', 'Como Comprar', $_POST['how_to_buy_content'] ?? '');
+        $this->updateLegalPage('trocas-e-devolucoes', 'Trocas e Devolucoes', $_POST['returns_content'] ?? '');
+        $this->updateLegalPage('perguntas-frequentes', 'Perguntas Frequentes', $_POST['public_faq_content'] ?? '');
 
         Cache::flush('home_');
 
@@ -102,7 +114,7 @@ class SettingsController extends BaseController
         $stmt = db()->prepare(
             "SELECT slug, title, content
                FROM pages
-              WHERE slug IN ('politica-de-privacidade', 'termos-de-uso', 'faq')"
+              WHERE slug IN ('politica-de-privacidade', 'termos-de-uso', 'faq', 'sobre', 'como-comprar', 'trocas-e-devolucoes', 'perguntas-frequentes')"
         );
         $stmt->execute();
 
@@ -155,5 +167,34 @@ class SettingsController extends BaseController
 
             return '<a href="' . htmlspecialchars($href, ENT_QUOTES, 'UTF-8') . '" rel="noopener">';
         }, $content) ?? '';
+    }
+
+    private function sanitizeLinkList(string $content): string
+    {
+        $lines = preg_split('/\R/', trim(strip_tags($content))) ?: [];
+        $clean = [];
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === '' || !str_contains($line, '|')) {
+                continue;
+            }
+
+            [$label, $url] = array_map('trim', explode('|', $line, 2));
+            $label = Sanitizer::plainText($label);
+            $url = Sanitizer::plainText($url);
+
+            if ($label === '' || $url === '') {
+                continue;
+            }
+
+            if (!preg_match('#^(https?://|/)#i', $url)) {
+                continue;
+            }
+
+            $clean[] = $label . '|' . $url;
+        }
+
+        return implode("\n", $clean);
     }
 }

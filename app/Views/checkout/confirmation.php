@@ -3,33 +3,37 @@
 <div class="container confirmation-page">
     <div class="confirmation-card">
         <div class="confirmation-icon" aria-hidden="true">✓</div>
-        <h1>Pedido Recebido!</h1>
-        <p class="confirmation-msg">Obrigado pela sua compra, <strong><?= htmlspecialchars($order['customer_name'], ENT_QUOTES, 'UTF-8') ?></strong>!</p>
-        <p>Pedido <strong>#<?= (int)$order['id'] ?></strong> · <?= htmlspecialchars($order['created_at'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+        <span class="section__label">Pedido recebido</span>
+        <h1>Agora falta finalizar o pagamento</h1>
+        <p class="confirmation-msg">Pedido <strong>#<?= (int)$order['id'] ?></strong> em nome de <strong><?= htmlspecialchars($order['customer_name'], ENT_QUOTES, 'UTF-8') ?></strong>.</p>
 
         <?php $method = $order['payment_method'] ?? ''; ?>
 
         <?php if ($method === 'pix'): ?>
         <div class="payment-instructions pix">
-            <h2>Pague via PIX</h2>
+            <h2>Pagamento via PIX</h2>
             <?php if (!empty($pixKey)): ?>
-            <p>Copie a chave PIX abaixo, cole no app do seu banco e efetue o pagamento.</p>
+            <p>Copie a chave abaixo, pague no app do seu banco e envie o comprovante pelo WhatsApp.</p>
             <div class="pix-copy-box">
                 <code><?= htmlspecialchars($pixKey, ENT_QUOTES, 'UTF-8') ?></code>
-                <button type="button" class="btn btn-primary" data-copy-text="<?= htmlspecialchars($pixKey, ENT_QUOTES, 'UTF-8') ?>">Copiar chave</button>
+                <button type="button" class="btn btn-primary" data-copy-text="<?= htmlspecialchars($pixKey, ENT_QUOTES, 'UTF-8') ?>">Copiar chave PIX</button>
             </div>
             <?php else: ?>
-            <p>A chave PIX ainda não foi configurada. Fale conosco pelo WhatsApp para concluir o pagamento.</p>
+            <p>A chave PIX ainda nao foi configurada. Fale conosco pelo WhatsApp para concluir o pagamento.</p>
             <?php endif; ?>
-            <p class="payment-success-note">Envie o comprovante pelo nosso WhatsApp.</p>
+            <div class="payment-success-note">
+                <strong>Importante:</strong> o pedido sera separado apos o envio do comprovante.
+            </div>
             <a href="<?= htmlspecialchars($whatsappLink, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
                 Enviar comprovante no WhatsApp
             </a>
         </div>
         <?php elseif ($method === 'cartao'): ?>
         <div class="payment-instructions cartao">
-            <h2>Cartão de Crédito</h2>
-            <p class="payment-success-note">Entraremos em contato pelo WhatsApp para finalizar sua compra.</p>
+            <h2>Pagamento com cartao</h2>
+            <div class="payment-success-note">
+                <strong>Proximo passo:</strong> nossa equipe entra em contato pelo WhatsApp para confirmar parcelas, taxas e link de pagamento.
+            </div>
             <a href="<?= htmlspecialchars($whatsappLink, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
                 Chamar no WhatsApp
             </a>
@@ -37,16 +41,17 @@
         <?php endif; ?>
 
         <div class="order-summary">
-            <h2>Resumo do Pedido</h2>
-            <p>Total: <strong>R$ <?= Sanitizer::money((float)$order['total']) ?></strong></p>
-            <p>E-mail de confirmação enviado para: <strong><?= htmlspecialchars($order['customer_email'], ENT_QUOTES, 'UTF-8') ?></strong></p>
+            <h2>Resumo do pedido</h2>
+            <p>Total dos produtos: <strong>R$ <?= Sanitizer::money((float)$order['total']) ?></strong></p>
+            <p>Entrega: <strong>combinada pelo WhatsApp</strong></p>
+            <p>E-mail informado: <strong><?= htmlspecialchars($order['customer_email'], ENT_QUOTES, 'UTF-8') ?></strong></p>
         </div>
 
         <div class="confirmation-actions">
             <?php if (\Maia\Helpers\Auth::isUserLogged()): ?>
-            <a href="/minha-conta/pedidos" class="btn btn-outline">Meus Pedidos</a>
+            <a href="/minha-conta/pedidos" class="btn btn-outline">Meus pedidos</a>
             <?php endif; ?>
-            <a href="/" class="btn btn-link">Voltar à loja</a>
+            <a href="/" class="btn btn-link">Voltar a loja</a>
         </div>
     </div>
 </div>

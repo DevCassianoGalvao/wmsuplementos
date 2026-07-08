@@ -1,7 +1,6 @@
 <?php use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
 
 <div class="container">
-
     <?php if (!empty($flash['error'])): ?>
     <div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
     <?php endif; ?>
@@ -11,17 +10,19 @@
 
     <?php if (empty($items)): ?>
     <div class="empty-cart">
-        <h1 class="cart-title">Meu Carrinho</h1>
-        <p>Seu carrinho est&aacute; vazio.</p>
-        <a href="/produtos" class="btn btn-primary">Continuar Comprando</a>
+        <h1 class="cart-title">Meu carrinho</h1>
+        <p>Seu carrinho esta vazio.</p>
+        <a href="/produtos" class="btn btn-primary">Continuar comprando</a>
     </div>
     <?php else: ?>
 
     <div class="cart-page">
-
         <div class="cart-items">
             <div class="cart-header-row">
-                <h1 class="cart-title">Meu Carrinho</h1>
+                <div>
+                    <span class="section__label">Carrinho</span>
+                    <h1 class="cart-title">Meu carrinho</h1>
+                </div>
                 <span class="cart-count-label"><?= count($items) ?> <?= count($items) === 1 ? 'item' : 'itens' ?></span>
             </div>
 
@@ -66,7 +67,7 @@
         </div>
 
         <aside class="cart-summary">
-            <h2>Resumo do Pedido</h2>
+            <h2>Resumo do pedido</h2>
 
             <form action="/carrinho/cupom" method="post" class="coupon-form cart-coupon">
                 <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
@@ -93,27 +94,21 @@
                     <span id="cart-discount">- R$ <?= Sanitizer::money((float)$discount) ?></span>
                 </div>
                 <?php endif; ?>
-                <?php if (($shipping ?? 0) > 0 || ($freeShippingRemaining ?? 0) <= 0): ?>
                 <div class="summary-line cart-summary-row">
-                    <span>Frete</span>
-                    <span id="cart-shipping"><?= ((float)($shipping ?? 0) > 0) ? 'R$ ' . Sanitizer::money((float)$shipping) : 'Grátis' ?></span>
+                    <span>Entrega</span>
+                    <span>Combinar no WhatsApp</span>
                 </div>
-                <?php endif; ?>
-                <?php if (($freeShippingRemaining ?? 0) > 0): ?>
-                <div class="summary-line cart-summary-row" id="cart-free-shipping">
-                    <span>Faltam R$ <?= Sanitizer::money((float)$freeShippingRemaining) ?> para frete grátis</span>
-                    <span></span>
-                </div>
-                <?php endif; ?>
                 <div class="summary-line total cart-summary-total">
                     <span class="label">Total</span>
                     <span class="value" id="cart-total">R$ <?= Sanitizer::money((float)$total) ?></span>
                 </div>
             </div>
 
+            <p class="cart-delivery-note">Prazo, endereco e valor de entrega serao confirmados pelo WhatsApp apos o pedido.</p>
+
             <div class="cart-actions">
-                <a href="/finalizar-compra" class="btn btn--primary btn--block">Finalizar Compra</a>
-                <a href="/produtos" class="btn btn--ghost btn--block">Continuar Comprando</a>
+                <a href="/finalizar-compra" class="btn btn--primary btn--block">Finalizar compra</a>
+                <a href="/produtos" class="btn btn--ghost btn--block">Continuar comprando</a>
             </div>
         </aside>
     </div>

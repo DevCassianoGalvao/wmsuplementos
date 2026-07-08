@@ -77,7 +77,7 @@ class AuthController extends BaseController
         $phone    = Sanitizer::onlyDigits($_POST['phone']   ?? '');
         $password = $_POST['password']                      ?? '';
         $confirm  = $_POST['password_confirm']              ?? '';
-        $optIn    = isset($_POST['email_opt_in']) ? 1 : 0;
+        $optIn    = 0;
 
         $v = new Validator([
             'name'             => $name,

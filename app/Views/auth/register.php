@@ -41,14 +41,6 @@
                 <input type="password" id="password_confirm" name="password_confirm" required autocomplete="new-password">
             </div>
 
-            <div class="form-group form-check">
-                <label>
-                    <input type="checkbox" name="email_opt_in" value="1"
-                           <?= !empty($_POST['email_opt_in']) ? 'checked' : '' ?>>
-                    Quero receber novidades e promoções por e-mail
-                </label>
-            </div>
-
             <button type="submit" class="btn btn--primary btn-primary btn-lg btn-block" style="background:#E63329;color:#fff;">Criar Conta</button>
         </form>
 

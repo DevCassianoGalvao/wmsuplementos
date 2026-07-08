@@ -9,6 +9,39 @@ use Maia\Models\PopupCampaignModel;
 <?php $footerAddress = Settings::get('endereco', Settings::get('store_address')); ?>
 <?php $waPhone = preg_replace('/\D/', '', $footerPhone); if ($waPhone === '') $waPhone = '5522998696430'; elseif (strlen($waPhone) <= 11) $waPhone = '55' . $waPhone; ?>
 <?php $waLink = 'https://wa.me/' . $waPhone . '?text=Ol%C3%A1%21%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20determinado%20suplemento'; ?>
+<?php
+$footerParseNavLinks = static function (string $raw, array $fallback): array {
+    $raw = trim($raw);
+    if ($raw === '') {
+        return $fallback;
+    }
+
+    $links = [];
+    foreach (preg_split('/\R/', $raw) ?: [] as $line) {
+        if (!str_contains($line, '|')) {
+            continue;
+        }
+        [$label, $url] = array_map('trim', explode('|', $line, 2));
+        if ($label !== '' && $url !== '' && preg_match('#^(https?://|/)#i', $url)) {
+            $links[] = ['label' => $label, 'url' => $url];
+        }
+    }
+
+    return $links !== [] ? $links : $fallback;
+};
+$footerNavLinks = $footerParseNavLinks(Settings::get('footer_nav_links'), [
+    ['label' => 'Todos os Produtos', 'url' => '/produtos'],
+    ['label' => 'Combos', 'url' => '/combos'],
+    ['label' => 'Proteinas', 'url' => '/categoria/proteinas'],
+    ['label' => 'Creatina', 'url' => '/categoria/creatina'],
+]);
+$footerInfoLinks = $footerParseNavLinks(Settings::get('footer_info_links'), [
+    ['label' => 'Sobre Nos', 'url' => '/pagina/sobre'],
+    ['label' => 'Como Comprar', 'url' => '/pagina/como-comprar'],
+    ['label' => 'Trocas e Devolucoes', 'url' => '/pagina/trocas-e-devolucoes'],
+    ['label' => 'Perguntas Frequentes', 'url' => '/pagina/perguntas-frequentes'],
+]);
+?>
 
 <footer class="site-footer">
     <div class="container footer-inner">
@@ -18,17 +51,15 @@ use Maia\Models\PopupCampaignModel;
         </div>
         <div class="footer-col">
             <h4>Navegação</h4>
-            <a href="/produtos">Todos os Produtos</a>
-            <a href="/combos">Combos</a>
-            <a href="/categoria/proteinas">Proteínas</a>
-            <a href="/categoria/creatina">Creatina</a>
+            <?php foreach ($footerNavLinks as $link): ?>
+            <a href="<?= htmlspecialchars($link['url'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($link['label'], ENT_QUOTES, 'UTF-8') ?></a>
+            <?php endforeach; ?>
         </div>
         <div class="footer-col">
             <h4>Institucional</h4>
-            <a href="/pagina/sobre">Sobre Nós</a>
-            <a href="/pagina/como-comprar">Como Comprar</a>
-            <a href="/pagina/trocas-e-devolucoes">Trocas e Devoluções</a>
-            <a href="/pagina/perguntas-frequentes">Perguntas Frequentes</a>
+            <?php foreach ($footerInfoLinks as $link): ?>
+            <a href="<?= htmlspecialchars($link['url'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($link['label'], ENT_QUOTES, 'UTF-8') ?></a>
+            <?php endforeach; ?>
         </div>
         <div class="footer-col">
             <h4>Atendimento</h4>
@@ -206,6 +237,6 @@ $breadcrumbSchema = [
 </div>
 
 <script src="/assets/js/placeholder-images.js?v=20260630-3" defer></script>
-<script src="/assets/js/main.js?v=20260707-wm2" defer></script>
+<script src="/assets/js/main.js?v=20260708-cart-checkout" defer></script>
 </body>
 </html>

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Maia\Services;
 
-use Maia\Helpers\Settings;
-
 /**
  * Gerencia o carrinho em sessão + tabela cart_sessions.
  *
@@ -129,35 +127,17 @@ class CartService
 
     public function total(): float
     {
-        return max(0.0, round($this->subtotal() - $this->discount() + $this->shippingFee(), 2));
+        return max(0.0, round($this->subtotal() - $this->discount(), 2));
     }
 
     public function shippingFee(): float
     {
-        $flatRate = (float)str_replace(',', '.', Settings::get('shipping_flat_rate', '0'));
-        if ($flatRate <= 0) {
-            return 0.0;
-        }
-
-        $freeAbove = (float)str_replace(',', '.', Settings::get('free_shipping_above', '0'));
-        $productsTotal = max(0.0, $this->subtotal() - $this->discount());
-
-        if ($freeAbove > 0 && $productsTotal >= $freeAbove) {
-            return 0.0;
-        }
-
-        return round($flatRate, 2);
+        return 0.0;
     }
 
     public function freeShippingRemaining(): float
     {
-        $freeAbove = (float)str_replace(',', '.', Settings::get('free_shipping_above', '0'));
-        $flatRate = (float)str_replace(',', '.', Settings::get('shipping_flat_rate', '0'));
-        if ($freeAbove <= 0 || $flatRate <= 0) {
-            return 0.0;
-        }
-
-        return max(0.0, round($freeAbove - max(0.0, $this->subtotal() - $this->discount()), 2));
+        return 0.0;
     }
 
     // ─── Cupom ────────────────────────────────────────────────────────────────

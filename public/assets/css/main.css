@@ -1651,29 +1651,7 @@ main > .section:first-child,
     border-radius: 12px;
     background: rgba(255,255,255,0.025);
 }
-.card-installments[hidden] {
-    display: none;
-}
-.form-hint {
-    margin: 0 0 0.85rem;
-    color: var(--color-text-secondary);
-    font-size: 0.875rem;
-}
-.payment-option {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    min-height: 52px;
-    padding: 0.85rem 1rem;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    background: #151515;
-}
-.payment-option input {
-    width: 18px;
-    height: 18px;
-    accent-color: #E63329;
-}
+
 .checkout-items {
     display: grid;
     gap: 0.75rem;
@@ -2585,5 +2563,209 @@ main > .section:first-child,
     /* Hero */
     .hero {
         min-height: 300px;
+    }
+}
+
+/* Final precedence: cart/checkout/institutional polish */
+.cart-count {
+    top: -8px;
+    right: -9px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-size: 0.7rem;
+    font-weight: 800;
+    border: 2px solid #0A0A0A;
+}
+
+.cart-page {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+    gap: clamp(1.25rem, 3vw, 2rem);
+    padding-top: clamp(2rem, 4vw, 3.5rem);
+    padding-bottom: clamp(3rem, 5vw, 5rem);
+}
+
+.cart-header-row {
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.cart-title {
+    font-size: clamp(1.75rem, 3vw, 2.4rem);
+    line-height: 1.05;
+    margin: 0.25rem 0 0;
+}
+
+.cart-count-label {
+    padding: 0.45rem 0.75rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.03);
+    white-space: nowrap;
+}
+
+.cart-coupon-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+}
+
+.cart-coupon-row input {
+    width: 100%;
+    min-width: 0;
+}
+
+.cart-coupon-row button {
+    min-width: 108px;
+    width: auto;
+}
+
+.cart-delivery-note,
+.checkout-notice,
+.payment-success-note {
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.25);
+    color: #86EFAC;
+    line-height: 1.45;
+}
+
+.cart-delivery-note {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.checkout-heading {
+    max-width: 760px;
+    margin-bottom: 1.5rem;
+}
+
+.checkout-heading h1 {
+    margin: 0 0 0.6rem;
+    font-size: clamp(1.85rem, 3vw, 2.5rem);
+    line-height: 1.08;
+}
+
+.checkout-heading p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+}
+
+.payment-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    min-height: 52px;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    background: #151515;
+}
+
+.payment-option input {
+    width: 18px;
+    height: 18px;
+    accent-color: #E63329;
+    margin-top: 0.15rem;
+}
+
+.payment-label {
+    display: grid;
+    gap: 0.25rem;
+    line-height: 1.35;
+}
+
+.payment-label strong {
+    color: var(--color-text-primary);
+}
+
+.payment-label small {
+    color: var(--color-text-secondary);
+}
+
+.card-installments {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.card-installments[hidden] {
+    display: none;
+}
+
+.form-hint {
+    margin: 0 0 0.85rem;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.payment-success-note {
+    margin: 1rem 0;
+}
+
+.confirmation-page {
+    padding-top: clamp(2rem, 4vw, 3.5rem);
+    padding-bottom: clamp(3rem, 5vw, 5rem);
+}
+
+.confirmation-card {
+    background: #101010;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.confirmation-card + .confirmation-card {
+    margin-top: 1rem;
+}
+
+.page-content {
+    padding-top: clamp(2.25rem, 5vw, 4rem);
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.static-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.static-page h1 {
+    margin: 0 0 1.5rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.rich-text {
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+}
+
+.rich-text > * + * {
+    margin-top: 1rem;
+}
+
+.rich-text h2,
+.rich-text h3 {
+    margin-top: 2rem;
+    color: var(--color-text-primary);
+}
+
+@media (max-width: 640px) {
+    .cart-page {
+        padding-top: 1.5rem;
+    }
+
+    .cart-header-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .cart-coupon-row {
+        grid-template-columns: 1fr;
     }
 }

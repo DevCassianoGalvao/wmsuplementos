@@ -37,11 +37,10 @@ class CheckoutController extends BaseController
             'items'     => $this->cart->getItems(),
             'subtotal'  => $this->cart->subtotal(),
             'discount'  => $this->cart->discount(),
-            'shipping'  => $this->cart->shippingFee(),
-            'freeShippingRemaining' => $this->cart->freeShippingRemaining(),
             'total'     => $this->cart->total(),
             'coupon'    => $this->cart->getAppliedCoupon(),
             'user'      => $this->getLoggedUser(),
+            'cardInterestMonthly' => (float)str_replace(',', '.', Settings::get('card_interest_monthly', '3.00')),
             'flash'     => $this->getFlash(),
         ]);
     }
@@ -113,7 +112,7 @@ class CheckoutController extends BaseController
         $_SESSION['last_order_id'] = $orderId;
         $this->cart->clear();
 
-        $this->redirect('/pedido/confirmacao/' . $orderId);
+        $this->redirect('/pedido/confirmacao/' . $orderId . '?t=' . $this->confirmationToken($orderId, $email));
     }
 
     public function confirmation(array $params): void
@@ -140,9 +139,14 @@ class CheckoutController extends BaseController
         }
 
         if ($orderUserId === 0 && $lastOrderId !== $orderId) {
-            http_response_code(404);
-            $this->render('errors/404');
-            return;
+            $token = (string)($_GET['t'] ?? '');
+            $expectedToken = $this->confirmationToken($orderId, (string)($order['customer_email'] ?? ''));
+
+            if ($token === '' || !hash_equals($expectedToken, $token)) {
+                http_response_code(404);
+                $this->render('errors/404');
+                return;
+            }
         }
 
         $this->render('checkout/confirmation', [
@@ -209,10 +213,7 @@ class CheckoutController extends BaseController
             $notes[] = 'Parcelamento solicitado: ' . $installments . 'x';
         }
 
-        $shipping = $this->cart->shippingFee();
-        if ($shipping > 0) {
-            $notes[] = 'Frete: R$ ' . number_format($shipping, 2, ',', '.');
-        }
+        $notes[] = 'Entrega: combinar pelo WhatsApp.';
 
         return $notes !== [] ? implode("\n", $notes) : null;
     }
@@ -230,6 +231,12 @@ class CheckoutController extends BaseController
             . 'Total: R$ ' . number_format((float)$order['total'], 2, ',', '.') . '.';
 
         return 'https://wa.me/' . $phone . '?text=' . rawurlencode($message);
+    }
+
+    private function confirmationToken(int $orderId, string $email): string
+    {
+        $secret = getenv('APP_SECRET') ?: session_id();
+        return hash_hmac('sha256', $orderId . '|' . strtolower(trim($email)), $secret);
     }
 
     private function trackFunnel(string $step, ?int $orderId = null): void

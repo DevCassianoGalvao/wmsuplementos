@@ -2004,6 +2004,40 @@ button.btn-link:hover {
     font-size: var(--text-small);
 }
 
+/* Settings spacing pass */
+.settings-form {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.settings-form .form-grid {
+    gap: 1.5rem;
+}
+
+.settings-form .form-card,
+.settings-form .form-grid .form-card {
+    margin-top: 0;
+}
+
+.settings-form .form-card h2 {
+    margin-bottom: 1rem;
+}
+
+.settings-form .form-row {
+    row-gap: 1rem;
+}
+
+.settings-form textarea {
+    min-height: 130px;
+}
+
+.settings-shortcut {
+    padding: 1.25rem;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    background: #111111;
+}
+
 /* Responsive */
 @media (max-width: 640px) {
     .notification-item {

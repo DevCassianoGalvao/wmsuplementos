@@ -40,8 +40,6 @@ class CartController extends BaseController
             'suggestions' => $this->cartSuggestions(),
             'subtotal'   => $this->cart->subtotal(),
             'discount'   => $this->cart->discount(),
-            'shipping'   => $this->cart->shippingFee(),
-            'freeShippingRemaining' => $this->cart->freeShippingRemaining(),
             'total'      => $this->cart->total(),
             'coupon'     => $this->cart->getAppliedCoupon(),
             'flash'      => $this->getFlash(),
@@ -117,8 +115,6 @@ class CartController extends BaseController
             'count'    => $this->cart->count(),
             'subtotal' => $this->moneyValue($this->cart->subtotal()),
             'discount' => $this->moneyValue($this->cart->discount()),
-            'shipping' => $this->moneyValue($this->cart->shippingFee()),
-            'free_shipping_remaining' => $this->moneyValue($this->cart->freeShippingRemaining()),
             'total'    => $this->moneyValue($this->cart->total()),
         ]);
     }
@@ -135,8 +131,6 @@ class CartController extends BaseController
             'count'    => $this->cart->count(),
             'subtotal' => $this->moneyValue($this->cart->subtotal()),
             'discount' => $this->moneyValue($this->cart->discount()),
-            'shipping' => $this->moneyValue($this->cart->shippingFee()),
-            'free_shipping_remaining' => $this->moneyValue($this->cart->freeShippingRemaining()),
             'total'    => $this->moneyValue($this->cart->total()),
         ]);
     }
@@ -151,8 +145,6 @@ class CartController extends BaseController
         if ($this->isAjax()) {
             $this->json(array_merge($result, [
                 'discount' => $this->moneyValue($this->cart->discount()),
-                'shipping' => $this->moneyValue($this->cart->shippingFee()),
-                'free_shipping_remaining' => $this->moneyValue($this->cart->freeShippingRemaining()),
                 'total'    => $this->moneyValue($this->cart->total()),
             ]));
         }

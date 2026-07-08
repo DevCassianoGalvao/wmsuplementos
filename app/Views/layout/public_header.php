@@ -1,5 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<?php
+$parseNavLinks = static function (string $raw, array $fallback): array {
+    $raw = trim($raw);
+    if ($raw === '') {
+        return $fallback;
+    }
+
+    $links = [];
+    foreach (preg_split('/\R/', $raw) ?: [] as $line) {
+        if (!str_contains($line, '|')) {
+            continue;
+        }
+        [$label, $url] = array_map('trim', explode('|', $line, 2));
+        if ($label !== '' && $url !== '' && preg_match('#^(https?://|/)#i', $url)) {
+            $links[] = ['label' => $label, 'url' => $url];
+        }
+    }
+
+    return $links !== [] ? $links : $fallback;
+};
+$headerLinks = $parseNavLinks(\Maia\Helpers\Settings::get('header_nav_links'), [
+    ['label' => 'Produtos', 'url' => '/produtos'],
+    ['label' => 'Combos', 'url' => '/combos'],
+]);
+?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +46,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/design-system.css?v=20260625-6">
     <link rel="stylesheet" href="/assets/css/animations.css?v=20260625-6">
-    <link rel="stylesheet" href="/assets/css/main.css?v=20260708-hero-empty">
+    <link rel="stylesheet" href="/assets/css/main.css?v=20260708-cart-checkout">
     <?= \Maia\Helpers\ScriptInjector::head() ?>
 </head>
 <body>
@@ -48,8 +73,9 @@
         </form>
 
         <nav class="header-nav" id="header-nav" aria-label="Menu principal">
-            <a href="/produtos" class="nav-link">Produtos</a>
-            <a href="/combos" class="nav-link">Combos</a>
+            <?php foreach ($headerLinks as $link): ?>
+                <a href="<?= htmlspecialchars($link['url'], ENT_QUOTES, 'UTF-8') ?>" class="nav-link"><?= htmlspecialchars($link['label'], ENT_QUOTES, 'UTF-8') ?></a>
+            <?php endforeach; ?>
             <?php if (\Maia\Helpers\Auth::isUserLogged()): ?>
                 <a href="/minha-conta" class="nav-link">Minha Conta</a>
                 <a href="/sair" class="nav-link">Sair</a>
@@ -69,8 +95,9 @@
     <!-- Mobile nav overlay -->
     <div class="mobile-nav" id="mobile-nav">
         <nav>
-            <a href="/produtos">Produtos</a>
-            <a href="/combos">Combos</a>
+            <?php foreach ($headerLinks as $link): ?>
+                <a href="<?= htmlspecialchars($link['url'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($link['label'], ENT_QUOTES, 'UTF-8') ?></a>
+            <?php endforeach; ?>
             <?php if (\Maia\Helpers\Auth::isUserLogged()): ?>
                 <a href="/minha-conta">Minha Conta</a>
                 <a href="/sair">Sair</a>

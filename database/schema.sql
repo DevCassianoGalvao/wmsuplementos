@@ -522,6 +522,10 @@ INSERT IGNORE INTO `settings` (`key`, `value`) VALUES
     ('store_pix_key',         NULL),
     ('shipping_flat_rate',    '0.00'),
     ('free_shipping_above',   '0.00'),
+    ('card_interest_monthly', '3.00'),
+    ('header_nav_links',      'Produtos|/produtos\nCombos|/combos'),
+    ('footer_nav_links',      'Todos os Produtos|/produtos\nCombos|/combos\nProteinas|/categoria/proteinas\nCreatina|/categoria/creatina'),
+    ('footer_info_links',     'Sobre Nos|/pagina/sobre\nComo Comprar|/pagina/como-comprar\nTrocas e Devolucoes|/pagina/trocas-e-devolucoes\nPerguntas Frequentes|/pagina/perguntas-frequentes'),
     ('stock_alert_min',       '5'),
     ('privacy_policy',        NULL),
     ('terms_of_use',          NULL);
@@ -544,7 +548,11 @@ CREATE TABLE IF NOT EXISTS `pages` (
 
 INSERT IGNORE INTO `pages` (`slug`, `title`, `content`, `active`) VALUES
 ('politica-de-privacidade', 'Política de Privacidade', '<p>Preencha a política de privacidade.</p>', 1),
-('termos-de-uso',           'Termos de Uso',           '<p>Preencha os termos de uso.</p>',           1);
+('termos-de-uso',           'Termos de Uso',           '<p>Preencha os termos de uso.</p>',           1),
+('sobre',                   'Sobre a WM Suplementos', '<p>Conte a historia da loja.</p>',            1),
+('como-comprar',            'Como Comprar',           '<p>Explique o passo a passo da compra.</p>',  1),
+('trocas-e-devolucoes',     'Trocas e Devolucoes',    '<p>Explique as regras de troca e devolucao.</p>', 1),
+('perguntas-frequentes',    'Perguntas Frequentes',   '<p>Adicione as principais duvidas dos clientes.</p>', 1);
 
 -- =============================================================================
 -- 25. stock_notifications — Avisos de reposição de estoque para clientes

@@ -1,7 +1,21 @@
 <?php use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
+<?php
+$interestRate = max(0.0, (float)($cardInterestMonthly ?? 3.00));
+$installmentAmount = static function (float $total, int $months, float $monthlyRate): float {
+    if ($months <= 1 || $monthlyRate <= 0) {
+        return $total / max(1, $months);
+    }
+    $rate = $monthlyRate / 100;
+    return $total * ($rate / (1 - pow(1 + $rate, -$months)));
+};
+?>
 
 <div class="container checkout-page">
-    <h1>Finalizar Compra</h1>
+    <div class="checkout-heading">
+        <span class="section__label">Checkout</span>
+        <h1>Finalizar compra</h1>
+        <p>Pagamento, entrega e comprovantes serao finalizados com atendimento pelo WhatsApp.</p>
+    </div>
 
     <?php if (!empty($flash['error'])): ?>
     <div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
@@ -12,7 +26,7 @@
             <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
 
             <section class="checkout-section">
-                <h2>Dados Pessoais</h2>
+                <h2>Dados pessoais</h2>
 
                 <div class="form-group">
                     <label for="name">Nome completo <span aria-hidden="true">*</span></label>
@@ -34,18 +48,24 @@
             </section>
 
             <section class="checkout-section">
-                <h2>Forma de Pagamento</h2>
+                <h2>Pagamento</h2>
 
                 <div class="payment-options">
                     <label class="payment-option">
                         <input type="radio" name="payment_method" value="pix"
                                <?= ($_POST['payment_method'] ?? 'pix') === 'pix' ? 'checked' : '' ?> required>
-                        <span class="payment-label">PIX <small>copie a chave na próxima tela</small></span>
+                        <span class="payment-label">
+                            <strong>PIX</strong>
+                            <small>A chave PIX aparece na proxima tela. Depois envie o comprovante pelo WhatsApp.</small>
+                        </span>
                     </label>
                     <label class="payment-option">
                         <input type="radio" name="payment_method" value="cartao"
                                <?= ($_POST['payment_method'] ?? '') === 'cartao' ? 'checked' : '' ?>>
-                        <span class="payment-label">Cartão de Crédito <small>finalização pelo WhatsApp</small></span>
+                        <span class="payment-label">
+                            <strong>Cartao de credito</strong>
+                            <small>Escolha uma estimativa de parcelas. A confirmacao final acontece pelo WhatsApp.</small>
+                        </span>
                     </label>
                 </div>
 
@@ -53,20 +73,26 @@
                     <label for="installments">Parcelamento desejado</label>
                     <select id="installments" name="installments">
                         <?php for ($i = 1; $i <= 12; $i++): ?>
+                        <?php $parcel = $installmentAmount((float)$total, $i, $interestRate); ?>
                         <option value="<?= $i ?>" <?= (int)($_POST['installments'] ?? 1) === $i ? 'selected' : '' ?>>
-                            <?= $i ?>x
+                            <?= $i ?>x de R$ <?= Sanitizer::money($parcel) ?><?= $i > 1 ? ' (estimado)' : '' ?>
                         </option>
                         <?php endfor; ?>
                     </select>
-                    <p class="form-hint">Entraremos em contato pelo WhatsApp para finalizar sua compra.</p>
+                    <p class="form-hint">Estimativa com taxa mensal configurada de <?= Sanitizer::money($interestRate) ?>%. O valor final sera confirmado no atendimento.</p>
+                </div>
+
+                <div class="checkout-notice">
+                    <strong>Entrega combinada no WhatsApp</strong>
+                    <span>Depois do pedido, nossa equipe confirma endereco, prazo e valor de entrega diretamente com voce.</span>
                 </div>
             </section>
 
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Confirmar Pedido</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Confirmar pedido</button>
         </form>
 
         <aside class="checkout-summary">
-            <h2>Seu Pedido</h2>
+            <h2>Seu pedido</h2>
             <ul class="checkout-items">
                 <?php foreach ($items as $item): ?>
                 <li class="checkout-item">
@@ -87,18 +113,10 @@
                     <span>- R$ <?= Sanitizer::money((float)$discount) ?></span>
                 </div>
                 <?php endif; ?>
-                <?php if (($shipping ?? 0) > 0 || ($freeShippingRemaining ?? 0) <= 0): ?>
-                <div class="summary-line">
-                    <span>Frete:</span>
-                    <span><?= ((float)($shipping ?? 0) > 0) ? 'R$ ' . Sanitizer::money((float)$shipping) : 'Grátis' ?></span>
+                <div class="summary-line summary-line--muted">
+                    <span>Entrega:</span>
+                    <span>Combinar no WhatsApp</span>
                 </div>
-                <?php endif; ?>
-                <?php if (($freeShippingRemaining ?? 0) > 0): ?>
-                <div class="summary-line">
-                    <span>Frete grátis:</span>
-                    <span>Faltam R$ <?= Sanitizer::money((float)$freeShippingRemaining) ?></span>
-                </div>
-                <?php endif; ?>
                 <div class="summary-line total">
                     <span>Total:</span>
                     <span>R$ <?= Sanitizer::money((float)$total) ?></span>
