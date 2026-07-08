@@ -20,7 +20,7 @@ require ROOT_PATH . '/config/database.php';
 use Maia\Services\BrevoService;
 
 try {
-    $appUrl = rtrim(getenv('APP_URL') ?: 'https://maiasuplementos.com.br', '/');
+    $appUrl = rtrim(getenv('APP_URL') ?: 'https://wmsuplementos.com.br', '/');
     $brevo  = new BrevoService();
 
     // ── Alerta de estoque baixo para admin ─────────────────────────────────────

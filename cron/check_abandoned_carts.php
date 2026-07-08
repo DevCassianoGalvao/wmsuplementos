@@ -21,7 +21,7 @@ use Maia\Services\BrevoService;
 try {
     $config         = require ROOT_PATH . '/config/app.php';
     $abandonedAfter = (int)($config['cart']['abandoned_after_minutes'] ?? 60);
-    $appUrl         = rtrim(getenv('APP_URL') ?: 'https://maiasuplementos.com.br', '/');
+    $appUrl         = rtrim(getenv('APP_URL') ?: 'https://wmsuplementos.com.br', '/');
 
     // Carrinhos com e-mail, não notificados, atualizados há X minutos (máx 7 dias)
     $stmt = db()->prepare(

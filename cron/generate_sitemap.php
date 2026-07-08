@@ -17,7 +17,7 @@ require ROOT_PATH . '/app/autoload.php';
 require ROOT_PATH . '/config/database.php';
 
 try {
-    $appUrl  = rtrim(getenv('APP_URL') ?: 'https://maiasuplementos.com.br', '/');
+    $appUrl  = rtrim(getenv('APP_URL') ?: 'https://wmsuplementos.com.br', '/');
     $today   = date('Y-m-d');
     $urls    = [];
 

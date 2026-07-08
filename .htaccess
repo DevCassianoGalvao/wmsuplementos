@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /maiasuplementos/
+    RewriteBase /
 
     # Se já chegou em public/ — para (evita loop)
     RewriteRule ^public/ - [L]
@@ -9,5 +9,3 @@
     # O public/.htaccess cuida de servir arquivos reais ou rotear para index.php
     RewriteRule ^(.*)$ public/$1 [L,QSA]
 </IfModule>
-
-Options -Indexes

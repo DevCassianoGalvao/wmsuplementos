@@ -22,7 +22,7 @@ use Maia\Services\NotificationService;
 use Maia\Models\OrderModel;
 
 try {
-    $appUrl = rtrim(getenv('APP_URL') ?: 'https://maiasuplementos.com.br', '/');
+    $appUrl = rtrim(getenv('APP_URL') ?: 'https://wmsuplementos.com.br', '/');
     $brevo  = new BrevoService();
 
     // Pedidos entregues há 2-7 dias sem nenhum review criado para o order_id

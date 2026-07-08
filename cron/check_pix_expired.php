@@ -20,7 +20,7 @@ use Maia\Services\BrevoService;
 use Maia\Models\OrderModel;
 
 try {
-    $appUrl = getenv('APP_URL') ?: 'https://maiasuplementos.com.br';
+    $appUrl = getenv('APP_URL') ?: 'https://wmsuplementos.com.br';
 
     // PIX expirado: aguardando_pagamento + método PIX + criado há mais de 30 min
     $stmt = db()->prepare(
