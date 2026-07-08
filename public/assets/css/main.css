@@ -3109,3 +3109,47 @@ main > .section:first-child,
         grid-template-columns: 1fr;
     }
 }
+
+@media (max-width: 640px) {
+    .site-footer {
+        text-align: center;
+    }
+
+    .footer-inner,
+    .footer-col,
+    .footer-brand {
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-col a,
+    .footer-contact-link,
+    .footer-address {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .footer-security-inner {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .footer-bottom-inner {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 0.65rem;
+        padding-inline: 1rem;
+    }
+
+    .footer-bottom-inner .text-muted,
+    .footer-bottom-inner .dev-credit {
+        display: block;
+        width: 100%;
+        max-width: 320px;
+        margin-inline: auto;
+        text-align: center;
+        line-height: 1.55;
+    }
+}

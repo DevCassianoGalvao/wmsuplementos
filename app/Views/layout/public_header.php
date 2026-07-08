@@ -41,6 +41,8 @@ $headerLinks = $parseNavLinks(\Maia\Helpers\Settings::get('header_nav_links'), [
     <?php if (!empty($ogImage)): ?>
     <meta property="og:image" content="<?= htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8') ?>">
     <?php endif; ?>
+    <link rel="icon" type="image/png" href="/assets/img/logo.png?v=20260707-wm">
+    <link rel="apple-touch-icon" href="/assets/img/logo.png?v=20260707-wm">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
