@@ -177,7 +177,7 @@ class BrevoService
         $payload = json_encode([
             'sender'      => [
                 'email' => $this->config['brevo']['sender_email'] ?? '',
-                'name'  => $this->config['brevo']['sender_name']  ?? 'Maia Suplementos',
+                'name'  => $this->config['brevo']['sender_name']  ?? 'WM Suplementos',
             ],
             'to'          => [['email' => $toEmail, 'name' => $toName]],
             'subject'     => $subject,
@@ -265,7 +265,7 @@ class BrevoService
         }
 
         $from    = $smtp['from_email'] ?? ($this->config['brevo']['sender_email'] ?? '');
-        $fromName= $smtp['from_name']  ?? ($this->config['brevo']['sender_name'] ?? 'Maia Suplementos');
+        $fromName= $smtp['from_name']  ?? ($this->config['brevo']['sender_name'] ?? 'WM Suplementos');
         $host    = $smtp['host'];
         $port    = (int)($smtp['port'] ?? 587);
         $user    = $smtp['username'] ?? '';
@@ -350,7 +350,7 @@ class BrevoService
      */
     private function builtinTemplates(): array
     {
-        $brand = 'Maia Suplementos';
+        $brand = 'WM Suplementos';
         return [
             'pix_gerado' => [
                 'subject'      => 'Seu PIX foi gerado! | ' . $brand,

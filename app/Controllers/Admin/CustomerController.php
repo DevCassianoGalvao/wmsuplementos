@@ -35,7 +35,7 @@ class CustomerController extends BaseController
         $total        = (int)($customerList['total'] ?? $model->countList($filters));
 
         $this->render('admin/customers/index', [
-            'pageTitle'  => 'Clientes | Admin Maia',
+            'pageTitle'  => 'Clientes | Admin WM',
             'customers'  => $customers,
             'total'      => $total,
             'page'       => $page,
@@ -61,7 +61,7 @@ class CustomerController extends BaseController
         $orders = (new OrderModel())->getByUser($id, 1, 20);
 
         $this->render('admin/customers/show', [
-            'pageTitle' => $user['name'] . ' | Clientes | Admin Maia',
+            'pageTitle' => $user['name'] . ' | Clientes | Admin WM',
             'customer'  => $user,
             'orders'    => $orders,
         ], 'admin');
@@ -201,7 +201,7 @@ class CustomerController extends BaseController
     {
         Auth::requireAdminRole();
         $this->render('admin/customers/form', [
-            'pageTitle' => 'Novo Cliente | Admin Maia',
+            'pageTitle' => 'Novo Cliente | Admin WM',
             'customer'  => null,
             'flash'     => $this->getFlash(),
         ], 'admin');
@@ -263,7 +263,7 @@ class CustomerController extends BaseController
         }
 
         $this->render('admin/customers/form', [
-            'pageTitle' => 'Editar Cliente | Admin Maia',
+            'pageTitle' => 'Editar Cliente | Admin WM',
             'customer'  => $customer,
             'flash'     => $this->getFlash(),
         ], 'admin');

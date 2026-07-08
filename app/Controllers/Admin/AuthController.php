@@ -18,7 +18,7 @@ class AuthController extends BaseController
         }
 
         $this->render('admin/auth/login', [
-            'pageTitle' => 'Admin Login | Maia Suplementos',
+            'pageTitle' => 'Admin Login | WM Suplementos',
             'flash'     => $this->getFlash(),
         ], 'admin_bare');
     }

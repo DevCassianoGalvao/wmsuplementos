@@ -41,7 +41,7 @@ class PageController extends BaseController
         }
 
         $this->render('page/show', [
-            'pageTitle' => $page['title'] . ' | Maia Suplementos',
+            'pageTitle' => $page['title'] . ' | WM Suplementos',
             'metaDesc'  => $page['meta_description'] ?? '',
             'page'      => $page,
         ]);

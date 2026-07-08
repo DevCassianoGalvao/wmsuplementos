@@ -13,7 +13,7 @@ use Maia\Models\PopupCampaignModel;
 <footer class="site-footer">
     <div class="container footer-inner">
         <div class="footer-brand">
-            <img src="/assets/img/logo.png" alt="Maia Suplementos" height="44" style="height:44px;width:auto;">
+            <img src="/assets/img/logo.png?v=20260707-wm" alt="WM Suplementos" height="44" style="height:44px;width:auto;">
             <p class="footer-tagline">Suplementação premium para quem leva a sério.</p>
         </div>
         <div class="footer-col">
@@ -66,7 +66,7 @@ use Maia\Models\PopupCampaignModel;
     </div>
     <div class="footer-bottom">
         <div class="container footer-bottom-inner">
-            <span class="text-muted">&copy; <?= date('Y') ?> Maia Suplementos. Todos os direitos reservados. | CNPJ 66.596.775/0001-80</span>
+            <span class="text-muted">&copy; <?= date('Y') ?> WM Suplementos. Todos os direitos reservados. | CNPJ 66.596.775/0001-80</span>
             <a href="https://www.instagram.com/cassianogalvao.web" target="_blank" rel="noopener" class="dev-credit">Desenvolvido por @cassianogalvao.web</a>
         </div>
     </div>
@@ -114,7 +114,7 @@ $popupCta = (string)($popupCampaign['cta_label'] ?: 'Ver oferta');
             <?php endif; ?>
         <?php else: ?>
             <div class="campaign-popup__content">
-                <img src="/assets/img/logo.png" alt="Maia Suplementos" class="campaign-popup__logo">
+                <img src="/assets/img/logo.png?v=20260707-wm" alt="WM Suplementos" class="campaign-popup__logo">
                 <span class="campaign-popup__eyebrow">Promocao</span>
                 <h2 id="campaign-popup-title"><?= htmlspecialchars($popupTitle, ENT_QUOTES, 'UTF-8') ?></h2>
                 <?php if ($popupMessage !== ''): ?>
@@ -148,7 +148,7 @@ $currentUrl = $appUrl . ($currentPath === '/' ? '/' : $currentPath);
 $organizationSchema = [
     '@context' => 'https://schema.org',
     '@type' => 'Organization',
-    'name' => 'Maia Suplementos',
+    'name' => 'WM Suplementos',
     'url' => $appUrl . '/',
     'logo' => $appUrl . '/assets/img/logo.png',
     'contactPoint' => [

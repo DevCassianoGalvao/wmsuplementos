@@ -38,7 +38,7 @@ class OrderController extends BaseController
         $total  = $this->model->countList($filters);
 
         $this->render('admin/orders/index', [
-            'pageTitle'  => 'Pedidos | Admin Maia',
+            'pageTitle'  => 'Pedidos | Admin WM',
             'orders'     => $orders,
             'total'      => $total,
             'page'       => $page,
@@ -63,7 +63,7 @@ class OrderController extends BaseController
         }
 
         $this->render('admin/orders/show', [
-            'pageTitle' => 'Pedido #' . $id . ' | Admin Maia',
+            'pageTitle' => 'Pedido #' . $id . ' | Admin WM',
             'order'     => $order,
             'statuses'  => OrderModel::allStatuses(),
             'flash'     => $this->getFlash(),

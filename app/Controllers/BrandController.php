@@ -33,7 +33,7 @@ class BrandController extends BaseController
         $total = (int)($result['total'] ?? 0);
 
         $this->render('brand/show', [
-            'pageTitle'  => $brand['name'] . ' | Maia Suplementos',
+            'pageTitle'  => $brand['name'] . ' | WM Suplementos',
             'metaDesc'   => 'Produtos da marca ' . $brand['name'],
             'brand'      => $brand,
             'products'   => $result['items'] ?? [],

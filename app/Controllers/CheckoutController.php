@@ -34,7 +34,7 @@ class CheckoutController extends BaseController
         $this->trackFunnel('checkout_start');
 
         $this->render('checkout/index', [
-            'pageTitle' => 'Finalizar Compra | Maia Suplementos',
+            'pageTitle' => 'Finalizar Compra | WM Suplementos',
             'items'     => $this->cart->getItems(),
             'subtotal'  => $this->cart->subtotal(),
             'discount'  => $this->cart->discount(),
@@ -169,7 +169,7 @@ class CheckoutController extends BaseController
         }
 
         $this->render('checkout/confirmation', [
-            'pageTitle' => 'Pedido Confirmado | Maia Suplementos',
+            'pageTitle' => 'Pedido Confirmado | WM Suplementos',
             'order'     => $order,
             'mpUrl'     => $_GET['mp'] ?? '',
         ]);

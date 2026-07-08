@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($pageTitle ?? 'Maia Suplementos', ENT_QUOTES, 'UTF-8') ?></title>
+    <title><?= htmlspecialchars($pageTitle ?? 'WM Suplementos', ENT_QUOTES, 'UTF-8') ?></title>
     <meta name="app-base" content="<?= htmlspecialchars(defined('APP_BASE') ? APP_BASE : '', ENT_QUOTES, 'UTF-8') ?>">
     <?php if (!empty($metaDesc)): ?>
     <meta name="description" content="<?= htmlspecialchars($metaDesc, ENT_QUOTES, 'UTF-8') ?>">
     <?php endif; ?>
-    <meta property="og:title" content="<?= htmlspecialchars($pageTitle ?? 'Maia Suplementos', ENT_QUOTES, 'UTF-8') ?>">
+    <meta property="og:title" content="<?= htmlspecialchars($pageTitle ?? 'WM Suplementos', ENT_QUOTES, 'UTF-8') ?>">
     <?php if (!empty($metaDesc)): ?>
     <meta property="og:description" content="<?= htmlspecialchars($metaDesc, ENT_QUOTES, 'UTF-8') ?>">
     <?php endif; ?>
@@ -32,8 +32,8 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
 
-        <a href="/" class="logo" aria-label="Maia Suplementos">
-            <img src="/assets/img/logo.png" alt="Maia Suplementos" height="44" loading="eager" style="height:44px;width:auto;">
+        <a href="/" class="logo" aria-label="WM Suplementos">
+            <img src="/assets/img/logo.png?v=20260707-wm" alt="WM Suplementos" height="44" loading="eager" style="height:44px;width:auto;">
         </a>
 
         <form class="search-form" action="/busca" method="get" role="search">

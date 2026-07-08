@@ -48,7 +48,7 @@ class StockController extends BaseController
         $movements = $this->getRecentMovements(20);
 
         $this->render('admin/stock/index', [
-            'pageTitle'  => 'Estoque | Admin Maia',
+            'pageTitle'  => 'Estoque | Admin WM',
             'products'   => $products,
             'total'      => $total,
             'page'       => $page,

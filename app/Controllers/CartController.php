@@ -35,7 +35,7 @@ class CartController extends BaseController
         $this->trackFunnel('add_to_cart');
 
         $this->render('cart/index', [
-            'pageTitle'  => 'Carrinho | Maia Suplementos',
+            'pageTitle'  => 'Carrinho | WM Suplementos',
             'items'      => $this->cart->getItems(),
             'suggestions' => $this->cartSuggestions(),
             'subtotal'   => $this->cart->subtotal(),

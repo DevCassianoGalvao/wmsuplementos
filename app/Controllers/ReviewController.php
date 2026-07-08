@@ -26,7 +26,7 @@ class ReviewController extends BaseController
         $product = $this->getProduct((int)$review['product_id']);
 
         $this->render('review/form', [
-            'pageTitle' => 'Avaliar Produto | Maia Suplementos',
+            'pageTitle' => 'Avaliar Produto | WM Suplementos',
             'review'    => $review,
             'product'   => $product,
             'flash'     => $this->getFlash(),
@@ -85,7 +85,7 @@ class ReviewController extends BaseController
         );
 
         $this->render('review/thanks', [
-            'pageTitle' => 'Avaliação Enviada | Maia Suplementos',
+            'pageTitle' => 'Avaliação Enviada | WM Suplementos',
         ]);
     }
 

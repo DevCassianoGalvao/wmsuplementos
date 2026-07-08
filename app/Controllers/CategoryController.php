@@ -65,7 +65,7 @@ class CategoryController extends BaseController
         });
 
         $this->render('category/show', [
-            'pageTitle'  => $category['seo_title']       ?: $category['name'] . ' | Maia Suplementos',
+            'pageTitle'  => $category['seo_title']       ?: $category['name'] . ' | WM Suplementos',
             'metaDesc'   => $category['seo_description'] ?: '',
             'category'   => $category,
             'products'   => $result['items'],

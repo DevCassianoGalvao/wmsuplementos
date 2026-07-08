@@ -26,7 +26,7 @@ class CategoryController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/categories/index', [
-            'pageTitle'  => 'Categorias | Admin Maia',
+            'pageTitle'  => 'Categorias | Admin WM',
             'categories' => $this->model->getAllWithProductCount(),
             'flash'      => $this->getFlash(),
         ], 'admin');
@@ -37,7 +37,7 @@ class CategoryController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/categories/form', [
-            'pageTitle' => 'Nova Categoria | Admin Maia',
+            'pageTitle' => 'Nova Categoria | Admin WM',
             'category'  => null,
             'flash'     => $this->getFlash(),
         ], 'admin');
@@ -80,7 +80,7 @@ class CategoryController extends BaseController
         }
 
         $this->render('admin/categories/form', [
-            'pageTitle' => 'Editar Categoria | Admin Maia',
+            'pageTitle' => 'Editar Categoria | Admin WM',
             'category'  => $category,
             'flash'     => $this->getFlash(),
         ], 'admin');

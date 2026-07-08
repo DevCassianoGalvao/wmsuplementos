@@ -1,5 +1,5 @@
 -- =============================================================================
--- Maia Suplementos — Seed de Demonstração
+-- WM Suplementos — Seed de Demonstração
 -- Popula o banco com ~60 pedidos, 20 clientes e avaliações realistas
 -- para visualização de métricas, filtros e dashboard.
 --

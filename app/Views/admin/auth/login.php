@@ -2,7 +2,7 @@
 
 <div class="admin-login-wrap">
     <div class="admin-login-card">
-        <img src="/assets/img/logo.png" alt="Maia Suplementos" height="40" style="height:40px;width:auto;margin-bottom:1.5rem;">
+        <img src="/assets/img/logo.png?v=20260707-wm" alt="WM Suplementos" height="40" style="height:40px;width:auto;margin-bottom:1.5rem;">
         <h1>Painel Administrativo</h1>
         <p class="subtitle">Acesse com suas credenciais de administrador</p>
 

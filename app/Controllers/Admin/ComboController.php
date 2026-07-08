@@ -28,7 +28,7 @@ class ComboController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/combos/index', [
-            'pageTitle' => 'Combos | Admin Maia',
+            'pageTitle' => 'Combos | Admin WM',
             'combos'    => $this->model->getAll(),
             'flash'     => $this->getFlash(),
         ], 'admin');
@@ -39,7 +39,7 @@ class ComboController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/combos/form', [
-            'pageTitle' => 'Novo Combo | Admin Maia',
+            'pageTitle' => 'Novo Combo | Admin WM',
             'combo'     => null,
             'products'  => $this->getProducts(),
             'flash'     => $this->getFlash(),
@@ -87,7 +87,7 @@ class ComboController extends BaseController
         }
 
         $this->render('admin/combos/form', [
-            'pageTitle' => 'Editar Combo | Admin Maia',
+            'pageTitle' => 'Editar Combo | Admin WM',
             'combo'     => $combo,
             'products'  => $this->getProducts(),
             'flash'     => $this->getFlash(),

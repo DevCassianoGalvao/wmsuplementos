@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($pageTitle ?? 'Admin | Maia Suplementos', ENT_QUOTES, 'UTF-8') ?></title>
+    <title><?= htmlspecialchars($pageTitle ?? 'Admin | WM Suplementos', ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
     <aside class="admin-sidebar">
         <div class="sidebar-logo">
             <a href="<?= \Maia\Helpers\Auth::isAdmin() ? '/admin/dashboard' : '/admin/pedidos' ?>">
-                <img src="/assets/img/logo.png" alt="Maia Suplementos" height="38" style="height:38px;width:auto;">
+                <img src="/assets/img/logo.png?v=20260707-wm" alt="WM Suplementos" height="38" style="height:38px;width:auto;">
             </a>
         </div>
 

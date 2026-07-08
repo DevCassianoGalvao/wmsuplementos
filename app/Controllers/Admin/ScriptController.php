@@ -32,7 +32,7 @@ class ScriptController extends BaseController
         }
 
         $this->render('admin/scripts/index', [
-            'pageTitle' => 'Central de Scripts | Admin Maia',
+            'pageTitle' => 'Central de Scripts | Admin WM',
             'scripts'   => $scripts,
             'keys'      => self::KEYS,
             'flash'     => $this->getFlash(),

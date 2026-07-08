@@ -40,7 +40,7 @@ class ReviewController extends BaseController
         $total = (int)$stmt->fetchColumn();
 
         $this->render('admin/reviews/index', [
-            'pageTitle' => 'Avaliações | Admin Maia',
+            'pageTitle' => 'Avaliações | Admin WM',
             'reviews' => $reviews,
             'total' => $total,
             'page' => $page,

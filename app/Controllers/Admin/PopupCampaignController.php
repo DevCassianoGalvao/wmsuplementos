@@ -34,7 +34,7 @@ class PopupCampaignController extends BaseController
         }
 
         $this->render('admin/popups/index', [
-            'pageTitle'    => 'Popups | Admin Maia',
+            'pageTitle'    => 'Popups | Admin WM',
             'campaigns'    => $campaigns,
             'tableMissing' => $tableMissing,
             'flash'        => $this->getFlash(),
@@ -46,7 +46,7 @@ class PopupCampaignController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/popups/form', [
-            'pageTitle' => 'Novo Popup | Admin Maia',
+            'pageTitle' => 'Novo Popup | Admin WM',
             'campaign'  => null,
             'flash'     => $this->getFlash(),
         ], 'admin');
@@ -96,7 +96,7 @@ class PopupCampaignController extends BaseController
         }
 
         $this->render('admin/popups/form', [
-            'pageTitle' => 'Editar Popup | Admin Maia',
+            'pageTitle' => 'Editar Popup | Admin WM',
             'campaign'  => $campaign,
             'flash'     => $this->getFlash(),
         ], 'admin');

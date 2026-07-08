@@ -39,7 +39,7 @@ class SettingsController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/settings/index', [
-            'pageTitle' => 'Configurações | Admin Maia',
+            'pageTitle' => 'Configurações | Admin WM',
             'settings'  => $this->getSettings(),
             'pages'     => $this->getLegalPages(),
             'flash'     => $this->getFlash(),

@@ -27,7 +27,7 @@ class BrandController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/brands/index', [
-            'pageTitle' => 'Marcas | Admin Maia',
+            'pageTitle' => 'Marcas | Admin WM',
             'brands'    => $this->model->getAllWithProductCount(),
             'flash'     => $this->getFlash(),
         ], 'admin');
@@ -38,7 +38,7 @@ class BrandController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/brands/form', [
-            'pageTitle' => 'Nova Marca | Admin Maia',
+            'pageTitle' => 'Nova Marca | Admin WM',
             'brand'     => null,
             'flash'     => $this->getFlash(),
         ], 'admin');
@@ -80,7 +80,7 @@ class BrandController extends BaseController
         }
 
         $this->render('admin/brands/form', [
-            'pageTitle' => 'Editar Marca | Admin Maia',
+            'pageTitle' => 'Editar Marca | Admin WM',
             'brand'     => $brand,
             'flash'     => $this->getFlash(),
         ], 'admin');

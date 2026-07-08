@@ -51,7 +51,7 @@ class MercadoPagoService
         if ($orderTotal > 0 && abs(round($itemsTotal, 2) - $orderTotal) > 0.01) {
             $mpItems = [[
                 'id'          => 'order-' . (string)($order['id'] ?? ''),
-                'title'       => 'Pedido #' . (string)($order['id'] ?? '') . ' - Maia Suplementos',
+                'title'       => 'Pedido #' . (string)($order['id'] ?? '') . ' - WM Suplementos',
                 'quantity'    => 1,
                 'unit_price'  => $orderTotal,
                 'currency_id' => 'BRL',
@@ -75,7 +75,7 @@ class MercadoPagoService
                 'failure' => $appUrl . '/finalizar-compra',
             ],
             'auto_return'          => 'approved',
-            'statement_descriptor' => 'MAIA SUPLEMENTOS',
+            'statement_descriptor' => 'WM SUPLEMENTOS',
         ];
 
         // Restringe método de pagamento conforme seleção do cliente

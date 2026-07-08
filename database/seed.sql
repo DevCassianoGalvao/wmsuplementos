@@ -1,5 +1,5 @@
 -- =============================================================================
--- Maia Suplementos — Dados fictícios para demonstração
+-- WM Suplementos — Dados fictícios para demonstração
 -- Importar APÓS schema.sql
 -- =============================================================================
 
@@ -20,14 +20,14 @@ INSERT IGNORE INTO brands (name, slug, active) VALUES
 -- Categorias
 -- -----------------------------------------------------------------------------
 INSERT IGNORE INTO categories (name, slug, seo_title, seo_description, active, sort_order) VALUES
-('Proteínas',        'proteinas',       'Proteínas | Maia Suplementos',         'Whey Protein, Albumina, Proteína Vegana e muito mais.',    1, 1),
-('Creatina',         'creatina',        'Creatina | Maia Suplementos',          'Creatina Monohidratada e fórmulas avançadas.',             1, 2),
-('Pré-Treino',       'pre-treino',      'Pré-Treino | Maia Suplementos',        'Maximize seu desempenho com os melhores pré-treinos.',     1, 3),
-('Aminoácidos',      'aminoacidos',     'Aminoácidos | Maia Suplementos',       'BCAA, Glutamina, EAA e mais.',                             1, 4),
-('Vitaminas',        'vitaminas',       'Vitaminas e Minerais | Maia',          'Multivitamínicos e suplementos para saúde geral.',         1, 5),
-('Hipercalóricos',   'hipercaloricos',  'Hipercalóricos | Maia Suplementos',    'Ganho de massa com os melhores hipercalóricos.',           1, 6),
-('Termogênicos',     'termogenicos',    'Termogênicos | Maia Suplementos',      'Acelere seu metabolismo e queime gordura.',                1, 7),
-('Barras e Snacks',  'barras-snacks',   'Barras e Snacks | Maia Suplementos',   'Lanches saudáveis e nutritivos para qualquer hora.',      1, 8);
+('Proteínas',        'proteinas',       'Proteínas | WM Suplementos',         'Whey Protein, Albumina, Proteína Vegana e muito mais.',    1, 1),
+('Creatina',         'creatina',        'Creatina | WM Suplementos',          'Creatina Monohidratada e fórmulas avançadas.',             1, 2),
+('Pré-Treino',       'pre-treino',      'Pré-Treino | WM Suplementos',        'Maximize seu desempenho com os melhores pré-treinos.',     1, 3),
+('Aminoácidos',      'aminoacidos',     'Aminoácidos | WM Suplementos',       'BCAA, Glutamina, EAA e mais.',                             1, 4),
+('Vitaminas',        'vitaminas',       'Vitaminas e Minerais | WM Suplementos',          'Multivitamínicos e suplementos para saúde geral.',         1, 5),
+('Hipercalóricos',   'hipercaloricos',  'Hipercalóricos | WM Suplementos',    'Ganho de massa com os melhores hipercalóricos.',           1, 6),
+('Termogênicos',     'termogenicos',    'Termogênicos | WM Suplementos',      'Acelere seu metabolismo e queime gordura.',                1, 7),
+('Barras e Snacks',  'barras-snacks',   'Barras e Snacks | WM Suplementos',   'Lanches saudáveis e nutritivos para qualquer hora.',      1, 8);
 
 -- -----------------------------------------------------------------------------
 -- Produtos
@@ -142,7 +142,7 @@ INSERT IGNORE INTO coupons (code, type, value, min_order, max_uses, active, expi
 ('BEMVINDO10',  'percent', 10.00,  0.00, 1000, 1, DATE_ADD(NOW(), INTERVAL 1 YEAR)),
 ('PROMO20',     'percent', 20.00, 150.00,  200, 1, DATE_ADD(NOW(), INTERVAL 6 MONTH)),
 ('FRETE30',     'fixed',   30.00,  99.00, null, 1, DATE_ADD(NOW(), INTERVAL 3 MONTH)),
-('MAIA50OFF',   'fixed',   50.00, 299.00,   50, 1, DATE_ADD(NOW(), INTERVAL 2 MONTH));
+('WM50OFF',   'fixed',   50.00, 299.00,   50, 1, DATE_ADD(NOW(), INTERVAL 2 MONTH));
 
 -- -----------------------------------------------------------------------------
 -- Usuário cliente de teste
@@ -241,12 +241,12 @@ INSERT IGNORE INTO notifications (type, title, message, `read`) VALUES
 -- -----------------------------------------------------------------------------
 INSERT IGNORE INTO pages (slug, title, content, active) VALUES
 ('sobre',
- 'Sobre a Maia Suplementos',
- '<h2>Nossa História</h2><p>A Maia Suplementos nasceu da paixão pelo esporte e pelo bem-estar. Fundada em 2020, somos uma loja especializada em suplementos alimentares de alta qualidade para atletas e praticantes de atividade física.</p><h2>Nossa Missão</h2><p>Oferecer os melhores produtos com o melhor custo-benefício, acompanhado de um atendimento diferenciado e entrega rápida para todo o Brasil.</p><p>Trabalhamos apenas com marcas reconhecidas e produtos com procedência garantida.</p>',
+ 'Sobre a WM Suplementos',
+ '<h2>Nossa História</h2><p>A WM Suplementos nasceu da paixão pelo esporte e pelo bem-estar. Fundada em 2020, somos uma loja especializada em suplementos alimentares de alta qualidade para atletas e praticantes de atividade física.</p><h2>Nossa Missão</h2><p>Oferecer os melhores produtos com o melhor custo-benefício, acompanhado de um atendimento diferenciado e entrega rápida para todo o Brasil.</p><p>Trabalhamos apenas com marcas reconhecidas e produtos com procedência garantida.</p>',
  1),
 ('como-comprar',
  'Como Comprar',
- '<h2>É fácil comprar na Maia Suplementos</h2><ol><li>Escolha seus produtos e adicione ao carrinho.</li><li>Clique em "Finalizar Compra".</li><li>Preencha seus dados de entrega.</li><li>Escolha a forma de pagamento (PIX, Cartão ou Boleto).</li><li>Pronto! Você receberá a confirmação por e-mail.</li></ol>',
+ '<h2>É fácil comprar na WM Suplementos</h2><ol><li>Escolha seus produtos e adicione ao carrinho.</li><li>Clique em "Finalizar Compra".</li><li>Preencha seus dados de entrega.</li><li>Escolha a forma de pagamento (PIX, Cartão ou Boleto).</li><li>Pronto! Você receberá a confirmação por e-mail.</li></ol>',
  1),
 ('formas-de-pagamento',
  'Formas de Pagamento',

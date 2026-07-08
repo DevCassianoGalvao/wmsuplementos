@@ -1,4 +1,4 @@
-/* Maia Suplementos — main.js */
+/* WM Suplementos — main.js */
 'use strict';
 
 function appUrl(path) {

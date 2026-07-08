@@ -32,7 +32,7 @@ class UtmController extends BaseController
         $total = (int)db()->query('SELECT COUNT(*) FROM utm_links')->fetchColumn();
 
         $this->render('admin/utm/index', [
-            'pageTitle'  => 'UTM Builder | Admin Maia',
+            'pageTitle'  => 'UTM Builder | Admin WM',
             'links'      => $links,
             'total'      => $total,
             'page'       => $page,

@@ -11,7 +11,7 @@ class ComboController extends BaseController
     public function index(array $params = []): void
     {
         $this->render('combo/index', [
-            'pageTitle' => 'Combos | Maia Suplementos',
+            'pageTitle' => 'Combos | WM Suplementos',
             'combos'    => (new ComboModel())->getActive(),
             'flash'     => $this->getFlash(),
         ]);
@@ -28,7 +28,7 @@ class ComboController extends BaseController
         }
 
         $this->render('combo/show', [
-            'pageTitle' => $combo['name'] . ' | Maia Suplementos',
+            'pageTitle' => $combo['name'] . ' | WM Suplementos',
             'combo'     => $combo,
             'items'     => $combo['items'] ?? [],
             'flash'     => $this->getFlash(),

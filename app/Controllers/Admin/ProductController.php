@@ -41,7 +41,7 @@ class ProductController extends BaseController
         $cats     = (new CategoryModel())->getAll();
 
         $this->render('admin/products/index', [
-            'pageTitle' => 'Produtos | Admin Maia',
+            'pageTitle' => 'Produtos | Admin WM',
             'products'  => $products,
             'total'     => $total,
             'page'      => $page,
@@ -57,7 +57,7 @@ class ProductController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/products/form', [
-            'pageTitle'  => 'Novo Produto | Admin Maia',
+            'pageTitle'  => 'Novo Produto | Admin WM',
             'product'    => null,
             'categories' => (new CategoryModel())->getAll(),
             'brands'     => $this->getBrands(),
@@ -109,7 +109,7 @@ class ProductController extends BaseController
         $product['images'] = $this->prepareProductImages($product['images'] ?? []);
 
         $this->render('admin/products/form', [
-            'pageTitle'    => 'Editar: ' . $product['name'] . ' | Admin Maia',
+            'pageTitle'    => 'Editar: ' . $product['name'] . ' | Admin WM',
             'product'      => $product,
             'categories'   => (new CategoryModel())->getAll(),
             'brands'       => $this->getBrands(),

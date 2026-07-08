@@ -20,7 +20,7 @@ class HomeController extends BaseController
         $settings = Cache::remember('home_settings', 600, fn() => $this->getSettings());
 
         $this->render('home/index', [
-            'pageTitle'   => $settings['store_name'] ?? 'Maia Suplementos',
+            'pageTitle'   => $settings['store_name'] ?? 'WM Suplementos',
             'categories'  => Cache::remember('home_categories', 300, fn() => $categories->getActiveWithProducts()),
             'featured'    => Cache::remember('home_featured', 300, fn() => $products->getFeatured(8)),
             'bestsellers' => Cache::remember('home_bestsellers', 300, fn() => $products->getBestsellers(8)),

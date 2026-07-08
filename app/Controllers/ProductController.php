@@ -27,7 +27,7 @@ class ProductController extends BaseController
         ], $page, $perPage);
 
         $this->render('product/index', [
-            'pageTitle'   => 'Produtos | Maia Suplementos',
+            'pageTitle'   => 'Produtos | WM Suplementos',
             'products'    => $result['items'],
             'total'       => $result['total'],
             'page'        => $page,
@@ -70,7 +70,7 @@ class ProductController extends BaseController
         $this->trackFunnelEvent('product_view', (int)$product['id']);
 
         $this->render('product/show', [
-            'pageTitle'  => $product['seo_title']       ?: $product['name'] . ' | Maia Suplementos',
+            'pageTitle'  => $product['seo_title']       ?: $product['name'] . ' | WM Suplementos',
             'metaDesc'   => $product['seo_description'] ?: '',
             'ogImage'    => $product['og_image']        ?: '',
             'ogType'     => 'product',

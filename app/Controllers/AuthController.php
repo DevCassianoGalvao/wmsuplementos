@@ -19,7 +19,7 @@ class AuthController extends BaseController
         }
 
         $this->render('auth/login', [
-            'pageTitle' => 'Entrar | Maia Suplementos',
+            'pageTitle' => 'Entrar | WM Suplementos',
             'flash'     => $this->getFlash(),
         ]);
     }
@@ -63,7 +63,7 @@ class AuthController extends BaseController
         }
 
         $this->render('auth/register', [
-            'pageTitle' => 'Criar Conta | Maia Suplementos',
+            'pageTitle' => 'Criar Conta | WM Suplementos',
             'flash'     => $this->getFlash(),
         ]);
     }

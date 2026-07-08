@@ -26,7 +26,7 @@ class DashboardController extends BaseController
         $counts = $this->getCounts();
 
         $this->render('admin/dashboard/index', [
-            'pageTitle' => 'Dashboard | Admin Maia',
+            'pageTitle' => 'Dashboard | Admin WM',
             'summary'   => $summary,
             'daily'     => $daily,
             'top'       => $top,

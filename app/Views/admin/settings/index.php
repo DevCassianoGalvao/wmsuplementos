@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label for="store_name">Nome da loja</label>
                 <input type="text" id="store_name" name="store_name"
-                       value="<?= htmlspecialchars($settings['store_name'] ?? 'Maia Suplementos', ENT_QUOTES, 'UTF-8') ?>">
+                       value="<?= htmlspecialchars($settings['store_name'] ?? 'WM Suplementos', ENT_QUOTES, 'UTF-8') ?>">
             </div>
             <div class="form-group">
                 <label for="store_email">E-mail de atendimento</label>

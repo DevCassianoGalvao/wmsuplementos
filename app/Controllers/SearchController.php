@@ -25,7 +25,7 @@ class SearchController extends BaseController
         }
 
         $this->render('search/results', [
-            'pageTitle'  => 'Busca: ' . htmlspecialchars($query, ENT_QUOTES, 'UTF-8') . ' | Maia Suplementos',
+            'pageTitle'  => 'Busca: ' . htmlspecialchars($query, ENT_QUOTES, 'UTF-8') . ' | WM Suplementos',
             'query'      => $query,
             'results'    => $results,
             'total'      => $total,

@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Todos os valores lidos de variáveis de ambiente.
  */
 return [
-    'name'    => getenv('APP_NAME')   ?: 'Maia Suplementos',
+    'name'    => getenv('APP_NAME')   ?: 'WM Suplementos',
     'url'     => rtrim(getenv('APP_URL') ?: 'http://localhost', '/'),
     'env'     => getenv('APP_ENV')    ?: 'production',
     'debug'   => filter_var(getenv('APP_DEBUG') ?: 'false', FILTER_VALIDATE_BOOLEAN),

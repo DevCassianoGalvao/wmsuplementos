@@ -20,7 +20,7 @@ class AccountController extends BaseController
         $user = (new UserModel())->findById(Auth::userId());
 
         $this->render('account/index', [
-            'pageTitle' => 'Minha Conta | Maia Suplementos',
+            'pageTitle' => 'Minha Conta | WM Suplementos',
             'user'      => $user,
             'flash'     => $this->getFlash(),
         ]);
@@ -34,7 +34,7 @@ class AccountController extends BaseController
         $orders = (new OrderModel())->getByUser(Auth::userId(), $page, 10);
 
         $this->render('account/orders', [
-            'pageTitle' => 'Meus Pedidos | Maia Suplementos',
+            'pageTitle' => 'Meus Pedidos | WM Suplementos',
             'orders'    => $orders,
             'page'      => $page,
         ]);
@@ -55,7 +55,7 @@ class AccountController extends BaseController
         }
 
         $this->render('account/order_detail', [
-            'pageTitle' => 'Pedido #' . $orderId . ' | Maia Suplementos',
+            'pageTitle' => 'Pedido #' . $orderId . ' | WM Suplementos',
             'order'     => $order,
         ]);
     }

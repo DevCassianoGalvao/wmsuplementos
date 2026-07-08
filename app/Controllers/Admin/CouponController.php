@@ -22,7 +22,7 @@ class CouponController extends BaseController
         $coupons = $stmt->fetchAll();
 
         $this->render('admin/coupons/index', [
-            'pageTitle' => 'Cupons | Admin Maia',
+            'pageTitle' => 'Cupons | Admin WM',
             'coupons'   => $coupons,
             'flash'     => $this->getFlash(),
         ], 'admin');
@@ -33,7 +33,7 @@ class CouponController extends BaseController
         Auth::requireAdminRole();
 
         $this->render('admin/coupons/form', [
-            'pageTitle' => 'Novo Cupom | Admin Maia',
+            'pageTitle' => 'Novo Cupom | Admin WM',
             'coupon'    => null,
             'flash'     => $this->getFlash(),
         ], 'admin');
@@ -82,7 +82,7 @@ class CouponController extends BaseController
         }
 
         $this->render('admin/coupons/form', [
-            'pageTitle' => 'Editar Cupom | Admin Maia',
+            'pageTitle' => 'Editar Cupom | Admin WM',
             'coupon'    => $coupon,
             'flash'     => $this->getFlash(),
         ], 'admin');

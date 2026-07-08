@@ -1,4 +1,4 @@
-/* Maia Suplementos — admin.js */
+/* WM Suplementos — admin.js */
 'use strict';
 
 /* ── Sidebar toggle (mobile) ─────────────────────────────────── */

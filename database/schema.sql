@@ -1,5 +1,5 @@
 -- =============================================================================
--- Maia Suplementos — Schema SQL Completo
+-- WM Suplementos — Schema SQL Completo
 -- MySQL 8.0+ | InnoDB | utf8mb4
 -- PRD v1.0
 -- =============================================================================
@@ -512,7 +512,7 @@ INSERT IGNORE INTO `scripts_config` (`key`, `value`, `active`) VALUES
 
 -- Configurações gerais da loja (seção 4.11 PRD)
 INSERT IGNORE INTO `settings` (`key`, `value`) VALUES
-    ('store_name',            'Maia Suplementos'),
+    ('store_name',            'WM Suplementos'),
     ('store_logo',            NULL),
     ('store_favicon',         NULL),
     ('store_color_primary',   '#e60000'),

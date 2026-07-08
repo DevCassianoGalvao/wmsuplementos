@@ -40,7 +40,7 @@ class NotificationController extends BaseController
         $unread    = NotificationService::countUnread();
 
         $this->render('admin/notifications/index', [
-            'pageTitle'     => 'Notificações | Admin Maia',
+            'pageTitle'     => 'Notificações | Admin WM',
             'notifications' => $notifications,
             'total'         => $total,
             'unread'        => $unread,

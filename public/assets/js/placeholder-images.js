@@ -1,4 +1,4 @@
-/* Maia Suplementos - placeholder para imagens ausentes */
+/* WM Suplementos - placeholder para imagens ausentes */
 'use strict';
 
 (function() {
