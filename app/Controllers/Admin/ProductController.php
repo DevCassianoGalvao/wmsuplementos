@@ -201,6 +201,59 @@ class ProductController extends BaseController
         $this->redirect('/admin/produtos/' . $newId);
     }
 
+    public function delete(array $params): void
+    {
+        Auth::requireAdminRole();
+        CSRF::verify();
+
+        $id = (int)($params['id'] ?? 0);
+        $product = $this->model->findById($id);
+
+        if (!$product) {
+            $this->flash('error', 'Produto não encontrado.');
+            $this->redirect('/admin/produtos');
+        }
+
+        $images = $product['images'] ?? [];
+        $pdo = db();
+        $deleted = false;
+
+        try {
+            $pdo->beginTransaction();
+
+            $this->deleteIfTableExists('product_related', 'product_id = ? OR related_product_id = ?', [$id, $id]);
+            $this->deleteIfTableExists('combo_items', 'product_id = ?', [$id]);
+            $this->deleteIfTableExists('stock_movements', 'product_id = ?', [$id]);
+            $this->deleteIfTableExists('reviews', 'product_id = ?', [$id]);
+            $this->deleteIfTableExists('stock_notifications', 'product_id = ?', [$id]);
+
+            $stmt = $pdo->prepare('DELETE FROM products WHERE id = ?');
+            $stmt->execute([$id]);
+            $deleted = $stmt->rowCount() > 0;
+
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            error_log('[ProductController] Falha ao excluir produto ' . $id . ': ' . $e->getMessage());
+            $this->flash('error', 'Não foi possível excluir o produto. Verifique vínculos no banco.');
+            $this->redirect('/admin/produtos');
+        }
+
+        if ($deleted) {
+            foreach ($images as $image) {
+                ImageService::deleteAll((string)($image['filename_webp'] ?? $image['filename'] ?? ''));
+            }
+            $this->flushProductCaches($id);
+            $this->flash('success', 'Produto excluído.');
+        } else {
+            $this->flash('error', 'Produto não encontrado.');
+        }
+
+        $this->redirect('/admin/produtos');
+    }
+
     // ─── Helpers ─────────────────────────────────────────────────────────────
 
     private function extractProductData(): array
@@ -390,6 +443,23 @@ class ProductController extends BaseController
         Cache::forget('product_' . $productId);
         Cache::flush('category_');
         Cache::flush('home_');
+    }
+
+    private function deleteIfTableExists(string $table, string $where, array $params): void
+    {
+        $check = db()->prepare(
+            'SELECT COUNT(*)
+               FROM information_schema.TABLES
+              WHERE TABLE_SCHEMA = DATABASE()
+                AND TABLE_NAME = ?'
+        );
+        $check->execute([$table]);
+
+        if ((int)$check->fetchColumn() === 0) {
+            return;
+        }
+
+        db()->prepare("DELETE FROM {$table} WHERE {$where}")->execute($params);
     }
 
     public function searchApi(array $params = []): void

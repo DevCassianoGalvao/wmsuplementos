@@ -17,7 +17,7 @@
     <a href="/admin/avaliacoes?status=rejected" class="btn btn-sm <?= $status === 'rejected' ? 'btn-primary' : 'btn-outline' ?>">Rejeitadas</a>
 </div>
 
-<p class="results-count"><?= (int)$total ?> avaliacao(oes)</p>
+<p class="results-count"><?= (int)$total ?> avaliação(ões)</p>
 
 <?php if ($status === 'pending' && !empty($reviews)): ?>
 <form method="post" action="/admin/avaliacoes/lote" class="bulk-form">
@@ -27,8 +27,9 @@
             <option value="">Ação em lote</option>
             <option value="approve">Aprovar selecionadas</option>
             <option value="reject">Rejeitar selecionadas</option>
+            <option value="delete">Excluir selecionadas</option>
         </select>
-        <input type="text" name="rejection_reason" placeholder="Motivo da rejeicao, se houver">
+        <input type="text" name="rejection_reason" placeholder="Motivo da rejeição, se houver">
         <button type="submit" class="btn btn-outline">Aplicar</button>
     </div>
 <?php endif; ?>
@@ -40,16 +41,16 @@
             <th>Produto</th>
             <th>Cliente</th>
             <th>Nota</th>
-            <th>Comentario</th>
+            <th>Comentário</th>
             <th>Foto</th>
             <?php if ($status === 'rejected'): ?><th>Motivo</th><?php endif; ?>
             <th>Data</th>
-            <?php if ($status === 'pending'): ?><th>Ações</th><?php endif; ?>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
     <?php if (empty($reviews)): ?>
-    <tr><td colspan="<?= $status === 'pending' ? 8 : ($status === 'rejected' ? 7 : 6) ?>" class="empty-state">Nenhuma avaliacao encontrada.</td></tr>
+    <tr><td colspan="<?= $status === 'pending' ? 8 : ($status === 'rejected' ? 8 : 7) ?>" class="empty-state">Nenhuma avaliação encontrada.</td></tr>
     <?php else: ?>
     <?php foreach ($reviews as $review): ?>
     <tr>
@@ -77,8 +78,8 @@
         <td><?= htmlspecialchars($review['rejection_reason'] ?? '-', ENT_QUOTES, 'UTF-8') ?></td>
         <?php endif; ?>
         <td><?= htmlspecialchars(substr($review['created_at'] ?? '', 0, 10), ENT_QUOTES, 'UTF-8') ?></td>
-        <?php if ($status === 'pending'): ?>
         <td class="actions">
+            <?php if ($status === 'pending'): ?>
             <button type="submit" name="bulk_action" value="approve" class="btn btn-sm btn-success"
                     onclick="this.form.querySelectorAll('input[name=&quot;review_ids[]&quot;]').forEach(i => i.checked = false); this.closest('tr').querySelector('input[name=&quot;review_ids[]&quot;]').checked = true;">
                 Aprovar
@@ -87,8 +88,17 @@
                     onclick="this.form.querySelectorAll('input[name=&quot;review_ids[]&quot;]').forEach(i => i.checked = false); this.closest('tr').querySelector('input[name=&quot;review_ids[]&quot;]').checked = true;">
                 Rejeitar
             </button>
+            <button type="submit" name="bulk_action" value="delete" class="btn btn-sm btn-danger"
+                    onclick="return confirm('Excluir esta avaliação?') && (this.form.querySelectorAll('input[name=&quot;review_ids[]&quot;]').forEach(i => i.checked = false), this.closest('tr').querySelector('input[name=&quot;review_ids[]&quot;]').checked = true, true);">
+                Excluir
+            </button>
+            <?php else: ?>
+            <form method="post" action="/admin/avaliacoes/<?= (int)$review['id'] ?>/excluir" data-confirm="Excluir esta avaliação?">
+                <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+                <button type="submit" class="btn-link btn-link-danger">Excluir</button>
+            </form>
+            <?php endif; ?>
         </td>
-        <?php endif; ?>
     </tr>
     <?php endforeach; ?>
     <?php endif; ?>

@@ -16,6 +16,9 @@
 <?php if (!empty($flash['success'])): ?>
 <div class="alert alert-success"><?= htmlspecialchars($flash['success'], ENT_QUOTES, 'UTF-8') ?></div>
 <?php endif; ?>
+<?php if (!empty($flash['error'])): ?>
+<div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
+<?php endif; ?>
 
 <nav class="notif-tabs">
     <a href="/admin/notificacoes" class="notif-tab <?= $filter === '' ? 'notif-tab--active' : '' ?>">Todas</a>
@@ -85,14 +88,22 @@ $defaultIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" v
                 <?php endif; ?>
             </div>
         </div>
+        <div class="notif-action">
         <?php if (!$notif['read']): ?>
-        <form method="post" action="/admin/notificacoes/<?= (int)$notif['id'] ?>/ler" class="notif-action">
+        <form method="post" action="/admin/notificacoes/<?= (int)$notif['id'] ?>/ler">
             <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
             <button type="submit" class="notif-read-btn" title="Marcar como lida">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
         </form>
         <?php endif; ?>
+        <form method="post" action="/admin/notificacoes/<?= (int)$notif['id'] ?>/excluir" data-confirm="Excluir esta notificação?">
+            <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+            <button type="submit" class="notif-read-btn notif-delete-btn" title="Excluir notificação">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </button>
+        </form>
+        </div>
     </li>
     <?php endforeach; ?>
 </ul>

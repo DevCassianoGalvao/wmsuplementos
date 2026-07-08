@@ -75,6 +75,10 @@
                 <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
                 <button type="submit" class="btn-link">Duplicar</button>
             </form>
+            <form method="post" action="/admin/produtos/<?= (int)$prod['id'] ?>/excluir" style="display:inline" data-confirm="Excluir este produto? Esta ação não pode ser desfeita.">
+                <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+                <button type="submit" class="btn-link btn-link-danger">Excluir</button>
+            </form>
         </td>
     </tr>
     <?php endforeach; ?>

@@ -331,6 +331,24 @@ class CustomerController extends BaseController
         $this->redirect('/admin/clientes');
     }
 
+    public function delete(array $params): void
+    {
+        Auth::requireAdminRole();
+        CSRF::verify();
+
+        $id = (int)($params['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('error', 'Cliente inválido.');
+            $this->redirect('/admin/clientes');
+        }
+
+        $stmt = db()->prepare('DELETE FROM users WHERE id = ?');
+        $stmt->execute([$id]);
+
+        $this->flash($stmt->rowCount() > 0 ? 'success' : 'error', $stmt->rowCount() > 0 ? 'Cliente excluído.' : 'Cliente não encontrado.');
+        $this->redirect('/admin/clientes');
+    }
+
     public function updateTag(array $params): void
     {
         Auth::requireAdminRole();

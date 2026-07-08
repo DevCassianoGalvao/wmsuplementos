@@ -228,6 +228,7 @@ $router->post('/admin/produtos/{id}',    'Admin\ProductController@update');
 $router->post('/admin/produtos/{id}/imagens/{imageId}/excluir', 'Admin\ProductController@deleteImage');
 $router->post('/admin/produtos/{id}/toggle', 'Admin\ProductController@toggle');
 $router->post('/admin/produtos/{id}/duplicar', 'Admin\ProductController@duplicate');
+$router->post('/admin/produtos/{id}/excluir', 'Admin\ProductController@delete');
 
 // Marcas
 $router->get('/admin/marcas',          'Admin\BrandController@index');
@@ -265,6 +266,7 @@ $router->get('/admin/pedidos',           'Admin\OrderController@index');
 $router->get('/admin/pedidos/exportar',  'Admin\OrderController@export');
 $router->get('/admin/pedidos/{id}',      'Admin\OrderController@show');
 $router->post('/admin/pedidos/{id}/status', 'Admin\OrderController@updateStatus');
+$router->post('/admin/pedidos/{id}/excluir', 'Admin\OrderController@delete');
 
 // Clientes
 $router->get('/admin/clientes',          'Admin\CustomerController@index');
@@ -277,6 +279,7 @@ $router->get('/admin/clientes/{id}/editar', 'Admin\CustomerController@edit');
 $router->post('/admin/clientes/{id}/editar', 'Admin\CustomerController@update');
 $router->post('/admin/clientes/{id}/tag', 'Admin\CustomerController@updateTag');
 $router->post('/admin/clientes/{id}/anonimizar', 'Admin\CustomerController@anonymize');
+$router->post('/admin/clientes/{id}/excluir', 'Admin\CustomerController@delete');
 $router->get('/admin/clientes/{id}',     'Admin\CustomerController@show');
 
 // Cupons
@@ -286,12 +289,14 @@ $router->post('/admin/cupons',           'Admin\CouponController@store');
 $router->get('/admin/cupons/{id}',       'Admin\CouponController@edit');
 $router->post('/admin/cupons/{id}',      'Admin\CouponController@update');
 $router->post('/admin/cupons/{id}/toggle', 'Admin\CouponController@toggle');
+$router->post('/admin/cupons/{id}/excluir', 'Admin\CouponController@delete');
 
 // Avaliações
 $router->get('/admin/avaliacoes',        'Admin\ReviewController@index');
 $router->post('/admin/avaliacoes/lote',  'Admin\ReviewController@bulk');
 $router->post('/admin/avaliacoes/{id}/aprovar', 'Admin\ReviewController@approve');
 $router->post('/admin/avaliacoes/{id}/rejeitar', 'Admin\ReviewController@reject');
+$router->post('/admin/avaliacoes/{id}/excluir', 'Admin\ReviewController@delete');
 
 // Central de Scripts
 $router->get('/admin/scripts',           'Admin\ScriptController@index');
@@ -314,6 +319,7 @@ $router->get('/admin/usuarios/novo',     'Admin\AdminUserController@create');
 $router->post('/admin/usuarios',         'Admin\AdminUserController@store');
 $router->get('/admin/usuarios/{id}',     'Admin\AdminUserController@edit');
 $router->post('/admin/usuarios/{id}',    'Admin\AdminUserController@update');
+$router->post('/admin/usuarios/{id}/excluir', 'Admin\AdminUserController@delete');
 
 // UTM Builder
 $router->get('/admin/utm',               'Admin\UtmController@index');
@@ -323,6 +329,7 @@ $router->post('/admin/utm/{id}/excluir', 'Admin\UtmController@delete');
 // Notificações
 $router->get('/admin/notificacoes',                    'Admin\NotificationController@index');
 $router->post('/admin/notificacoes/{id}/ler',          'Admin\NotificationController@markRead');
+$router->post('/admin/notificacoes/{id}/excluir',      'Admin\NotificationController@delete');
 $router->post('/admin/notificacoes/marcar-todas',      'Admin\NotificationController@markAllRead');
 
 // Diagnóstico de uploads

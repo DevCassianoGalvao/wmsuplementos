@@ -127,6 +127,24 @@ class CouponController extends BaseController
         $this->redirect('/admin/cupons');
     }
 
+    public function delete(array $params): void
+    {
+        Auth::requireAdminRole();
+        CSRF::verify();
+
+        $id = (int)($params['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('error', 'Cupom inválido.');
+            $this->redirect('/admin/cupons');
+        }
+
+        $stmt = db()->prepare('DELETE FROM coupons WHERE id = ?');
+        $stmt->execute([$id]);
+
+        $this->flash($stmt->rowCount() > 0 ? 'success' : 'error', $stmt->rowCount() > 0 ? 'Cupom excluído.' : 'Cupom não encontrado.');
+        $this->redirect('/admin/cupons');
+    }
+
     private function extractData(): array
     {
         return [

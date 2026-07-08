@@ -99,6 +99,24 @@ class OrderController extends BaseController
         $this->redirect('/admin/pedidos/' . $id);
     }
 
+    public function delete(array $params): void
+    {
+        Auth::requireAdmin();
+        CSRF::verify();
+
+        $id = (int)($params['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('error', 'Pedido inválido.');
+            $this->redirect('/admin/pedidos');
+        }
+
+        $stmt = db()->prepare('DELETE FROM orders WHERE id = ?');
+        $stmt->execute([$id]);
+
+        $this->flash($stmt->rowCount() > 0 ? 'success' : 'error', $stmt->rowCount() > 0 ? 'Pedido excluído.' : 'Pedido não encontrado.');
+        $this->redirect('/admin/pedidos');
+    }
+
     public function export(array $params = []): void
     {
         Auth::requireAdminRole();

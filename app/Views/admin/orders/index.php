@@ -1,4 +1,4 @@
-<?php use Maia\Helpers\Auth; use Maia\Helpers\Sanitizer; ?>
+<?php use Maia\Helpers\Auth; use Maia\Helpers\CSRF; use Maia\Helpers\Sanitizer; ?>
 <?php $canViewFinancials = Auth::isAdmin(); ?>
 
 <div class="page-header">
@@ -11,6 +11,9 @@
 
 <?php if (!empty($flash['success'])): ?>
 <div class="alert alert-success"><?= htmlspecialchars($flash['success'], ENT_QUOTES, 'UTF-8') ?></div>
+<?php endif; ?>
+<?php if (!empty($flash['error'])): ?>
+<div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
 <?php endif; ?>
 
 <form class="filter-bar" method="get" action="/admin/pedidos">
@@ -67,7 +70,13 @@
                 <?= htmlspecialchars($statuses[$order['status'] ?? ''] ?? $order['status'] ?? '', ENT_QUOTES, 'UTF-8') ?>
             </span>
         </td>
-        <td><a href="/admin/pedidos/<?= (int)$order['id'] ?>">Ver</a></td>
+        <td class="actions">
+            <a href="/admin/pedidos/<?= (int)$order['id'] ?>">Ver</a>
+            <form method="post" action="/admin/pedidos/<?= (int)$order['id'] ?>/excluir" style="display:inline" data-confirm="Excluir este pedido? O histórico e itens do pedido serão removidos.">
+                <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+                <button type="submit" class="btn-link btn-link-danger">Excluir</button>
+            </form>
+        </td>
     </tr>
     <?php endforeach; ?>
     <?php endif; ?>

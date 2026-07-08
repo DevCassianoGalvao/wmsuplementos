@@ -137,6 +137,44 @@ class AdminUserController extends BaseController
         $this->redirect('/admin/usuarios');
     }
 
+    public function delete(array $params): void
+    {
+        Auth::requireAdminRole();
+        CSRF::verify();
+
+        $id = (int)($params['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('error', 'Usuário inválido.');
+            $this->redirect('/admin/usuarios');
+        }
+
+        if ($id === Auth::adminId()) {
+            $this->flash('error', 'Você não pode excluir o próprio usuário logado.');
+            $this->redirect('/admin/usuarios');
+        }
+
+        $user = $this->find($id);
+        if (!$user) {
+            $this->flash('error', 'Usuário não encontrado.');
+            $this->redirect('/admin/usuarios');
+        }
+
+        if (($user['role'] ?? '') === 'admin') {
+            $stmt = db()->prepare("SELECT COUNT(*) FROM admin_users WHERE role = 'admin' AND active = 1 AND id <> ?");
+            $stmt->execute([$id]);
+            if ((int)$stmt->fetchColumn() === 0) {
+                $this->flash('error', 'Mantenha pelo menos um admin ativo no sistema.');
+                $this->redirect('/admin/usuarios');
+            }
+        }
+
+        $stmt = db()->prepare('DELETE FROM admin_users WHERE id = ?');
+        $stmt->execute([$id]);
+
+        $this->flash('success', 'Usuário excluído.');
+        $this->redirect('/admin/usuarios');
+    }
+
     private function extractData(): array
     {
         return [

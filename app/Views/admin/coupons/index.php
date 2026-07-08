@@ -8,6 +8,9 @@
 <?php if (!empty($flash['success'])): ?>
 <div class="alert alert-success"><?= htmlspecialchars($flash['success'], ENT_QUOTES, 'UTF-8') ?></div>
 <?php endif; ?>
+<?php if (!empty($flash['error'])): ?>
+<div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
+<?php endif; ?>
 
 <table class="admin-table">
     <thead>
@@ -42,6 +45,10 @@
             <form method="post" action="/admin/cupons/<?= (int)$c['id'] ?>/toggle" style="display:inline">
                 <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
                 <button type="submit" class="btn-link"><?= $c['active'] ? 'Desativar' : 'Ativar' ?></button>
+            </form>
+            <form method="post" action="/admin/cupons/<?= (int)$c['id'] ?>/excluir" style="display:inline" data-confirm="Excluir este cupom? Pedidos antigos perderão o vínculo com ele.">
+                <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+                <button type="submit" class="btn-link btn-link-danger">Excluir</button>
             </form>
         </td>
     </tr>

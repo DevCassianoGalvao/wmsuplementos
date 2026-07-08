@@ -78,6 +78,24 @@ class ReviewController extends BaseController
         $this->redirect('/admin/avaliacoes');
     }
 
+    public function delete(array $params): void
+    {
+        Auth::requireAdminRole();
+        CSRF::verify();
+
+        $id = (int)($params['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('error', 'Avaliação inválida.');
+            $this->redirect('/admin/avaliacoes');
+        }
+
+        $stmt = db()->prepare('DELETE FROM reviews WHERE id = ?');
+        $stmt->execute([$id]);
+
+        $this->flash($stmt->rowCount() > 0 ? 'success' : 'error', $stmt->rowCount() > 0 ? 'Avaliação excluída.' : 'Avaliação não encontrada.');
+        $this->redirect('/admin/avaliacoes');
+    }
+
     public function bulk(array $params = []): void
     {
         Auth::requireAdminRole();
@@ -86,7 +104,7 @@ class ReviewController extends BaseController
         $action = (string)($_POST['bulk_action'] ?? '');
         $ids = array_values(array_filter(array_map('intval', (array)($_POST['review_ids'] ?? []))));
 
-        if (!in_array($action, ['approve', 'reject'], true) || empty($ids)) {
+        if (!in_array($action, ['approve', 'reject', 'delete'], true) || empty($ids)) {
             $this->flash('error', 'Selecione avaliacoes e uma acao valida.');
             $this->redirect('/admin/avaliacoes');
         }
@@ -97,6 +115,10 @@ class ReviewController extends BaseController
             db()->prepare("UPDATE reviews SET status = 'approved', rejection_reason = NULL WHERE id IN ({$placeholders})")
                 ->execute($ids);
             $this->flash('success', 'Avaliacoes aprovadas.');
+        } elseif ($action === 'delete') {
+            db()->prepare("DELETE FROM reviews WHERE id IN ({$placeholders})")
+                ->execute($ids);
+            $this->flash('success', 'Avaliações excluídas.');
         } else {
             $reason = trim((string)($_POST['rejection_reason'] ?? ''));
             db()->prepare("UPDATE reviews SET status = 'rejected', rejection_reason = ? WHERE id IN ({$placeholders})")

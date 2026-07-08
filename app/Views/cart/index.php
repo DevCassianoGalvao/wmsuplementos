@@ -1,4 +1,5 @@
 <?php use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
+<?php $cartItemCount = array_sum(array_map(static fn($item) => (int)($item['quantity'] ?? 0), (array)$items)); ?>
 
 <div class="container">
     <?php if (!empty($flash)): ?>
@@ -22,7 +23,7 @@
                     <span class="section__label">Carrinho</span>
                     <h1 class="cart-title">Meu carrinho</h1>
                 </div>
-                <span class="cart-count-label"><?= count($items) ?> <?= count($items) === 1 ? 'item' : 'itens' ?></span>
+                <span class="cart-count-label"><?= (int)$cartItemCount ?> <?= $cartItemCount === 1 ? 'item' : 'itens' ?></span>
             </div>
 
             <?php foreach ($items as $item): ?>

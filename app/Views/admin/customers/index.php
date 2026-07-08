@@ -13,6 +13,13 @@
     </div>
 </div>
 
+<?php if (!empty($flash['success'])): ?>
+<div class="alert alert-success"><?= htmlspecialchars($flash['success'], ENT_QUOTES, 'UTF-8') ?></div>
+<?php endif; ?>
+<?php if (!empty($flash['error'])): ?>
+<div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
+<?php endif; ?>
+
 <form class="filter-bar" method="get" action="/admin/clientes">
     <input type="text" name="busca" placeholder="Nome, e-mail ou telefone..." value="<?= htmlspecialchars($filters['search'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
     <select name="segmento">
@@ -69,9 +76,13 @@
         <td><?= (int)($c['total_orders'] ?? 0) ?></td>
         <td>R$ <?= Sanitizer::money((float)($c['total_spent'] ?? 0)) ?></td>
         <td><?= htmlspecialchars(substr($c['created_at'] ?? '', 0, 10), ENT_QUOTES, 'UTF-8') ?></td>
-        <td>
+        <td class="actions">
             <a href="/admin/clientes/<?= (int)($c['id'] ?? 0) ?>">Ver</a>
             <a href="/admin/clientes/<?= (int)($c['id'] ?? 0) ?>/editar" class="btn btn--ghost btn--sm">Editar</a>
+            <form method="post" action="/admin/clientes/<?= (int)($c['id'] ?? 0) ?>/excluir" style="display:inline" data-confirm="Excluir este cliente? Pedidos antigos ficarão sem vínculo com a conta.">
+                <input type="hidden" name="csrf_token" value="<?= CSRF::token() ?>">
+                <button type="submit" class="btn-link btn-link-danger">Excluir</button>
+            </form>
         </td>
     </tr>
     <?php endforeach; ?>

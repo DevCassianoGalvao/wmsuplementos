@@ -64,6 +64,20 @@ class NotificationController extends BaseController
         $this->redirect('/admin/notificacoes');
     }
 
+    public function delete(array $params): void
+    {
+        Auth::requireAdmin();
+        CSRF::verify();
+
+        $id = (int)($params['id'] ?? 0);
+        if ($id > 0) {
+            db()->prepare('DELETE FROM notifications WHERE id = ?')->execute([$id]);
+            $this->flash('success', 'Notificação excluída.');
+        }
+
+        $this->redirect('/admin/notificacoes');
+    }
+
     public function markAllRead(array $params = []): void
     {
         Auth::requireAdmin();
