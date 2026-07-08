@@ -1644,14 +1644,14 @@ main > .section:first-child,
     display: grid;
     gap: 0.75rem;
 }
-.boleto-address {
+.card-installments {
     margin-top: 1rem;
     padding: 1rem;
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 12px;
     background: rgba(255,255,255,0.025);
 }
-.boleto-address[hidden] {
+.card-installments[hidden] {
     display: none;
 }
 .form-hint {
@@ -1694,6 +1694,29 @@ main > .section:first-child,
 .checkout-summary {
     position: sticky;
     top: 84px;
+}
+
+.pix-copy-box {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    margin: 1rem 0;
+    padding: 0.85rem;
+    border: 1px solid rgba(230,51,41,0.24);
+    border-radius: 12px;
+    background: rgba(230,51,41,0.08);
+}
+.pix-copy-box code {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: #FFFFFF;
+    font-weight: 800;
+}
+.payment-success-note {
+    margin: 1rem 0;
+    color: #22C55E;
+    font-weight: 800;
 }
 
 .auth-page {

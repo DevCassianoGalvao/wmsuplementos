@@ -23,7 +23,7 @@
             <div class="form-group">
                 <label for="base_url">URL Base *</label>
                 <input type="url" id="base_url" name="base_url" required
-                       placeholder="https://maiasuplementos.com.br/produto/whey-protein">
+                       placeholder="https://wmsuplementos.com.br/produto/whey-protein">
             </div>
 
             <div class="form-row">

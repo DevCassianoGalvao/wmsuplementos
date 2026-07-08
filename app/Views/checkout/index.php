@@ -31,44 +31,6 @@
                     <input type="tel" id="phone" name="phone" required autocomplete="tel"
                            value="<?= htmlspecialchars($user['phone'] ?? $_POST['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                 </div>
-
-                <div class="boleto-address" data-boleto-address hidden>
-                    <p class="form-hint">Endereço exigido apenas para emissão do boleto.</p>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="zip_code">CEP</label>
-                            <input type="text" id="zip_code" name="zip_code" inputmode="numeric" autocomplete="postal-code"
-                                   value="<?= htmlspecialchars($_POST['zip_code'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="address_number">Numero</label>
-                            <input type="text" id="address_number" name="address_number" autocomplete="address-line2"
-                                   value="<?= htmlspecialchars($_POST['address_number'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Endereço</label>
-                        <input type="text" id="address" name="address" autocomplete="address-line1"
-                               value="<?= htmlspecialchars($_POST['address'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="neighborhood">Bairro</label>
-                            <input type="text" id="neighborhood" name="neighborhood"
-                                   value="<?= htmlspecialchars($_POST['neighborhood'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="city">Cidade</label>
-                            <input type="text" id="city" name="city" autocomplete="address-level2"
-                                   value="<?= htmlspecialchars($_POST['city'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="state">UF</label>
-                            <input type="text" id="state" name="state" maxlength="2" autocomplete="address-level1"
-                                   value="<?= htmlspecialchars($_POST['state'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                        </div>
-                    </div>
-                </div>
             </section>
 
             <section class="checkout-section">
@@ -78,18 +40,25 @@
                     <label class="payment-option">
                         <input type="radio" name="payment_method" value="pix"
                                <?= ($_POST['payment_method'] ?? 'pix') === 'pix' ? 'checked' : '' ?> required>
-                        <span class="payment-label">PIX <small>(aprovação imediata)</small></span>
+                        <span class="payment-label">PIX <small>copie a chave na próxima tela</small></span>
                     </label>
                     <label class="payment-option">
                         <input type="radio" name="payment_method" value="cartao"
                                <?= ($_POST['payment_method'] ?? '') === 'cartao' ? 'checked' : '' ?>>
-                        <span class="payment-label">Cartão de Crédito</span>
+                        <span class="payment-label">Cartão de Crédito <small>finalização pelo WhatsApp</small></span>
                     </label>
-                    <label class="payment-option">
-                        <input type="radio" name="payment_method" value="boleto"
-                               <?= ($_POST['payment_method'] ?? '') === 'boleto' ? 'checked' : '' ?>>
-                        <span class="payment-label">Boleto Bancário <small>(prazo de 3 dias úteis)</small></span>
-                    </label>
+                </div>
+
+                <div class="form-group card-installments" data-card-installments>
+                    <label for="installments">Parcelamento desejado</label>
+                    <select id="installments" name="installments">
+                        <?php for ($i = 1; $i <= 12; $i++): ?>
+                        <option value="<?= $i ?>" <?= (int)($_POST['installments'] ?? 1) === $i ? 'selected' : '' ?>>
+                            <?= $i ?>x
+                        </option>
+                        <?php endfor; ?>
+                    </select>
+                    <p class="form-hint">Entraremos em contato pelo WhatsApp para finalizar sua compra.</p>
                 </div>
             </section>
 
@@ -102,7 +71,7 @@
                 <?php foreach ($items as $item): ?>
                 <li class="checkout-item">
                     <span class="item-name"><?= htmlspecialchars($item['product_name'], ENT_QUOTES, 'UTF-8') ?></span>
-                    <span class="item-qty">× <?= (int)$item['quantity'] ?></span>
+                    <span class="item-qty">x <?= (int)$item['quantity'] ?></span>
                     <span class="item-price">R$ <?= Sanitizer::money((float)$item['price'] * (int)$item['quantity']) ?></span>
                 </li>
                 <?php endforeach; ?>

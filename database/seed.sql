@@ -172,7 +172,7 @@ VALUES
  89.90, 0.00, 89.90, 'pix', 'PAY-003-DEMO', 'pago'),
 (null, 'Carlos Teste', 'carlos@teste.com', '(31) 97654-3210',
  '30112-000', 'Rua Espírito Santo', '100', 'Belo Horizonte', 'MG',
- 69.90, 0.00, 69.90, 'boleto', null, 'aguardando_pagamento');
+ 69.90, 0.00, 69.90, 'pix', null, 'aguardando_pagamento');
 
 -- Itens dos pedidos
 INSERT IGNORE INTO order_items (order_id, product_id, product_name, price, quantity, subtotal)
@@ -246,11 +246,11 @@ INSERT IGNORE INTO pages (slug, title, content, active) VALUES
  1),
 ('como-comprar',
  'Como Comprar',
- '<h2>É fácil comprar na WM Suplementos</h2><ol><li>Escolha seus produtos e adicione ao carrinho.</li><li>Clique em "Finalizar Compra".</li><li>Preencha seus dados de entrega.</li><li>Escolha a forma de pagamento (PIX, Cartão ou Boleto).</li><li>Pronto! Você receberá a confirmação por e-mail.</li></ol>',
+ '<h2>É fácil comprar na WM Suplementos</h2><ol><li>Escolha seus produtos e adicione ao carrinho.</li><li>Clique em "Finalizar Compra".</li><li>Preencha seus dados de entrega.</li><li>Escolha a forma de pagamento (PIX ou Cart�o).</li><li>Pronto! Você receberá a confirmação por e-mail.</li></ol>',
  1),
 ('formas-de-pagamento',
  'Formas de Pagamento',
- '<h2>Aceitamos:</h2><ul><li><strong>PIX</strong> — Aprovação imediata, desconto de 5%.</li><li><strong>Cartão de Crédito</strong> — Até 6x sem juros nos cartões Visa, Mastercard, Elo e Amex.</li><li><strong>Boleto Bancário</strong> — Compensação em até 3 dias úteis.</li></ul>',
+ '<h2>Aceitamos:</h2><ul><li><strong>PIX</strong> - pague copiando a chave PIX e envie o comprovante no WhatsApp.</li><li><strong>Cart�o de Cr�dito</strong> - escolha o parcelamento e finalizamos pelo WhatsApp.</li></ul>',
  1),
 ('prazo-de-entrega',
  'Prazo de Entrega',
@@ -258,7 +258,7 @@ INSERT IGNORE INTO pages (slug, title, content, active) VALUES
  1),
 ('trocas-e-devolucoes',
  'Trocas e Devoluções',
- '<h2>Política de Troca</h2><p>Você tem até 7 dias após o recebimento para solicitar troca ou devolução conforme o Código de Defesa do Consumidor.</p><p>Entre em contato pelo e-mail <strong>contato@maiasuplementos.com.br</strong> ou WhatsApp informando o número do pedido e o motivo.</p>',
+ '<h2>Política de Troca</h2><p>Você tem até 7 dias após o recebimento para solicitar troca ou devolução conforme o Código de Defesa do Consumidor.</p><p>Entre em contato pelo e-mail <strong>contato@wmsuplementos.com.br</strong> ou WhatsApp informando o número do pedido e o motivo.</p>',
  1),
 ('faq',
  'Perguntas Frequentes',
@@ -266,7 +266,7 @@ INSERT IGNORE INTO pages (slug, title, content, active) VALUES
  1),
 ('perguntas-frequentes',
  'Perguntas Frequentes',
- '<h2>Perguntas Frequentes</h2><h3>Os produtos são originais e lacrados?</h3><p>Sim. Trabalhamos somente com distribuidores autorizados e todos os produtos são enviados lacrados, com nota fiscal e procedência garantida.</p><h3>Qual o prazo de entrega?</h3><p>Capitais: 2 a 4 dias úteis. Interior: 4 a 8 dias úteis. Norte e Nordeste: 6 a 12 dias úteis. Pedidos aprovados até as 14h em dias úteis são despachados no mesmo dia.</p><h3>Quais as formas de pagamento?</h3><p>Aceitamos PIX (aprovação imediata), cartão de crédito (até 6x sem juros) e boleto bancário.</p><h3>Como funciona a troca ou devolução?</h3><p>Você tem até 7 dias após o recebimento para solicitar troca ou devolução, conforme o Código de Defesa do Consumidor. Consulte a página de <a href="/pagina/trocas-e-devolucoes">Trocas e Devoluções</a>.</p><h3>Posso rastrear meu pedido?</h3><p>Sim. Assim que o pedido for despachado, você recebe o código de rastreamento por e-mail.</p><h3>Como falo com o atendimento?</h3><p>Pelo e-mail contato@maiasuplementos.com.br ou pelo WhatsApp (22) 99869-6430.</p>',
+ '<h2>Perguntas Frequentes</h2><h3>Os produtos são originais e lacrados?</h3><p>Sim. Trabalhamos somente com distribuidores autorizados e todos os produtos são enviados lacrados, com nota fiscal e procedência garantida.</p><h3>Qual o prazo de entrega?</h3><p>Capitais: 2 a 4 dias úteis. Interior: 4 a 8 dias úteis. Norte e Nordeste: 6 a 12 dias úteis. Pedidos aprovados até as 14h em dias úteis são despachados no mesmo dia.</p><h3>Quais as formas de pagamento?</h3><p>Aceitamos PIX e cart�o de cr�dito. O pagamento � finalizado com suporte pelo WhatsApp.</p><h3>Como funciona a troca ou devolução?</h3><p>Você tem até 7 dias após o recebimento para solicitar troca ou devolução, conforme o Código de Defesa do Consumidor. Consulte a página de <a href="/pagina/trocas-e-devolucoes">Trocas e Devoluções</a>.</p><h3>Posso rastrear meu pedido?</h3><p>Sim. Assim que o pedido for despachado, você recebe o código de rastreamento por e-mail.</p><h3>Como falo com o atendimento?</h3><p>Pelo e-mail contato@wmsuplementos.com.br ou pelo WhatsApp (22) 99869-6430.</p>',
  1);
 
 -- -----------------------------------------------------------------------------
@@ -274,7 +274,8 @@ INSERT IGNORE INTO pages (slug, title, content, active) VALUES
 -- -----------------------------------------------------------------------------
 INSERT INTO settings (`key`, `value`) VALUES
 ('store_whatsapp', '5511999999999'),
-('store_email',    'contato@maiasuplementos.com.br'),
+('store_email',    'contato@wmsuplementos.com.br'),
+('store_pix_key',  NULL),
 ('store_address',  'São Paulo, SP'),
 ('shipping_flat_rate', '0.00'),
 ('free_shipping_above', '199.00'),

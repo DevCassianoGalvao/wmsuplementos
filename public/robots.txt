@@ -7,4 +7,4 @@ Disallow: /finalizar-compra
 Disallow: /pedido/confirmacao/
 Disallow: /minha-conta/
 
-Sitemap: https://cassianogalvao.com.br/maiasuplementos/sitemap.xml
+Sitemap: https://wmsuplementos.com.br/sitemap.xml

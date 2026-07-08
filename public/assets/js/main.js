@@ -305,25 +305,44 @@ if (phoneInput) {
     });
 }
 
-/* Boleto address fields */
-var boletoAddress = document.querySelector('[data-boleto-address]');
-if (boletoAddress) {
+/* Card installments visibility */
+(function() {
+    var installments = document.querySelector('[data-card-installments]');
+    if (!installments) return;
     var paymentInputs = document.querySelectorAll('input[name="payment_method"]');
-    var addressFields = boletoAddress.querySelectorAll('input');
-    var toggleBoletoAddress = function() {
+    var toggleInstallments = function() {
         var selected = document.querySelector('input[name="payment_method"]:checked');
-        var isBoleto = selected && selected.value === 'boleto';
-        boletoAddress.hidden = !isBoleto;
-        addressFields.forEach(function(input) {
-            input.required = !!isBoleto;
-        });
+        installments.hidden = !(selected && selected.value === 'cartao');
     };
-
     paymentInputs.forEach(function(input) {
-        input.addEventListener('change', toggleBoletoAddress);
+        input.addEventListener('change', toggleInstallments);
     });
-    toggleBoletoAddress();
-}
+    toggleInstallments();
+})();
+
+/* Copy text buttons */
+document.querySelectorAll('[data-copy-text]').forEach(function(button) {
+    button.addEventListener('click', function() {
+        var text = button.getAttribute('data-copy-text') || '';
+        var done = function() {
+            var old = button.textContent;
+            button.textContent = 'Copiado';
+            setTimeout(function() { button.textContent = old; }, 1600);
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(function() {});
+            return;
+        }
+
+        var tmp = document.createElement('textarea');
+        tmp.value = text;
+        document.body.appendChild(tmp);
+        tmp.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        tmp.remove();
+    });
+});
 
 /* LGPD cookie consent */
 var cookieConsent = document.querySelector('[data-cookie-consent]');

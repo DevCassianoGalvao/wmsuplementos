@@ -138,7 +138,7 @@ $popupCta = (string)($popupCampaign['cta_label'] ?: 'Ver oferta');
 <?php endif; ?>
 
 <?php
-$appUrl = rtrim((string)(getenv('APP_URL') ?: 'https://maiasuplementos.com.br'), '/');
+$appUrl = rtrim((string)(getenv('APP_URL') ?: 'https://wmsuplementos.com.br'), '/');
 $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $basePath = defined('APP_BASE') ? APP_BASE : '';
 if ($basePath !== '' && str_starts_with($currentPath, $basePath . '/')) {
@@ -154,7 +154,7 @@ $organizationSchema = [
     'contactPoint' => [
         '@type' => 'ContactPoint',
         'contactType' => 'customer service',
-        'email' => 'contato@maiasuplementos.com.br',
+        'email' => 'contato@wmsuplementos.com.br',
         'areaServed' => 'BR',
         'availableLanguage' => 'Portuguese',
     ],
@@ -206,6 +206,6 @@ $breadcrumbSchema = [
 </div>
 
 <script src="/assets/js/placeholder-images.js?v=20260630-3" defer></script>
-<script src="/assets/js/main.js?v=20260630-8" defer></script>
+<script src="/assets/js/main.js?v=20260707-wm2" defer></script>
 </body>
 </html>

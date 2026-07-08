@@ -14,7 +14,7 @@ return [
     'secret'  => getenv('APP_SECRET') ?: '',
 
     'session' => [
-        'name'     => getenv('SESSION_NAME')     ?: 'maia_sess',
+        'name'     => getenv('SESSION_NAME')     ?: 'wm_sess',
         'lifetime' => (int)(getenv('SESSION_LIFETIME') ?: 7200),
     ],
 
@@ -30,14 +30,6 @@ return [
     ],
 
     'log_path' => getenv('LOG_PATH') ?: 'logs/',
-
-    'mercadopago' => [
-        'access_token'         => getenv('MP_ACCESS_TOKEN')         ?: '',
-        'public_key'           => getenv('MP_PUBLIC_KEY')           ?: '',
-        'webhook_secret'       => getenv('MP_WEBHOOK_SECRET')       ?: '',
-        'sandbox_access_token' => getenv('MP_SANDBOX_ACCESS_TOKEN') ?: '',
-        'sandbox_public_key'   => getenv('MP_SANDBOX_PUBLIC_KEY')   ?: '',
-    ],
 
     'pagination' => [
         'per_page' => 20,

@@ -44,6 +44,11 @@
                 <label for="store_address">Endereço</label>
                 <textarea id="store_address" name="store_address" rows="3"><?= htmlspecialchars($settings['store_address'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
+            <div class="form-group">
+                <label for="store_pix_key">Chave PIX</label>
+                <input type="text" id="store_pix_key" name="store_pix_key"
+                       value="<?= htmlspecialchars($settings['store_pix_key'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
         </section>
 
         <section class="form-card">

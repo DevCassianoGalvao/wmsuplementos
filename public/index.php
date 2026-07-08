@@ -120,11 +120,6 @@ Maia\Middleware\SecurityHeaders::send();
         Maia\Middleware\RateLimiter::enforce('cart_add', 30, 60);
     }
 
-    // Webhook MP: 60 por minuto (protege contra flood; MP reenvia com backoff)
-    if ($method === 'POST' && $uri === '/webhook/mercadopago') {
-        Maia\Middleware\RateLimiter::enforce('webhook_mp', 60, 60);
-    }
-
     if ($method === 'POST' && $uri === '/webhook/brevo') {
         Maia\Middleware\RateLimiter::enforce('webhook_brevo', 120, 60);
     }
@@ -194,7 +189,6 @@ $router->post('/carrinho/cupom',         'CartController@applyCoupon');
 $router->get('/finalizar-compra',        'CheckoutController@index');
 $router->post('/finalizar-compra',       'CheckoutController@store');
 $router->get('/pedido/confirmacao/{id}', 'CheckoutController@confirmation');
-$router->post('/webhook/mercadopago',    'WebhookController@mercadoPago');
 $router->post('/webhook/brevo',          'WebhookController@brevo');
 
 // Área do cliente

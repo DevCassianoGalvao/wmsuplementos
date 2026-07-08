@@ -9,8 +9,8 @@ use Maia\Models\UserModel;
 use Maia\Models\ProductModel;
 use Maia\Models\ComboModel;
 use Maia\Services\CartService;
-use Maia\Services\MercadoPagoService;
 use Maia\Helpers\CSRF;
+use Maia\Helpers\Settings;
 use Maia\Helpers\Validator;
 use Maia\Helpers\Sanitizer;
 
@@ -30,7 +30,6 @@ class CheckoutController extends BaseController
             $this->redirect('/carrinho');
         }
 
-        // Funil
         $this->trackFunnel('checkout_start');
 
         $this->render('checkout/index', [
@@ -59,22 +58,13 @@ class CheckoutController extends BaseController
         $email  = Sanitizer::email($_POST['email']      ?? '');
         $phone  = Sanitizer::onlyDigits($_POST['phone'] ?? '');
         $method = $_POST['payment_method'] ?? '';
-        $address = $this->extractBoletoAddress();
+        $installments = max(1, min(12, (int)($_POST['installments'] ?? 1)));
 
         $v = new Validator(['name' => $name, 'email' => $email, 'phone' => $phone, 'payment_method' => $method]);
         $v->required('name')->maxLen('name', 150)
           ->required('email')->email('email')
           ->required('phone')->phone('phone', 'Telefone')
-          ->required('payment_method')->in('payment_method', ['pix', 'cartao', 'boleto'], 'Forma de pagamento');
-
-        if ($method === 'boleto') {
-            foreach (['zip_code', 'address', 'address_number', 'neighborhood', 'city', 'state'] as $field) {
-                if (($address[$field] ?? '') === '') {
-                    $this->flash('error', 'Preencha o endereco completo para pagamento por boleto.');
-                    $this->redirect('/finalizar-compra');
-                }
-            }
-        }
+          ->required('payment_method')->in('payment_method', ['pix', 'cartao'], 'Forma de pagamento');
 
         if ($v->fails()) {
             $this->flash('error', implode(' ', $v->errors()));
@@ -87,11 +77,10 @@ class CheckoutController extends BaseController
             $this->redirect('/carrinho');
         }
 
-        // Persiste e-mail no cart_sessions para recuperação de abandono
         $this->cart->persist($email);
 
         $orderModel = new OrderModel();
-        $items      = [];
+        $items = [];
         foreach ($this->cart->getItems() as $item) {
             $items[] = [
                 'product_id'   => $item['product_id'] ?? null,
@@ -116,27 +105,15 @@ class CheckoutController extends BaseController
             'coupon_id'      => $coupon['id']   ?? null,
             'coupon_code'    => $coupon['code'] ?? null,
             'payment_method' => $method,
-            'notes'          => $this->formatOrderNotes($method, $address),
+            'notes'          => $this->formatOrderNotes($method, $installments),
             'items'          => $items,
         ]);
 
-        // Cria preferência no Mercado Pago
-        $mpResult = $this->createMercadoPagoPreference($orderId, $email, $name, $method);
-
-        if (empty($mpResult['init_point'])) {
-            $orderModel->updateStatus($orderId, OrderModel::STATUS_CANCELLED, 'Falha ao iniciar pagamento Mercado Pago.');
-            $this->flash('error', 'Nao foi possivel iniciar o pagamento. Tente novamente em instantes.');
-            $this->redirect('/finalizar-compra');
-        }
-
-        // Funil
         $this->trackFunnel('purchase', $orderId);
         $_SESSION['last_order_id'] = $orderId;
-
-        // Limpa carrinho após criar pedido com MP
         $this->cart->clear();
 
-        $this->redirect('/pedido/confirmacao/' . $orderId . '?mp=' . urlencode($mpResult['init_point'] ?? ''));
+        $this->redirect('/pedido/confirmacao/' . $orderId);
     }
 
     public function confirmation(array $params): void
@@ -144,7 +121,7 @@ class CheckoutController extends BaseController
         $orderId = (int)($params['id'] ?? 0);
 
         $orderModel = new OrderModel();
-        $order      = $orderModel->findById($orderId);
+        $order = $orderModel->findById($orderId);
 
         if (!$order) {
             http_response_code(404);
@@ -169,9 +146,10 @@ class CheckoutController extends BaseController
         }
 
         $this->render('checkout/confirmation', [
-            'pageTitle' => 'Pedido Confirmado | WM Suplementos',
-            'order'     => $order,
-            'mpUrl'     => $_GET['mp'] ?? '',
+            'pageTitle'    => 'Pedido Confirmado | WM Suplementos',
+            'order'        => $order,
+            'pixKey'       => Settings::get('store_pix_key'),
+            'whatsappLink' => $this->buildWhatsappLink($order),
         ]);
     }
 
@@ -181,28 +159,8 @@ class CheckoutController extends BaseController
         if (!$userId) {
             return null;
         }
+
         return (new UserModel())->findById((int)$userId);
-    }
-
-    private function createMercadoPagoPreference(int $orderId, string $email, string $name, string $method): array
-    {
-        $orderModel = new OrderModel();
-        $order      = $orderModel->findById($orderId);
-
-        if (!$order) {
-            return ['init_point' => '', 'id' => ''];
-        }
-
-        $mp     = new MercadoPagoService();
-        $result = $mp->createPreference($order, $order['items'] ?? []);
-
-        // Persiste preference_id no pedido para rastreio
-        if (!empty($result['id'])) {
-            db()->prepare('UPDATE orders SET payment_id = ? WHERE id = ?')
-                ->execute([$result['id'], $orderId]);
-        }
-
-        return $result;
     }
 
     private function validateCartStock(): ?string
@@ -243,33 +201,12 @@ class CheckoutController extends BaseController
         return null;
     }
 
-    private function extractBoletoAddress(): array
-    {
-        return [
-            'zip_code'       => Sanitizer::onlyDigits($_POST['zip_code'] ?? ''),
-            'address'        => Sanitizer::plainText($_POST['address'] ?? ''),
-            'address_number' => Sanitizer::plainText($_POST['address_number'] ?? ''),
-            'neighborhood'   => Sanitizer::plainText($_POST['neighborhood'] ?? ''),
-            'city'           => Sanitizer::plainText($_POST['city'] ?? ''),
-            'state'          => strtoupper(substr(Sanitizer::plainText($_POST['state'] ?? ''), 0, 2)),
-        ];
-    }
-
-    private function formatAddressNote(array $address): string
-    {
-        return 'Endereco boleto: '
-            . $address['address'] . ', ' . $address['address_number']
-            . ' - ' . $address['neighborhood']
-            . ' - ' . $address['city'] . '/' . $address['state']
-            . ' - CEP ' . $address['zip_code'];
-    }
-
-    private function formatOrderNotes(string $method, array $address): ?string
+    private function formatOrderNotes(string $method, int $installments): ?string
     {
         $notes = [];
 
-        if ($method === 'boleto') {
-            $notes[] = $this->formatAddressNote($address);
+        if ($method === 'cartao') {
+            $notes[] = 'Parcelamento solicitado: ' . $installments . 'x';
         }
 
         $shipping = $this->cart->shippingFee();
@@ -278,6 +215,21 @@ class CheckoutController extends BaseController
         }
 
         return $notes !== [] ? implode("\n", $notes) : null;
+    }
+
+    private function buildWhatsappLink(array $order): string
+    {
+        $phone = preg_replace('/\D/', '', Settings::get('store_whatsapp', ''));
+        if ($phone === '') {
+            $phone = '5500000000000';
+        } elseif (strlen($phone) <= 11) {
+            $phone = '55' . $phone;
+        }
+
+        $message = 'Olá! Fiz o pedido #' . (int)$order['id'] . ' no site WM Suplementos. '
+            . 'Total: R$ ' . number_format((float)$order['total'], 2, ',', '.') . '.';
+
+        return 'https://wa.me/' . $phone . '?text=' . rawurlencode($message);
     }
 
     private function trackFunnel(string $step, ?int $orderId = null): void

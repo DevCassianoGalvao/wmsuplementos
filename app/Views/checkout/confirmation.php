@@ -12,38 +12,27 @@
         <?php if ($method === 'pix'): ?>
         <div class="payment-instructions pix">
             <h2>Pague via PIX</h2>
-            <?php if (!empty($mpUrl)): ?>
-            <p>Clique no botão para acessar o QR Code do PIX no Mercado Pago:</p>
-            <a href="<?= htmlspecialchars($mpUrl, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
-                Pagar com PIX
-            </a>
+            <?php if (!empty($pixKey)): ?>
+            <p>Copie a chave PIX abaixo, cole no app do seu banco e efetue o pagamento.</p>
+            <div class="pix-copy-box">
+                <code><?= htmlspecialchars($pixKey, ENT_QUOTES, 'UTF-8') ?></code>
+                <button type="button" class="btn btn-primary" data-copy-text="<?= htmlspecialchars($pixKey, ENT_QUOTES, 'UTF-8') ?>">Copiar chave</button>
+            </div>
             <?php else: ?>
-            <p>Você receberá o QR Code do PIX em instantes por e-mail.</p>
+            <p>A chave PIX ainda não foi configurada. Fale conosco pelo WhatsApp para concluir o pagamento.</p>
             <?php endif; ?>
-            <p class="payment-note">⚠️ O pedido será processado após confirmação do pagamento.</p>
+            <p class="payment-success-note">Envie o comprovante pelo nosso WhatsApp.</p>
+            <a href="<?= htmlspecialchars($whatsappLink, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+                Enviar comprovante no WhatsApp
+            </a>
         </div>
         <?php elseif ($method === 'cartao'): ?>
         <div class="payment-instructions cartao">
-            <h2>Pagamento com Cartão</h2>
-            <?php if (!empty($mpUrl)): ?>
-            <a href="<?= htmlspecialchars($mpUrl, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
-                Inserir dados do Cartão
+            <h2>Cartão de Crédito</h2>
+            <p class="payment-success-note">Entraremos em contato pelo WhatsApp para finalizar sua compra.</p>
+            <a href="<?= htmlspecialchars($whatsappLink, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+                Chamar no WhatsApp
             </a>
-            <?php else: ?>
-            <p>Você receberá as instruções de pagamento por e-mail.</p>
-            <?php endif; ?>
-        </div>
-        <?php elseif ($method === 'boleto'): ?>
-        <div class="payment-instructions boleto">
-            <h2>Boleto Bancário</h2>
-            <?php if (!empty($mpUrl)): ?>
-            <a href="<?= htmlspecialchars($mpUrl, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
-                Ver Boleto
-            </a>
-            <?php else: ?>
-            <p>O boleto foi enviado para <strong><?= htmlspecialchars($order['customer_email'], ENT_QUOTES, 'UTF-8') ?></strong>.</p>
-            <?php endif; ?>
-            <p class="payment-note">O prazo de compensação é de até 3 dias úteis.</p>
         </div>
         <?php endif; ?>
 

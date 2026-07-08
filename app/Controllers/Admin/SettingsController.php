@@ -17,6 +17,7 @@ class SettingsController extends BaseController
         'store_whatsapp',
         'store_email',
         'store_address',
+        'store_pix_key',
         'store_color_primary',
         'shipping_flat_rate',
         'free_shipping_above',
