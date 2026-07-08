@@ -175,7 +175,7 @@ class CartController extends BaseController
         $combo = (new ComboModel())->findById($comboId);
 
         if (!$combo || empty($combo['active'])) {
-            $this->jsonOrRedirect(['error' => 'Combo nao encontrado.'], '/combos');
+            $this->jsonOrRedirect(['error' => 'Combo não encontrado.'], '/combos');
             return;
         }
 

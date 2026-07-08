@@ -166,7 +166,7 @@ class ProductController extends BaseController
         $image = $this->model->deleteProductImage($productId, $imageId);
 
         if (!$image) {
-            $this->flash('error', 'Imagem nao encontrada para este produto.');
+            $this->flash('error', 'Imagem não encontrada para este produto.');
             $this->redirect('/admin/produtos/' . $productId);
         }
 

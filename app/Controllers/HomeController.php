@@ -66,7 +66,7 @@ class HomeController extends BaseController
 
         return $page ?: [
             'title' => 'Perguntas Frequentes',
-            'content' => '<h3>Os produtos sao originais?</h3><p>Sim. Trabalhamos apenas com produtos de procedencia e marcas reconhecidas.</p><h3>Entregam para todo o Brasil?</h3><p>Sim. O prazo depende da regiao e da modalidade escolhida.</p><h3>Posso acompanhar meu pedido?</h3><p>Sim. Depois da compra voce acompanha o status pela sua conta e recebe atualizacoes por e-mail.</p>',
+            'content' => '<h3>Os produtos são originais?</h3><p>Sim. Trabalhamos apenas com produtos de procedência e marcas reconhecidas.</p><h3>Entregam para todo o Brasil?</h3><p>Sim. O prazo depende da região e da modalidade escolhida.</p><h3>Posso acompanhar meu pedido?</h3><p>Sim. Depois da compra você acompanha o status pela sua conta e recebe atualizações por e-mail.</p>',
         ];
     }
 

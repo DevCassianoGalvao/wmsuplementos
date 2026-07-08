@@ -85,17 +85,17 @@ class SettingsController extends BaseController
             )->execute([$key, $storedValue]);
         }
 
-        $this->updateLegalPage('politica-de-privacidade', 'Politica de Privacidade', $_POST['privacy_policy'] ?? '');
+        $this->updateLegalPage('politica-de-privacidade', 'Política de Privacidade', $_POST['privacy_policy'] ?? '');
         $this->updateLegalPage('termos-de-uso', 'Termos de Uso', $_POST['terms_of_use'] ?? '');
         $this->updateLegalPage('faq', 'Perguntas Frequentes', $_POST['faq_content'] ?? '');
         $this->updateLegalPage('sobre', 'Sobre a WM Suplementos', $_POST['about_content'] ?? '');
         $this->updateLegalPage('como-comprar', 'Como Comprar', $_POST['how_to_buy_content'] ?? '');
-        $this->updateLegalPage('trocas-e-devolucoes', 'Trocas e Devolucoes', $_POST['returns_content'] ?? '');
+        $this->updateLegalPage('trocas-e-devolucoes', 'Trocas e Devoluções', $_POST['returns_content'] ?? '');
         $this->updateLegalPage('perguntas-frequentes', 'Perguntas Frequentes', $_POST['public_faq_content'] ?? '');
 
         Cache::flush('home_');
 
-        $this->flash('success', 'Configuracoes atualizadas.');
+        $this->flash('success', 'Configurações atualizadas.');
         $this->redirect('/admin/configuracoes');
     }
 

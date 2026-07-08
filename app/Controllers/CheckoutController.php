@@ -175,7 +175,7 @@ class CheckoutController extends BaseController
             if (($item['type'] ?? 'product') === 'combo' && !empty($item['combo_id'])) {
                 $combo = (new ComboModel())->findById((int)$item['combo_id']);
                 if (!$combo || empty($combo['active'])) {
-                    return 'Um combo do carrinho nao esta mais disponivel.';
+                    return 'Um combo do carrinho não está mais disponível.';
                 }
 
                 foreach (($combo['items'] ?? []) as $comboItem) {
@@ -189,12 +189,12 @@ class CheckoutController extends BaseController
             }
 
             if (empty($item['product_id'])) {
-                return 'Um item do carrinho nao esta mais disponivel.';
+                return 'Um item do carrinho não está mais disponível.';
             }
 
             $product = (new ProductModel())->findById((int)$item['product_id']);
             if (!$product || empty($product['active'])) {
-                return 'O produto ' . ($item['product_name'] ?? '') . ' nao esta mais disponivel.';
+                return 'O produto ' . ($item['product_name'] ?? '') . ' não está mais disponível.';
             }
 
             if ((int)$product['stock'] < $quantity) {
@@ -241,9 +241,13 @@ class CheckoutController extends BaseController
 
     private function trackFunnel(string $step, ?int $orderId = null): void
     {
-        $stmt = db()->prepare(
-            'INSERT INTO funnel_events (session_id, user_id, step, order_id, ip) VALUES (?, ?, ?, ?, ?)'
-        );
-        $stmt->execute([session_id(), $_SESSION['user_id'] ?? null, $step, $orderId, $this->clientIp()]);
+        try {
+            $stmt = db()->prepare(
+                'INSERT INTO funnel_events (session_id, user_id, step, order_id, ip) VALUES (?, ?, ?, ?, ?)'
+            );
+            $stmt->execute([session_id(), $_SESSION['user_id'] ?? null, $step, $orderId, $this->clientIp()]);
+        } catch (\Throwable $e) {
+            error_log('[CheckoutController] Funnel tracking failed: ' . $e->getMessage());
+        }
     }
 }

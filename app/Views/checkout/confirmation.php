@@ -19,10 +19,10 @@
                 <button type="button" class="btn btn-primary" data-copy-text="<?= htmlspecialchars($pixKey, ENT_QUOTES, 'UTF-8') ?>">Copiar chave PIX</button>
             </div>
             <?php else: ?>
-            <p>A chave PIX ainda nao foi configurada. Fale conosco pelo WhatsApp para concluir o pagamento.</p>
+            <p>A chave PIX ainda não foi configurada. Fale conosco pelo WhatsApp para concluir o pagamento.</p>
             <?php endif; ?>
             <div class="payment-success-note">
-                <strong>Importante:</strong> o pedido sera separado apos o envio do comprovante.
+                <strong>Importante:</strong> o pedido será separado após o envio do comprovante.
             </div>
             <a href="<?= htmlspecialchars($whatsappLink, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
                 Enviar comprovante no WhatsApp
@@ -30,9 +30,9 @@
         </div>
         <?php elseif ($method === 'cartao'): ?>
         <div class="payment-instructions cartao">
-            <h2>Pagamento com cartao</h2>
+            <h2>Pagamento com cartão</h2>
             <div class="payment-success-note">
-                <strong>Proximo passo:</strong> nossa equipe entra em contato pelo WhatsApp para confirmar parcelas, taxas e link de pagamento.
+                <strong>Próximo passo:</strong> nossa equipe entra em contato pelo WhatsApp para confirmar parcelas, taxas e link de pagamento.
             </div>
             <a href="<?= htmlspecialchars($whatsappLink, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
                 Chamar no WhatsApp
@@ -51,7 +51,7 @@
             <?php if (\Maia\Helpers\Auth::isUserLogged()): ?>
             <a href="/minha-conta/pedidos" class="btn btn-outline">Meus pedidos</a>
             <?php endif; ?>
-            <a href="/" class="btn btn-link">Voltar a loja</a>
+            <a href="/" class="btn btn-link">Voltar à loja</a>
         </div>
     </div>
 </div>

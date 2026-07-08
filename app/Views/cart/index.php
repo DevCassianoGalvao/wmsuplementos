@@ -1,17 +1,16 @@
 <?php use Maia\Helpers\Sanitizer; use Maia\Helpers\CSRF; ?>
 
 <div class="container">
-    <?php if (!empty($flash['error'])): ?>
-    <div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
-    <?php endif; ?>
-    <?php if (!empty($flash['success'])): ?>
-    <div class="alert alert-success"><?= htmlspecialchars($flash['success'], ENT_QUOTES, 'UTF-8') ?></div>
+    <?php if (!empty($flash)): ?>
+    <div class="alert alert-<?= htmlspecialchars($flash['type'] ?? 'info', ENT_QUOTES, 'UTF-8') ?>">
+        <?= htmlspecialchars($flash['message'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+    </div>
     <?php endif; ?>
 
     <?php if (empty($items)): ?>
     <div class="empty-cart">
         <h1 class="cart-title">Meu carrinho</h1>
-        <p>Seu carrinho esta vazio.</p>
+        <p>Seu carrinho está vazio.</p>
         <a href="/produtos" class="btn btn-primary">Continuar comprando</a>
     </div>
     <?php else: ?>
@@ -104,7 +103,7 @@
                 </div>
             </div>
 
-            <p class="cart-delivery-note">Prazo, endereco e valor de entrega serao confirmados pelo WhatsApp apos o pedido.</p>
+            <p class="cart-delivery-note">Prazo, endereço e valor de entrega serão confirmados pelo WhatsApp após o pedido.</p>
 
             <div class="cart-actions">
                 <a href="/finalizar-compra" class="btn btn--primary btn--block">Finalizar compra</a>

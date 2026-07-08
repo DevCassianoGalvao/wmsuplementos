@@ -14,11 +14,13 @@ $installmentAmount = static function (float $total, int $months, float $monthlyR
     <div class="checkout-heading">
         <span class="section__label">Checkout</span>
         <h1>Finalizar compra</h1>
-        <p>Pagamento, entrega e comprovantes serao finalizados com atendimento pelo WhatsApp.</p>
+        <p>Pagamento, entrega e comprovantes serão finalizados com atendimento pelo WhatsApp.</p>
     </div>
 
-    <?php if (!empty($flash['error'])): ?>
-    <div class="alert alert-error"><?= htmlspecialchars($flash['error'], ENT_QUOTES, 'UTF-8') ?></div>
+    <?php if (!empty($flash)): ?>
+    <div class="alert alert-<?= htmlspecialchars($flash['type'] ?? 'info', ENT_QUOTES, 'UTF-8') ?>">
+        <?= htmlspecialchars($flash['message'] ?? '', ENT_QUOTES, 'UTF-8') ?>
+    </div>
     <?php endif; ?>
 
     <div class="checkout-layout">
@@ -56,15 +58,15 @@ $installmentAmount = static function (float $total, int $months, float $monthlyR
                                <?= ($_POST['payment_method'] ?? 'pix') === 'pix' ? 'checked' : '' ?> required>
                         <span class="payment-label">
                             <strong>PIX</strong>
-                            <small>A chave PIX aparece na proxima tela. Depois envie o comprovante pelo WhatsApp.</small>
+                            <small>A chave PIX aparece na próxima tela. Depois envie o comprovante pelo WhatsApp.</small>
                         </span>
                     </label>
                     <label class="payment-option">
                         <input type="radio" name="payment_method" value="cartao"
                                <?= ($_POST['payment_method'] ?? '') === 'cartao' ? 'checked' : '' ?>>
                         <span class="payment-label">
-                            <strong>Cartao de credito</strong>
-                            <small>Escolha uma estimativa de parcelas. A confirmacao final acontece pelo WhatsApp.</small>
+                            <strong>Cartão de crédito</strong>
+                            <small>Escolha uma estimativa de parcelas. A confirmação final acontece pelo WhatsApp.</small>
                         </span>
                     </label>
                 </div>
@@ -79,12 +81,12 @@ $installmentAmount = static function (float $total, int $months, float $monthlyR
                         </option>
                         <?php endfor; ?>
                     </select>
-                    <p class="form-hint">Estimativa com taxa mensal configurada de <?= Sanitizer::money($interestRate) ?>%. O valor final sera confirmado no atendimento.</p>
+                    <p class="form-hint">Estimativa com taxa mensal configurada de <?= Sanitizer::money($interestRate) ?>%. O valor final será confirmado no atendimento.</p>
                 </div>
 
                 <div class="checkout-notice">
                     <strong>Entrega combinada no WhatsApp</strong>
-                    <span>Depois do pedido, nossa equipe confirma endereco, prazo e valor de entrega diretamente com voce.</span>
+                    <span>Depois do pedido, nossa equipe confirma endereço, prazo e valor de entrega diretamente com você.</span>
                 </div>
             </section>
 

@@ -122,7 +122,7 @@ class ProductController extends BaseController
             )->execute([(int)$product['id'], Auth::userId(), $email]);
         }
 
-        $this->flash('success', 'Avisaremos voce quando este produto voltar ao estoque.');
+        $this->flash('success', 'Avisaremos você quando este produto voltar ao estoque.');
         $this->redirect('/produto/' . $slug);
     }
 

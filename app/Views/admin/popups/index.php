@@ -3,7 +3,7 @@
 <div class="page-header">
     <div>
         <h1>Popups e Campanhas</h1>
-        <p class="page-subtitle">Promocoes, avisos e banners clicaveis exibidos na loja.</p>
+        <p class="page-subtitle">Promoções, avisos e banners clicáveis exibidos na loja.</p>
     </div>
     <a href="/admin/configuracoes/popups/novo" class="btn btn-primary">Nova campanha</a>
 </div>
@@ -17,7 +17,7 @@
 
 <?php if (!empty($tableMissing)): ?>
 <div class="alert alert-warning">
-    Tabela de popups ainda nao existe. Rode <strong>database/popup_campaigns.sql</strong> no banco antes de criar campanhas.
+    Tabela de popups ainda não existe. Rode <strong>database/popup_campaigns.sql</strong> no banco antes de criar campanhas.
 </div>
 <?php endif; ?>
 

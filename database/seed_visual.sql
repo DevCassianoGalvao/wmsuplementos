@@ -25,7 +25,7 @@ INSERT IGNORE INTO brands (name, slug, active) VALUES
 -- Categorias
 -- -----------------------------------------------------------------------------
 INSERT IGNORE INTO categories (name, slug, seo_title, seo_description, active, sort_order) VALUES
-('Proteinas', 'proteinas', 'Proteinas | WM Suplementos', 'Whey Protein, albumina e proteinas para rotina de treino.', 1, 1),
+('Proteínas', 'proteinas', 'Proteínas | WM Suplementos', 'Whey Protein, albumina e proteínas para rotina de treino.', 1, 1),
 ('Creatina', 'creatina', 'Creatina | WM Suplementos', 'Creatina monohidratada e formulas para forca e desempenho.', 1, 2),
 ('Pre-Treino', 'pre-treino', 'Pre-Treino | WM Suplementos', 'Energia, foco e intensidade para treinos mais fortes.', 1, 3),
 ('Aminoacidos', 'aminoacidos', 'Aminoacidos | WM Suplementos', 'BCAA, EAA, glutamina e suporte para recuperacao muscular.', 1, 4),
@@ -274,10 +274,10 @@ INSERT INTO pages (slug, title, content, active) VALUES
  1),
 ('formas-de-pagamento',
  'Formas de Pagamento',
- '<h2>Formas de pagamento</h2><p>Aceitamos PIX e cartao de credito. O atendimento final acontece pelo WhatsApp.</p>',
+ '<h2>Formas de pagamento</h2><p>Aceitamos PIX e cartão de crédito. O atendimento final acontece pelo WhatsApp.</p>',
  1),
 ('trocas-e-devolucoes',
- 'Trocas e Devolucoes',
+ 'Trocas e Devoluções',
  '<h2>Trocas e devolucoes</h2><p>Solicitacoes devem ser feitas pelo WhatsApp dentro do prazo legal, com numero do pedido e motivo da troca.</p>',
  1),
 ('perguntas-frequentes',
@@ -290,7 +290,7 @@ ON DUPLICATE KEY UPDATE
   active = VALUES(active);
 
 -- -----------------------------------------------------------------------------
--- Configuracoes visuais
+-- Configurações visuais
 -- hero_image vazio = visual antigo sem foto de fundo.
 -- -----------------------------------------------------------------------------
 INSERT INTO settings (`key`, `value`) VALUES
@@ -303,8 +303,8 @@ INSERT INTO settings (`key`, `value`) VALUES
 ('free_shipping_above', '0.00'),
 ('card_interest_monthly', '3.00'),
 ('header_nav_links', 'Produtos|/produtos\nCombos|/combos'),
-('footer_nav_links', 'Todos os Produtos|/produtos\nCombos|/combos\nProteinas|/categoria/proteinas\nCreatina|/categoria/creatina'),
-('footer_info_links', 'Sobre Nos|/pagina/sobre\nComo Comprar|/pagina/como-comprar\nTrocas e Devolucoes|/pagina/trocas-e-devolucoes\nPerguntas Frequentes|/pagina/perguntas-frequentes'),
+('footer_nav_links', 'Todos os Produtos|/produtos\nCombos|/combos\nProteínas|/categoria/proteinas\nCreatina|/categoria/creatina'),
+('footer_info_links', 'Sobre Nós|/pagina/sobre\nComo Comprar|/pagina/como-comprar\nTrocas e Devoluções|/pagina/trocas-e-devolucoes\nPerguntas Frequentes|/pagina/perguntas-frequentes'),
 ('stock_alert_min', '5'),
 ('hero_label', 'Performance & Resultados'),
 ('hero_title_before', 'Suplementos para'),

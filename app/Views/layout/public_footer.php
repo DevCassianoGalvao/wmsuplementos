@@ -32,13 +32,13 @@ $footerParseNavLinks = static function (string $raw, array $fallback): array {
 $footerNavLinks = $footerParseNavLinks(Settings::get('footer_nav_links'), [
     ['label' => 'Todos os Produtos', 'url' => '/produtos'],
     ['label' => 'Combos', 'url' => '/combos'],
-    ['label' => 'Proteinas', 'url' => '/categoria/proteinas'],
+    ['label' => 'Proteínas', 'url' => '/categoria/proteinas'],
     ['label' => 'Creatina', 'url' => '/categoria/creatina'],
 ]);
 $footerInfoLinks = $footerParseNavLinks(Settings::get('footer_info_links'), [
-    ['label' => 'Sobre Nos', 'url' => '/pagina/sobre'],
+    ['label' => 'Sobre Nós', 'url' => '/pagina/sobre'],
     ['label' => 'Como Comprar', 'url' => '/pagina/como-comprar'],
-    ['label' => 'Trocas e Devolucoes', 'url' => '/pagina/trocas-e-devolucoes'],
+    ['label' => 'Trocas e Devoluções', 'url' => '/pagina/trocas-e-devolucoes'],
     ['label' => 'Perguntas Frequentes', 'url' => '/pagina/perguntas-frequentes'],
 ]);
 ?>

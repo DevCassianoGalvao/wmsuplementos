@@ -524,8 +524,8 @@ INSERT IGNORE INTO `settings` (`key`, `value`) VALUES
     ('free_shipping_above',   '0.00'),
     ('card_interest_monthly', '3.00'),
     ('header_nav_links',      'Produtos|/produtos\nCombos|/combos'),
-    ('footer_nav_links',      'Todos os Produtos|/produtos\nCombos|/combos\nProteinas|/categoria/proteinas\nCreatina|/categoria/creatina'),
-    ('footer_info_links',     'Sobre Nos|/pagina/sobre\nComo Comprar|/pagina/como-comprar\nTrocas e Devolucoes|/pagina/trocas-e-devolucoes\nPerguntas Frequentes|/pagina/perguntas-frequentes'),
+    ('footer_nav_links',      'Todos os Produtos|/produtos\nCombos|/combos\nProteínas|/categoria/proteinas\nCreatina|/categoria/creatina'),
+    ('footer_info_links',     'Sobre Nós|/pagina/sobre\nComo Comprar|/pagina/como-comprar\nTrocas e Devoluções|/pagina/trocas-e-devolucoes\nPerguntas Frequentes|/pagina/perguntas-frequentes'),
     ('stock_alert_min',       '5'),
     ('privacy_policy',        NULL),
     ('terms_of_use',          NULL);
@@ -551,7 +551,7 @@ INSERT IGNORE INTO `pages` (`slug`, `title`, `content`, `active`) VALUES
 ('termos-de-uso',           'Termos de Uso',           '<p>Preencha os termos de uso.</p>',           1),
 ('sobre',                   'Sobre a WM Suplementos', '<p>Conte a historia da loja.</p>',            1),
 ('como-comprar',            'Como Comprar',           '<p>Explique o passo a passo da compra.</p>',  1),
-('trocas-e-devolucoes',     'Trocas e Devolucoes',    '<p>Explique as regras de troca e devolucao.</p>', 1),
+('trocas-e-devolucoes',     'Trocas e Devoluções',    '<p>Explique as regras de troca e devolução.</p>', 1),
 ('perguntas-frequentes',    'Perguntas Frequentes',   '<p>Adicione as principais duvidas dos clientes.</p>', 1);
 
 -- =============================================================================
