@@ -80,11 +80,14 @@ abstract class BaseController
         $_SESSION['flash'] = ['type' => $type, 'message' => $message];
     }
 
-    protected function getFlash(): ?array
+    protected function getFlash(): array
     {
         $flash = $_SESSION['flash'] ?? null;
         unset($_SESSION['flash']);
-        return $flash;
+        if (!$flash || !isset($flash['type'], $flash['message'])) {
+            return [];
+        }
+        return [$flash['type'] => $flash['message']];
     }
 
     /** Escapa para uso seguro em HTML (atalho para views). */

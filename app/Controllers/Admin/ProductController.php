@@ -184,6 +184,7 @@ class ProductController extends BaseController
 
         $id = (int)($params['id'] ?? 0);
         $this->model->toggleActive($id);
+        $this->flushProductCaches($id);
 
         $this->flash('success', 'Status do produto alterado.');
         $this->redirect('/admin/produtos');
