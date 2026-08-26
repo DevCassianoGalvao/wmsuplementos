@@ -32,6 +32,13 @@ class HomeController extends BaseController
         ]);
     }
 
+    public function maintenance(array $params = []): void
+    {
+        http_response_code(503);
+        header('Retry-After: 3600');
+        $this->render('maintenance', [], 'none');
+    }
+
     private function getActiveCombos(): array
     {
         return (new ComboModel())->getActive();

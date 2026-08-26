@@ -168,7 +168,7 @@ if ($_basePath !== '') {
 $router = new Maia\Router($_basePath);
 
 // Área pública
-$router->get('/',                        'HomeController@index');
+$router->get('/',                        'HomeController@maintenance');
 $router->get('/produtos',                'ProductController@index');
 $router->get('/combos',                  'ComboController@index');
 $router->get('/categoria/{slug}',        'CategoryController@show');
